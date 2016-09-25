@@ -1,20 +1,20 @@
 package database.controller;
 
-import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 import database.entities.User;
 
 public class DatabaseController 
 {
-	//private final String PERSISTENCE_NAME = "notofit";
-	//private static EntityManagerFactory myEntityManagerFactory;
-	//private static EntityManager myEntityManager;
 	SessionFactory factory;
 	Session sesja;
 	Transaction transakcja;
@@ -25,12 +25,8 @@ public class DatabaseController
 	}
 
     public void initialize(){
-
     	Configuration configuration = new Configuration().configure();
-    	//configuration.addClass(database.entities.User.class);
-    	StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
-    	applySettings(configuration.getProperties());
-    	factory = configuration.buildSessionFactory(builder.build());
+    	factory = configuration.buildSessionFactory();
     	sesja = factory.openSession();
     	transakcja = sesja.beginTransaction();
     }
@@ -41,21 +37,25 @@ public class DatabaseController
     }
     
     public void saveEntityToDatabase(User userToSave) throws RuntimeException{
-    	//sesja.persist(userToSave);
-    	sesja.save(userToSave);
+    	sesja.persist(userToSave);
     	transakcja.commit();
     	closeConnections();
     }
     
 	public static void main( String[] args )
     {
+	//main function only for test purposes
     	DatabaseController db = new DatabaseController();
-    	//Date data = new Date(22, 02, 1994);
-    	Date data = new Date(321);
-    	
+    	DateFormat myDateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+    	Date data = null;
+		try {
+			data = myDateFormatter.parse("22-03-1994");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
     	User us = new User("ktos", "jakis", data, "f", 177, 66.8f, 77.2f, 10, "m");
     	db.saveEntityToDatabase(us);
     	
-        System.out.println( "Hello World!" );
+        System.out.println( "Success!" );
     }
 }
