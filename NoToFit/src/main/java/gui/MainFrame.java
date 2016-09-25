@@ -51,7 +51,7 @@ public class MainFrame {
 	private void createFrame(){
 		frmNoToFit = new JFrame();
 		frmNoToFit.setTitle("NoToFit 0.0.1");
-		frmNoToFit.setBounds(100, 100, 675, 349);
+		frmNoToFit.setBounds(100, 100, 590, 550);
 		frmNoToFit.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmNoToFit.getContentPane().setLayout(null);
 	}
@@ -62,7 +62,7 @@ public class MainFrame {
 	}
 	private void prepareTabbedPane(){
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 11, 639, 288);
+		tabbedPane.setBounds(10, 11, 550, 450);
 		tabbedPane.addTab("Your Stats", userIcon, new UsersPanel());
 		tabbedPane.addTab("Meals", mealIcon, new MealsPanel());
 		tabbedPane.addTab("Exercises", exerciseIcon, new ExercisesPanel());
