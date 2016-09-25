@@ -45,11 +45,7 @@ public class MainFrame {
 	private void initialize() {
 		createFrame();
 		loadIcons();
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 11, 639, 288);
-		tabbedPane.addTab("Test Panel", userIcon, new UsersPanel());
-		frmNoToFit.getContentPane().add(tabbedPane);
+		prepareTabbedPane();
 	}
 	
 	private void createFrame(){
@@ -61,7 +57,15 @@ public class MainFrame {
 	}
 	private void loadIcons(){
 		userIcon = new ImageIcon("images\\user_icon.png");		
-		mealIcon = new ImageIcon("images\\contact-outline.png");
-		exerciseIcon = new ImageIcon("images\\contact-outline.png");
+		mealIcon = new ImageIcon("images\\meal_icon.png");
+		exerciseIcon = new ImageIcon("images\\exercise_icon.png");
+	}
+	private void prepareTabbedPane(){
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(10, 11, 639, 288);
+		tabbedPane.addTab("Your Stats", userIcon, new UsersPanel());
+		tabbedPane.addTab("Meals", mealIcon, new MealsPanel());
+		tabbedPane.addTab("Exercises", exerciseIcon, new ExercisesPanel());
+		frmNoToFit.getContentPane().add(tabbedPane);
 	}
 }
