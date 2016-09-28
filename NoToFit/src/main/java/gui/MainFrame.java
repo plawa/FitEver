@@ -71,6 +71,8 @@ public class MainFrame {
 		frmNoToFit.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		UsersPanel usersPanel = new UsersPanel();
+		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
+		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 42, 0};
 		tabbedPane.addTab("Your Stats", userIcon, usersPanel);
 		tabbedPane.addTab("Meals", mealIcon, new MealsPanel());
 		tabbedPane.addTab("Exercises", exerciseIcon, new ExercisesPanel());

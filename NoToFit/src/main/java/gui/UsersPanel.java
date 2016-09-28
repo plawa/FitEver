@@ -23,9 +23,9 @@ public class UsersPanel extends JPanel {
 	 */
 	public UsersPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{225, 0, 10, 0, 64, 117, 0, 0};
+		gridBagLayout.columnWidths = new int[]{225, 0, 10, 0, 64, 125, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{16, 23, 0, 0, 136, 1, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
@@ -36,13 +36,13 @@ public class UsersPanel extends JPanel {
 			}
 		});
 		
-		JLabel lblManagment = new JLabel("Managment");
-		GridBagConstraints gbc_lblManagment = new GridBagConstraints();
-		gbc_lblManagment.insets = new Insets(0, 0, 5, 5);
-		gbc_lblManagment.gridx = 5;
-		gbc_lblManagment.gridy = 1;
-		add(lblManagment, gbc_lblManagment);
-		lblManagment.setLabelFor(btnAddUser);
+		JLabel lblManagement = new JLabel("Management");
+		GridBagConstraints gbc_lblManagement = new GridBagConstraints();
+		gbc_lblManagement.insets = new Insets(0, 0, 5, 5);
+		gbc_lblManagement.gridx = 5;
+		gbc_lblManagement.gridy = 1;
+		add(lblManagement, gbc_lblManagement);
+		lblManagement.setLabelFor(btnAddUser);
 		GridBagConstraints gbc_btnAddUser = new GridBagConstraints();
 		gbc_btnAddUser.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnAddUser.insets = new Insets(0, 0, 5, 5);
