@@ -10,34 +10,37 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
+import database.controller.DatabaseController;
 import database.entities.User;
 
-import javax.swing.JTextPane;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.InputVerifier;
-import javax.swing.JSlider;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
 public class AddUserDialog extends JDialog {
+	
+	private static final long serialVersionUID = 7513700313890891626L;
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
 	private JTextField textFieldHeight;
 	private JTextField textFieldStartWeight;
 	private JTextField textFieldGoalWeight;
 	private JComboBox<String> comboBoxSex;
+	private JComboBox<String> comboBoxUserObjective;
 	private JFormattedTextField formatTxtFldDate;
 	private JSpinner spinnerFatPercentage;
 	private DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -235,15 +238,15 @@ public class AddUserDialog extends JDialog {
 		gbc_lblMainGoal.gridy = 9;
 		getContentPane().add(lblMainGoal, gbc_lblMainGoal);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Mass Gain", "Reduction", "Strenght"}));
+		comboBoxUserObjective = new JComboBox<String>();
+		comboBoxUserObjective.setModel(new DefaultComboBoxModel<String>(new String[] {"Mass Gain", "Reduction", "Strenght"}));
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.gridwidth = 3;
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 2;
 		gbc_comboBox.gridy = 9;
-		getContentPane().add(comboBox, gbc_comboBox);
+		getContentPane().add(comboBoxUserObjective, gbc_comboBox);
 		
 		Component horizontalStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
@@ -297,22 +300,34 @@ public class AddUserDialog extends JDialog {
 	}
 	
 	private void saveButtonPressed(){
+		Map<String, String> sexTranslations = new HashMap<String, String>();
+		sexTranslations.put("male", "m");
+		sexTranslations.put("female", "f");
+		
+		Map<String, String> objectiveTranslations = new HashMap<String, String>();
+		objectiveTranslations.put("Mass Gain", "m");
+		objectiveTranslations.put("Reduction", "r");
+		objectiveTranslations.put("Stength", "p");
+		
+		
 		String name = textFieldName.getText();
 		String surname = textFieldSurname.getText();
-		String sex = (String) comboBoxSex.getSelectedItem();
+		String sexFull = (String) comboBoxSex.getSelectedItem();
+		String sex = sexTranslations.get(sexFull);
 		int height = Integer.parseInt(textFieldHeight.getText());
-		float weightStart = Float.parseFloat(textFieldStartWeight.getText());
+		float startWeight = Float.parseFloat(textFieldStartWeight.getText());
 		float goalWeight = Float.parseFloat(textFieldGoalWeight.getText());
-		String dateRaw = formatTxtFldDate.getText();	
-		try {
-			Date date = dateFormatter.parse(dateRaw);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
+		String userObjectiveFull = (String) comboBoxUserObjective.getSelectedItem();
+		String userObjective = objectiveTranslations.get(userObjectiveFull);
+		String dateRaw = formatTxtFldDate.getText();
+		Date date = null;
+		try { date = dateFormatter.parse(dateRaw); } 
+		catch (ParseException e) { e.printStackTrace();	}
 		
-		
-		//User newUser = new User(, , textField)
+		User newUser = new User(name, surname, date, sex, height, startWeight, goalWeight, fatPercentage, userObjective);
+		new DatabaseController().saveEntityToDatabase(newUser);
+		dispose();
 	}
 	
 	private MaskFormatter createFormatter(String s){
@@ -324,9 +339,8 @@ public class AddUserDialog extends JDialog {
 	    }
 	    return formatter;
 	}
-	
 	private InputVerifier createInputVerifier(){
-		InputVerifier myInputVerifier = new InputVerifier() {
+		return new InputVerifier() {
 			
 			@Override
 			public boolean verify(JComponent input) {
@@ -341,7 +355,6 @@ public class AddUserDialog extends JDialog {
 				}
 			}
 		};
-		return myInputVerifier;
 	}
 	
 }

@@ -61,8 +61,8 @@ public class UsersPanel extends JPanel {
 	}
 	
 	private void handleAddUserModalDialog(){
-		AddUserDialog dialog = new AddUserDialog();
-		dialog.setLocationRelativeTo(null);
-		dialog.setVisible(true);
+		AddUserDialog myAddUserDialog = new AddUserDialog();
+		myAddUserDialog.setLocationRelativeTo(this);
+		myAddUserDialog.setVisible(true);
 	}
 }
