@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -17,6 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
+
+import database.entities.User;
+
 import javax.swing.JTextPane;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -31,9 +35,14 @@ public class AddUserDialog extends JDialog {
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
 	private JTextField textFieldHeight;
-	private JTextField textFieldWeight;
+	private JTextField textFieldStartWeight;
 	private JTextField textFieldGoalWeight;
-
+	private JComboBox<String> comboBoxSex;
+	private JFormattedTextField formatTxtFldDate;
+	private JSpinner spinnerFatPercentage;
+	private DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -115,8 +124,8 @@ public class AddUserDialog extends JDialog {
 		gbc_lblSex.gridy = 3;
 		getContentPane().add(lblSex, gbc_lblSex);
 		
-		JComboBox comboBoxSex = new JComboBox();
-		comboBoxSex.setModel(new DefaultComboBoxModel(new String[] {"male", "female"}));
+		comboBoxSex = new JComboBox<String>();
+		comboBoxSex.setModel(new DefaultComboBoxModel<String>(new String[] {"male", "female"}));
 		GridBagConstraints gbc_comboBoxSex = new GridBagConstraints();
 		gbc_comboBoxSex.gridwidth = 3;
 		gbc_comboBoxSex.insets = new Insets(0, 0, 5, 5);
@@ -137,15 +146,15 @@ public class AddUserDialog extends JDialog {
 		//DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 		
 		
-		JFormattedTextField frmtdtxtfldDdmmyyyy = new JFormattedTextField(createFormatter("##-##-####"));
-		frmtdtxtfldDdmmyyyy.setInputVerifier(createInputVerifier());
-		GridBagConstraints gbc_frmtdtxtfldDdmmyyyy = new GridBagConstraints();
-		gbc_frmtdtxtfldDdmmyyyy.gridwidth = 3;
-		gbc_frmtdtxtfldDdmmyyyy.insets = new Insets(0, 0, 5, 5);
-		gbc_frmtdtxtfldDdmmyyyy.fill = GridBagConstraints.HORIZONTAL;
-		gbc_frmtdtxtfldDdmmyyyy.gridx = 2;
-		gbc_frmtdtxtfldDdmmyyyy.gridy = 4;
-		getContentPane().add(frmtdtxtfldDdmmyyyy, gbc_frmtdtxtfldDdmmyyyy);
+		formatTxtFldDate = new JFormattedTextField(createFormatter("##-##-####"));
+		formatTxtFldDate.setInputVerifier(createInputVerifier());
+		GridBagConstraints gbc_formatTxtFldDate = new GridBagConstraints();
+		gbc_formatTxtFldDate.gridwidth = 3;
+		gbc_formatTxtFldDate.insets = new Insets(0, 0, 5, 5);
+		gbc_formatTxtFldDate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_formatTxtFldDate.gridx = 2;
+		gbc_formatTxtFldDate.gridy = 4;
+		getContentPane().add(formatTxtFldDate, gbc_formatTxtFldDate);
 		
 		JLabel lblHeight = new JLabel("Height:");
 		GridBagConstraints gbc_lblHeight = new GridBagConstraints();
@@ -173,15 +182,15 @@ public class AddUserDialog extends JDialog {
 		gbc_lblWeight.gridy = 6;
 		getContentPane().add(lblWeight, gbc_lblWeight);
 		
-		textFieldWeight = new JTextField();
+		textFieldStartWeight = new JTextField();
 		GridBagConstraints gbc_textFieldWeight = new GridBagConstraints();
 		gbc_textFieldWeight.gridwidth = 3;
 		gbc_textFieldWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldWeight.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldWeight.gridx = 2;
 		gbc_textFieldWeight.gridy = 6;
-		getContentPane().add(textFieldWeight, gbc_textFieldWeight);
-		textFieldWeight.setColumns(10);
+		getContentPane().add(textFieldStartWeight, gbc_textFieldWeight);
+		textFieldStartWeight.setColumns(10);
 		
 		JLabel lblGoalWeight = new JLabel("Goal Weight:");
 		GridBagConstraints gbc_lblGoalWeight = new GridBagConstraints();
@@ -208,7 +217,7 @@ public class AddUserDialog extends JDialog {
 		gbc_lblFatPercentage.gridy = 8;
 		getContentPane().add(lblFatPercentage, gbc_lblFatPercentage);
 		
-		JSpinner spinnerFatPercentage = new JSpinner();
+		spinnerFatPercentage = new JSpinner();
 		spinnerFatPercentage.setModel(new SpinnerNumberModel(0, 0, 40, 1));
 		GridBagConstraints gbc_spinnerFatPercentage = new GridBagConstraints();
 		gbc_spinnerFatPercentage.fill = GridBagConstraints.HORIZONTAL;
@@ -288,7 +297,22 @@ public class AddUserDialog extends JDialog {
 	}
 	
 	private void saveButtonPressed(){
+		String name = textFieldName.getText();
+		String surname = textFieldSurname.getText();
+		String sex = (String) comboBoxSex.getSelectedItem();
+		int height = Integer.parseInt(textFieldHeight.getText());
+		float weightStart = Float.parseFloat(textFieldStartWeight.getText());
+		float goalWeight = Float.parseFloat(textFieldGoalWeight.getText());
+		String dateRaw = formatTxtFldDate.getText();	
+		try {
+			Date date = dateFormatter.parse(dateRaw);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		
+		//User newUser = new User(, , textField)
 	}
 	
 	private MaskFormatter createFormatter(String s){
@@ -303,7 +327,6 @@ public class AddUserDialog extends JDialog {
 	
 	private InputVerifier createInputVerifier(){
 		InputVerifier myInputVerifier = new InputVerifier() {
-			private DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 			
 			@Override
 			public boolean verify(JComponent input) {
