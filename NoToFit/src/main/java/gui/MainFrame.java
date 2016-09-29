@@ -11,6 +11,7 @@ import javax.swing.JTabbedPane;
 public class MainFrame {
 
 	private JFrame frmNoToFit;
+	private LoginDialog myLoginDialog;
 	private ImageIcon userIcon;
 	private ImageIcon mealIcon;
 	private ImageIcon exerciseIcon;
@@ -37,16 +38,15 @@ public class MainFrame {
 	}
 
 	private boolean login(){
-		
+		myLoginDialog = new LoginDialog(frmNoToFit, true);
+		myLoginDialog.setVisible(true);
 		return false;
 		
 	}
 	
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		createFrame();
+		login();
 		loadIcons();
 		prepareTabbedPane();
 	}

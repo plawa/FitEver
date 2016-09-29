@@ -51,7 +51,10 @@ public class DatabaseController
     	Transaction myTransaction = mySession.beginTransaction();
     	Query<Shadow> queryForShadow = mySession.createQuery("FROM Shadow WHERE login = :login");
     	queryForShadow.setString("login", login);
-    	Shadow result = (Shadow) queryForShadow.list().get(0);
+    	List<Shadow> resultList = queryForShadow.list();
+    	if (resultList.isEmpty())
+    		return null;
+    	Shadow result = (Shadow) resultList.get(0);
     	myTransaction.commit();
     	mySession.close();
     	return result;

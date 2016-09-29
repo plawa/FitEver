@@ -1,24 +1,24 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import database.controller.DatabaseController;
 import logic.Login;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 
 public class LoginDialog extends JDialog {
 
@@ -26,19 +26,19 @@ public class LoginDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 8472433868284888754L;
+
 	private final JPanel contentPanel = new JPanel();
 	private JDialog myAddUserDialog;
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
-	
+
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			LoginDialog dialog = new LoginDialog();
+			LoginDialog dialog = new LoginDialog(null, false);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setLocationRelativeTo(null);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,7 +48,8 @@ public class LoginDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public LoginDialog() {
+	public LoginDialog(Frame owner, boolean modal) {
+		super(owner, modal);
 		setTitle("NoToFit Login");
 		setType(Type.POPUP);
 		setResizable(false);
@@ -57,10 +58,10 @@ public class LoginDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{10, 76, 171, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{10, 14, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] { 10, 76, 171, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 10, 14, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblUsername = new JLabel("Username:");
@@ -119,11 +120,17 @@ public class LoginDialog extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						Login myLogin = new Login();
-						
+
 						String username = textFieldUsername.getText();
 						String passwordRaw = passwordField.getText();
-						
-						myLogin.performLogin(username, passwordRaw);
+
+						if (myLogin.performLogin(username, passwordRaw)) {
+							JOptionPane.showMessageDialog(LoginDialog.this, "Logged in.", "Good!", 2);
+							LoginDialog.this.setVisible(false);
+							LoginDialog.this.dispose();
+						} else {
+							JOptionPane.showMessageDialog(LoginDialog.this, "Username or password incorrect.", "Error!", 2);
+						}
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -141,6 +148,7 @@ public class LoginDialog extends JDialog {
 				buttonPane.add(cancelButton, "cell 3 0,alignx left,aligny center");
 			}
 		}
+		setLocationRelativeTo(null);
 	}
 
 }
