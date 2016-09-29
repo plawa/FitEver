@@ -5,4 +5,11 @@
 	<table-filter match-name="exercise" match-catalog="notofit"></table-filter>
 	<table-filter match-name="meal" match-catalog="notofit"></table-filter>
 	<table-filter match-name="user" match-catalog="notofit"></table-filter>
+	<table-filter match-name="diet" match-catalog="notofit"></table-filter>
+	<table-filter match-name="diet_meal" match-catalog="notofit"></table-filter>
+	<table-filter match-name="shadow" match-catalog="notofit"></table-filter>
+	<table-filter match-name="workout" match-catalog="notofit"></table-filter>
+	<table-filter match-name="workout_exercise"
+		match-catalog="notofit">
+	</table-filter>
 </hibernate-reverse-engineering>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-09-29 16:40:14 by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="database.entities.Diet" table="diet" catalog="notofit" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="database.entities.User" fetch="select">
+            <column name="UserID" not-null="true" />
+        </many-to-one>
+        <property name="mealIds" type="int">
+            <column name="MealIDs" not-null="true" />
+        </property>
+        <property name="validFrom" type="date">
+            <column name="validFrom" length="10" not-null="true" />
+        </property>
+        <set name="dietMeals" table="diet_meal" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DietID" not-null="true" />
+            </key>
+            <one-to-many class="database.entities.DietMeal" />
+        </set>
+    </class>
+</hibernate-mapping>

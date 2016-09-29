@@ -230,10 +230,10 @@ public class AddMealDialog extends JDialog {
 	
 	private void saveButtonPressed(){
 		
-		Map<String, String> objectiveTranslations = new HashMap<String, String>();
-		objectiveTranslations.put("Mass Gain", "m");
-		objectiveTranslations.put("Reduction", "r");
-		objectiveTranslations.put("Stength", "p");
+		Map<String, Character> objectiveTranslations = new HashMap<String, Character>();
+		objectiveTranslations.put("Mass Gain", 'm');
+		objectiveTranslations.put("Reduction", 'r');
+		objectiveTranslations.put("Stength", 'p');
 		
 		
 		String name = textFieldName.getText();
@@ -242,7 +242,7 @@ public class AddMealDialog extends JDialog {
 		int proteinPercentage = (Integer) spinnerFatPercentage.getValue();
 		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
 		String objectiveFull = (String) comboBoxObjective.getSelectedItem();
-		String objective = objectiveTranslations.get(objectiveFull);
+		Character objective = objectiveTranslations.get(objectiveFull);
 		
 		Meal newMeal = new Meal(name, objective, gramature, carbohydratesPercentage, proteinPercentage, fatPercentage);
 		

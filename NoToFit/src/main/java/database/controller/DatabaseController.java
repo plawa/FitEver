@@ -44,7 +44,7 @@ public class DatabaseController
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-    	User us = new User("user", "jakis", data, "f", 177, 66.8f, 77.2f, 10, "m");
+    	User us = new User(null, "user", "jakis", data, 'f', 177, 66.8f, 77.2f, 10, 'm');
     	db.saveEntityToDatabase(us);
     	
         System.out.println( "Success!" );

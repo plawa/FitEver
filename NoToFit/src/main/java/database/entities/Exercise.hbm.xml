@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-09-28 19:34:16 by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated 2016-09-29 16:40:14 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="database.entities.Exercise" table="exercise" catalog="notofit" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -14,7 +14,7 @@
         <property name="description" type="string">
             <column name="description" />
         </property>
-        <property name="objective" type="string">
+        <property name="objective" type="char">
             <column name="objective" length="1" not-null="true">
                 <comment>One char: 'm' stands for mass gain 'r' stands for reduction 'p' stands for power &#160; &#160;</comment>
             </column>
@@ -30,5 +30,11 @@
         <property name="musclesTargeted" type="string">
             <column name="musclesTargeted" length="100" />
         </property>
+        <set name="workoutExercises" table="workout_exercise" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ExerciseID" not-null="true" />
+            </key>
+            <one-to-many class="database.entities.WorkoutExercise" />
+        </set>
     </class>
 </hibernate-mapping>
