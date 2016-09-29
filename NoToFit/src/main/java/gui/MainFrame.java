@@ -38,7 +38,7 @@ public class MainFrame {
 	}
 
 	private boolean login(){
-		myLoginDialog = new LoginDialog(frmNoToFit, true);
+		myLoginDialog = new LoginDialog();
 		myLoginDialog.setVisible(true);
 		return false;
 		

@@ -1,11 +1,6 @@
 package database.controller;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,7 +10,6 @@ import org.hibernate.cfg.Configuration;
 
 import database.entities.Entity;
 import database.entities.Shadow;
-import database.entities.User;
 
 public class DatabaseController 
 {
@@ -27,6 +21,14 @@ public class DatabaseController
 	}
     public void tidyUp(){
     	mySessionFactory.close();
+    }
+    
+    public void startTransaction(){
+    	mySessionFactory.openSession().beginTransaction();
+    }
+    
+    public void commitTransaction(){
+    	mySessionFactory.getCurrentSession().getTransaction().commit();
     }
     
     public <T extends Entity> void saveEntityToDatabase(T entity) throws RuntimeException{

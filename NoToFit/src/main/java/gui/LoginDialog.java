@@ -17,8 +17,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import database.entities.User;
 import logic.Login;
 import net.miginfocom.swing.MigLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class LoginDialog extends JDialog {
 
@@ -27,6 +30,7 @@ public class LoginDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 8472433868284888754L;
 
+	private User userLogged;
 	private final JPanel contentPanel = new JPanel();
 	private JDialog myAddUserDialog;
 	private JTextField textFieldUsername;
@@ -37,7 +41,7 @@ public class LoginDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			LoginDialog dialog = new LoginDialog(null, false);
+			LoginDialog dialog = new LoginDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -48,8 +52,15 @@ public class LoginDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public LoginDialog(Frame owner, boolean modal) {
-		super(owner, modal);
+	public LoginDialog() {
+		super((Frame)null, true);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				System.exit(0);
+			}
+		});
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("NoToFit Login");
 		setType(Type.POPUP);
 		setResizable(false);
@@ -124,7 +135,7 @@ public class LoginDialog extends JDialog {
 						String username = textFieldUsername.getText();
 						String passwordRaw = passwordField.getText();
 
-						if (myLogin.performLogin(username, passwordRaw)) {
+						if (myLogin.performLogin(username, passwordRaw)!= null) {
 							JOptionPane.showMessageDialog(LoginDialog.this, "Logged in.", "Good!", 2);
 							LoginDialog.this.setVisible(false);
 							LoginDialog.this.dispose();
