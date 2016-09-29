@@ -20,7 +20,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.text.MaskFormatter;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
@@ -254,7 +253,7 @@ public class AddMealDialog extends JDialog {
 			JOptionPane.showMessageDialog(this, "Please check your connection with database", "Error!", 2);
 		}
 	}
-	
+	/*
 	private MaskFormatter createFormatter(String s){
 	    MaskFormatter formatter = null;
 	    try {
@@ -264,6 +263,7 @@ public class AddMealDialog extends JDialog {
 	    }
 	    return formatter;
 	}
+	*/
 	/*private InputVerifier createInputVerifier(){
 		return new InputVerifier() {
 			

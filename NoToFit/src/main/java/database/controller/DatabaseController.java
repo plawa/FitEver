@@ -37,7 +37,6 @@ public class DatabaseController
 	public static void main(String[] args){
 		//main function only for test purposes
     	DatabaseController db = new DatabaseController();
-    	DatabaseController db2 = new DatabaseController();
     	DateFormat myDateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
     	Date data = null;
 		try {
@@ -45,7 +44,7 @@ public class DatabaseController
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-    	User us = new User("ktdsaos", "jakis", data, "f", 177, 66.8f, 77.2f, 10, "m");
+    	User us = new User("user", "jakis", data, "f", 177, 66.8f, 77.2f, 10, "m");
     	db.saveEntityToDatabase(us);
     	
         System.out.println( "Success!" );

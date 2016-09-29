@@ -32,9 +32,16 @@ public class MainFrame {
 	 * Create the application.
 	 */
 	public MainFrame() {
+		
 		initialize();
 	}
 
+	private boolean login(){
+		
+		return false;
+		
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
