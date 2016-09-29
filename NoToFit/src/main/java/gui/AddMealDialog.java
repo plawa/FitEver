@@ -1,0 +1,285 @@
+package gui;
+
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.text.MaskFormatter;
+
+import database.controller.DatabaseController;
+import database.entities.Meal;
+
+public class AddMealDialog extends JDialog {
+	
+	private static final long serialVersionUID = 7513700313890891626L;
+	private JTextField textFieldName;
+	private JTextField textFieldGramature;
+	private JComboBox<String> comboBoxObjective;
+	private JSpinner spinnerFatPercentage;
+	private JSpinner spinnerProteinPercentage;
+	private JSpinner spinnerCarbohydratesPercentage;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		try {
+			AddMealDialog dialog = new AddMealDialog();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Create the dialog.
+	 */
+	public AddMealDialog() {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setTitle("Add New Meal");
+		setModal(true);
+		setBounds(100, 100, 397, 364);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 70, 179, 49, 59, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 73, 33, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		getContentPane().setLayout(gridBagLayout);
+		
+		Component verticalStrutTop = Box.createVerticalStrut(10);
+		GridBagConstraints gbc_verticalStrutTop = new GridBagConstraints();
+		gbc_verticalStrutTop.insets = new Insets(0, 0, 5, 5);
+		gbc_verticalStrutTop.gridx = 2;
+		gbc_verticalStrutTop.gridy = 0;
+		getContentPane().add(verticalStrutTop, gbc_verticalStrutTop);
+		
+		JLabel lblName = new JLabel("Name:");
+		GridBagConstraints gbc_lblName = new GridBagConstraints();
+		gbc_lblName.anchor = GridBagConstraints.WEST;
+		gbc_lblName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblName.gridx = 1;
+		gbc_lblName.gridy = 1;
+		getContentPane().add(lblName, gbc_lblName);
+		
+		textFieldName = new JTextField();
+		textFieldName.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_textFieldName = new GridBagConstraints();
+		gbc_textFieldName.gridwidth = 3;
+		gbc_textFieldName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldName.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldName.gridx = 2;
+		gbc_textFieldName.gridy = 1;
+		getContentPane().add(textFieldName, gbc_textFieldName);
+		textFieldName.setColumns(10);
+		
+		JLabel lblGramature = new JLabel("Gramature:");
+		GridBagConstraints gbc_lblGramature = new GridBagConstraints();
+		gbc_lblGramature.anchor = GridBagConstraints.WEST;
+		gbc_lblGramature.insets = new Insets(0, 0, 5, 5);
+		gbc_lblGramature.gridx = 1;
+		gbc_lblGramature.gridy = 2;
+		getContentPane().add(lblGramature, gbc_lblGramature);
+		
+		textFieldGramature = new JTextField();
+		GridBagConstraints gbc_textFieldGramature = new GridBagConstraints();
+		gbc_textFieldGramature.gridwidth = 3;
+		gbc_textFieldGramature.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldGramature.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldGramature.gridx = 2;
+		gbc_textFieldGramature.gridy = 2;
+		getContentPane().add(textFieldGramature, gbc_textFieldGramature);
+		textFieldGramature.setColumns(10);
+		
+		JLabel lblCarbohydratesPercentage = new JLabel("Carbohydrates Percentage (%):");
+		GridBagConstraints gbc_lblCarbohydratesPercentage = new GridBagConstraints();
+		gbc_lblCarbohydratesPercentage.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCarbohydratesPercentage.gridx = 1;
+		gbc_lblCarbohydratesPercentage.gridy = 3;
+		getContentPane().add(lblCarbohydratesPercentage, gbc_lblCarbohydratesPercentage);
+		
+		spinnerCarbohydratesPercentage = new JSpinner();
+		spinnerCarbohydratesPercentage.setModel(new SpinnerNumberModel(0, 0, 99, 1));
+		GridBagConstraints gbc_spinnerCarbohydratesPercentage = new GridBagConstraints();
+		gbc_spinnerCarbohydratesPercentage.gridwidth = 3;
+		gbc_spinnerCarbohydratesPercentage.fill = GridBagConstraints.HORIZONTAL;
+		gbc_spinnerCarbohydratesPercentage.insets = new Insets(0, 0, 5, 5);
+		gbc_spinnerCarbohydratesPercentage.gridx = 2;
+		gbc_spinnerCarbohydratesPercentage.gridy = 3;
+		getContentPane().add(spinnerCarbohydratesPercentage, gbc_spinnerCarbohydratesPercentage);
+		
+		JLabel lblProteinPercentage = new JLabel("Protein Percentage (%):");
+		GridBagConstraints gbc_lblProteinPercentage = new GridBagConstraints();
+		gbc_lblProteinPercentage.anchor = GridBagConstraints.WEST;
+		gbc_lblProteinPercentage.insets = new Insets(0, 0, 5, 5);
+		gbc_lblProteinPercentage.gridx = 1;
+		gbc_lblProteinPercentage.gridy = 4;
+		getContentPane().add(lblProteinPercentage, gbc_lblProteinPercentage);
+		
+		spinnerProteinPercentage = new JSpinner();
+		spinnerProteinPercentage.setModel(new SpinnerNumberModel(0, 0, 99, 1));
+		GridBagConstraints gbc_spinnerProteinPercentage = new GridBagConstraints();
+		gbc_spinnerProteinPercentage.fill = GridBagConstraints.HORIZONTAL;
+		gbc_spinnerProteinPercentage.gridwidth = 3;
+		gbc_spinnerProteinPercentage.insets = new Insets(0, 0, 5, 5);
+		gbc_spinnerProteinPercentage.gridx = 2;
+		gbc_spinnerProteinPercentage.gridy = 4;
+		getContentPane().add(spinnerProteinPercentage, gbc_spinnerProteinPercentage);
+		
+		JLabel lblFatPercentage = new JLabel("Fat Percentage (%):");
+		GridBagConstraints gbc_lblFatPercentage = new GridBagConstraints();
+		gbc_lblFatPercentage.anchor = GridBagConstraints.WEST;
+		gbc_lblFatPercentage.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFatPercentage.gridx = 1;
+		gbc_lblFatPercentage.gridy = 5;
+		getContentPane().add(lblFatPercentage, gbc_lblFatPercentage);
+		
+		spinnerFatPercentage = new JSpinner();
+		spinnerFatPercentage.setModel(new SpinnerNumberModel(0, 0, 99, 1));
+		GridBagConstraints gbc_spinnerFatPercentage = new GridBagConstraints();
+		gbc_spinnerFatPercentage.fill = GridBagConstraints.HORIZONTAL;
+		gbc_spinnerFatPercentage.gridwidth = 3;
+		gbc_spinnerFatPercentage.insets = new Insets(0, 0, 5, 5);
+		gbc_spinnerFatPercentage.gridx = 2;
+		gbc_spinnerFatPercentage.gridy = 5;
+		getContentPane().add(spinnerFatPercentage, gbc_spinnerFatPercentage);
+		
+		JLabel lblObjective = new JLabel("Recommended For:");
+		GridBagConstraints gbc_lblObjective = new GridBagConstraints();
+		gbc_lblObjective.anchor = GridBagConstraints.WEST;
+		gbc_lblObjective.insets = new Insets(0, 0, 5, 5);
+		gbc_lblObjective.gridx = 1;
+		gbc_lblObjective.gridy = 6;
+		getContentPane().add(lblObjective, gbc_lblObjective);
+		
+		comboBoxObjective = new JComboBox<String>();
+		comboBoxObjective.setModel(new DefaultComboBoxModel<String>(new String[] {"Mass Gain", "Reduction", "Strenght"}));
+		GridBagConstraints gbc_comboBoxObjective = new GridBagConstraints();
+		gbc_comboBoxObjective.gridwidth = 3;
+		gbc_comboBoxObjective.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxObjective.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxObjective.gridx = 2;
+		gbc_comboBoxObjective.gridy = 6;
+		getContentPane().add(comboBoxObjective, gbc_comboBoxObjective);
+		
+		Component horizontalStrutLeft = Box.createHorizontalStrut(10);
+		GridBagConstraints gbc_horizontalStrutLeft = new GridBagConstraints();
+		gbc_horizontalStrutLeft.insets = new Insets(0, 0, 5, 5);
+		gbc_horizontalStrutLeft.gridx = 0;
+		gbc_horizontalStrutLeft.gridy = 11;
+		getContentPane().add(horizontalStrutLeft, gbc_horizontalStrutLeft);
+		{
+			JButton okButton = new JButton("Save");
+			okButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					saveButtonPressed();
+				}
+			});
+			GridBagConstraints gbc_okButton = new GridBagConstraints();
+			gbc_okButton.insets = new Insets(0, 0, 5, 5);
+			gbc_okButton.gridx = 3;
+			gbc_okButton.gridy = 11;
+			getContentPane().add(okButton, gbc_okButton);
+			okButton.setActionCommand("OK");
+			getRootPane().setDefaultButton(okButton);
+		}
+		{
+			JButton cancelButton = new JButton("Cancel");
+			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
+			gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
+			gbc_cancelButton.gridx = 4;
+			gbc_cancelButton.gridy = 11;
+			getContentPane().add(cancelButton, gbc_cancelButton);
+			cancelButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			cancelButton.setActionCommand("Cancel");
+		}
+		
+		Component horizontalStrutRight = Box.createHorizontalStrut(10);
+		GridBagConstraints gbc_horizontalStrutRight = new GridBagConstraints();
+		gbc_horizontalStrutRight.insets = new Insets(0, 0, 5, 0);
+		gbc_horizontalStrutRight.gridx = 5;
+		gbc_horizontalStrutRight.gridy = 11;
+		getContentPane().add(horizontalStrutRight, gbc_horizontalStrutRight);
+		
+		Component verticalStrutBottom = Box.createVerticalStrut(10);
+		GridBagConstraints gbc_verticalStrutBottom = new GridBagConstraints();
+		gbc_verticalStrutBottom.insets = new Insets(0, 0, 0, 5);
+		gbc_verticalStrutBottom.gridx = 2;
+		gbc_verticalStrutBottom.gridy = 12;
+		getContentPane().add(verticalStrutBottom, gbc_verticalStrutBottom);
+	}
+	
+	private void saveButtonPressed(){
+		
+		Map<String, String> objectiveTranslations = new HashMap<String, String>();
+		objectiveTranslations.put("Mass Gain", "m");
+		objectiveTranslations.put("Reduction", "r");
+		objectiveTranslations.put("Stength", "p");
+		
+		
+		String name = textFieldName.getText();
+		int gramature = Integer.parseInt(textFieldGramature.getText());
+		int carbohydratesPercentage = (Integer) spinnerCarbohydratesPercentage.getValue();
+		int proteinPercentage = (Integer) spinnerFatPercentage.getValue();
+		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
+		String objectiveFull = (String) comboBoxObjective.getSelectedItem();
+		String objective = objectiveTranslations.get(objectiveFull);
+		
+		Meal newMeal = new Meal(name, objective, gramature, carbohydratesPercentage, proteinPercentage, fatPercentage);
+		
+		try {
+			new DatabaseController().saveEntityToDatabase(newMeal);
+			dispose();
+		} catch (Exception e){
+			JOptionPane.showMessageDialog(this, "Please check your connection with database", "Error!", 2);
+		}
+	}
+	
+	private MaskFormatter createFormatter(String s){
+	    MaskFormatter formatter = null;
+	    try {
+	        formatter = new MaskFormatter(s);
+	    } catch (java.text.ParseException exc) {
+	        System.err.println("formatter is bad: " + exc.getMessage());
+	    }
+	    return formatter;
+	}
+	/*private InputVerifier createInputVerifier(){
+		return new InputVerifier() {
+			
+			@Override
+			public boolean verify(JComponent input) {
+				dateFormatter.setLenient(false);
+				JFormattedTextField ft = (JFormattedTextField) input;
+				String text = ft.getText();
+				try {
+					dateFormatter.parse(text);
+					return true;
+				} catch (ParseException e) {
+					return false;
+				}
+			}
+		};
+	}*/
+	
+}

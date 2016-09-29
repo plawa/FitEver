@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -33,7 +34,7 @@ import database.entities.User;
 
 public class AddUserDialog extends JDialog {
 	
-	private static final long serialVersionUID = 7513700313890891626L;
+	private static final long serialVersionUID = 9182720162758099907L;
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
 	private JTextField textFieldHeight;
@@ -326,8 +327,13 @@ public class AddUserDialog extends JDialog {
 		catch (ParseException e) { e.printStackTrace();	}
 		
 		User newUser = new User(name, surname, date, sex, height, startWeight, goalWeight, fatPercentage, userObjective);
-		new DatabaseController().saveEntityToDatabase(newUser);
-		dispose();
+		
+		try {
+			new DatabaseController().saveEntityToDatabase(newUser);
+			dispose();
+		} catch (Exception e){
+			JOptionPane.showMessageDialog(this, "Please check your connection with database", "Error!", 2);
+		}
 	}
 	
 	private MaskFormatter createFormatter(String s){

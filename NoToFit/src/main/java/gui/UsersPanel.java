@@ -1,22 +1,18 @@
 package gui;
 
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.SwingConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class UsersPanel extends JPanel {
+
+	private static final long serialVersionUID = -8424451595957894544L;
 
 	/**
 	 * Create the panel.
