@@ -250,7 +250,8 @@ public class AddMealDialog extends JDialog {
 			new DatabaseController().saveEntityToDatabase(newMeal);
 			dispose();
 		} catch (Exception e){
-			JOptionPane.showMessageDialog(this, "Please check your connection with database", "Error!", 2);
+			e.printStackTrace();
+			//JOptionPane.showMessageDialog(this, e.getStackTrace().toString(), "Error!", 2);
 		}
 	}
 	/*

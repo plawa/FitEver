@@ -30,6 +30,7 @@ import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
 import database.controller.DatabaseController;
+import database.entities.Shadow;
 import database.entities.User;
 import javax.swing.JPasswordField;
 
@@ -349,6 +350,8 @@ public class AddUserDialog extends JDialog {
 		objectiveTranslations.put("Stength", 'p');
 		
 		
+		String login = textFieldLogin.getText();
+		String password = passwordField.getText();
 		String name = textFieldName.getText();
 		String surname = textFieldSurname.getText();
 		String sexFull = (String) comboBoxSex.getSelectedItem();
@@ -364,13 +367,32 @@ public class AddUserDialog extends JDialog {
 		try { date = dateFormatter.parse(dateRaw); } 
 		catch (ParseException e) { e.printStackTrace();	}
 		
-		User newUser = new User(null, name, surname, date, sex, height, startWeight, goalWeight, fatPercentage, userObjective);
+		Shadow userCredentials = new Shadow();
+		userCredentials.setLogin(login);
+		userCredentials.setPass(password);
+		
+		User newUser = new User();
+		newUser.setName(name);
+		newUser.setSurname(surname);
+		newUser.setDateOfBirth(date);
+		newUser.setSex(sex);
+		newUser.setHeight(height);
+		newUser.setStartWeight(startWeight);
+		newUser.setGoalWeight(goalWeight);
+		newUser.setFatPercentage(fatPercentage);
+		newUser.setUserObjective(userObjective);
+		
+		newUser.setShadow(userCredentials);
+		userCredentials.setUser(newUser);
 		
 		try {
-			new DatabaseController().saveEntityToDatabase(newUser);
+			DatabaseController db = new DatabaseController();
+			db.saveEntityToDatabase(userCredentials);
+			//db.saveEntityToDatabase(newUser);
 			dispose();
 		} catch (Exception e){
-			JOptionPane.showMessageDialog(this, "Please check your connection with database", "Error!", 2);
+			e.printStackTrace();
+			//JOptionPane.showMessageDialog(this, e.getStackTrace().toString(), "Error!", 2);
 		}
 	}
 	
