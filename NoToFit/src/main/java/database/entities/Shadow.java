@@ -1,4 +1,7 @@
 package database.entities;
+
+import logic.Encrypter;
+
 // Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1
 
 /**
@@ -6,18 +9,13 @@ package database.entities;
  */
 public class Shadow extends Entity {
 
+	private static final long serialVersionUID = -1566651635897799137L;
 	private int userId;
 	private User user;
 	private String login;
 	private String pass;
 
 	public Shadow() {
-	}
-
-	public Shadow(User user, String login, String pass) {
-		this.user = user;
-		this.login = login;
-		this.pass = pass;
 	}
 
 	public int getUserId() {
@@ -50,6 +48,17 @@ public class Shadow extends Entity {
 
 	public void setPass(String pass) {
 		this.pass = pass;
+	}
+	
+	public void setAndEncryptPass(String pass){
+		this.pass = Encrypter.encryptWithMD5(pass);
+	}
+	
+	public boolean equals(Shadow other){
+		if (this.pass.equals(other.pass))
+			return true;
+		else
+			return false;
 	}
 
 }

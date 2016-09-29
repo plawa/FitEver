@@ -10,6 +10,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import database.controller.DatabaseController;
+import logic.Login;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagLayout;
@@ -114,6 +116,16 @@ public class LoginDialog extends JDialog {
 			}
 			{
 				JButton okButton = new JButton("Login");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						Login myLogin = new Login();
+						
+						String username = textFieldUsername.getText();
+						String passwordRaw = passwordField.getText();
+						
+						myLogin.performLogin(username, passwordRaw);
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton, "cell 2 0,alignx left,aligny center");
 				getRootPane().setDefaultButton(okButton);

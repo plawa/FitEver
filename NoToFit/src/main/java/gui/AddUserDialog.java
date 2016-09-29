@@ -32,6 +32,8 @@ import javax.swing.text.MaskFormatter;
 import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
+import logic.Encrypter;
+
 import javax.swing.JPasswordField;
 
 public class AddUserDialog extends JDialog {
@@ -351,7 +353,7 @@ public class AddUserDialog extends JDialog {
 		
 		
 		String login = textFieldLogin.getText();
-		String password = passwordField.getText();
+		String passwordRaw = passwordField.getText();
 		String name = textFieldName.getText();
 		String surname = textFieldSurname.getText();
 		String sexFull = (String) comboBoxSex.getSelectedItem();
@@ -369,7 +371,7 @@ public class AddUserDialog extends JDialog {
 		
 		Shadow userCredentials = new Shadow();
 		userCredentials.setLogin(login);
-		userCredentials.setPass(password);
+		userCredentials.setAndEncryptPass(passwordRaw);
 		
 		User newUser = new User();
 		newUser.setName(name);
@@ -388,7 +390,6 @@ public class AddUserDialog extends JDialog {
 		try {
 			DatabaseController db = new DatabaseController();
 			db.saveEntityToDatabase(userCredentials);
-			//db.saveEntityToDatabase(newUser);
 			dispose();
 		} catch (Exception e){
 			e.printStackTrace();

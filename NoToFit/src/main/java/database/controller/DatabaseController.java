@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -45,10 +46,12 @@ public class DatabaseController
     	return resultList;
     }
     
-    public <T extends Entity> T getEntityByID(Class<T> type, int ID) throws RuntimeException{
+    public Shadow getShadowEntityByLogin(String login) throws RuntimeException{
     	Session mySession = mySessionFactory.openSession();
     	Transaction myTransaction = mySession.beginTransaction();
-    	T result = mySession.get(type, ID);
+    	Query<Shadow> queryForShadow = mySession.createQuery("FROM Shadow WHERE login = :login");
+    	queryForShadow.setString("login", login);
+    	Shadow result = (Shadow) queryForShadow.list().get(0);
     	myTransaction.commit();
     	mySession.close();
     	return result;
@@ -57,7 +60,7 @@ public class DatabaseController
 	public static void main(String[] args){
 		//main function only for test purposes
     	DatabaseController db = new DatabaseController();
-    	DateFormat myDateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+    	/*DateFormat myDateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
     	Date data = null;
 		try {
 			data = myDateFormatter.parse("12-03-1994");
@@ -66,7 +69,7 @@ public class DatabaseController
 		}
 		Shadow sh = new Shadow();
 		sh.setLogin("mojLogin");
-		sh.setPass("md51111111111111111111111111jdhs");
+		sh.setPass("md511111111111jdhs");
 		
     	User us = new User();
     	us.setName("Marek");
@@ -80,15 +83,11 @@ public class DatabaseController
     	us.setShadow(sh);
     	sh.setUser(us);
     	
-    	db.saveEntityToDatabase(us);
-    	db.saveEntityToDatabase(sh);
+    	db.saveEntityToDatabase(sh);*/
 
-    	/*for (Shadow sh : db.getAll(Shadow.class)){
-    		System.out.println(sh.getLogin());
-    	}*/
     	
-    	//db.getEntityByID(User.class, )
+    	System.out.print(db.getShadowEntityByLogin("pidanciwo").getPass());
     	
-        System.out.println( "Success!" );
+        //System.out.println( "Success!" );
     }
 }

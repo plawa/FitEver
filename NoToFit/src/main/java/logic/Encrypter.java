@@ -5,9 +5,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class Encrypter {
 
-	private MessageDigest md;
+	private static MessageDigest md;
 	
-	public String encryptWithMD5(String pass) {
+	public static String encryptWithMD5(String pass) {
 		try {
 			md = MessageDigest.getInstance("MD5");
 			byte[] passBytes = pass.getBytes();
@@ -24,8 +24,7 @@ public class Encrypter {
 	}
 
 	public static void main(String[] args) {
-		Encrypter myEncrypter = new Encrypter();
-		System.out.print(myEncrypter.encryptWithMD5("mojeHaslo1!@"));
+		System.out.print(Encrypter.encryptWithMD5("mojeHaslo1!@"));
 	}
 
 }
