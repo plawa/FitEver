@@ -10,9 +10,12 @@ import org.hibernate.cfg.Configuration;
 
 import database.entities.Entity;
 import database.entities.Shadow;
+import database.entities.User;
 
 public class DatabaseController 
 {
+	private User usr;
+	
 	private static SessionFactory mySessionFactory = null;
 	
     public DatabaseController() {
@@ -53,13 +56,25 @@ public class DatabaseController
     	Transaction myTransaction = mySession.beginTransaction();
     	Query<Shadow> queryForShadow = mySession.createQuery("FROM Shadow WHERE login = :login");
     	queryForShadow.setString("login", login);
+    	//queryForShadow.
     	List<Shadow> resultList = queryForShadow.list();
     	if (resultList.isEmpty())
     		return null;
     	Shadow result = (Shadow) resultList.get(0);
+    	//usr = result.getUser();
+    	//String name = usr.getName();
     	myTransaction.commit();
     	mySession.close();
     	return result;
+    }
+    
+    public User getUserByShadow(Shadow credentials) throws RuntimeException {
+    	Session mySession = mySessionFactory.openSession();
+    	Transaction myTransaction = mySession.beginTransaction(); 	
+    	usr = credentials.getUser();
+    	myTransaction.commit();
+    	mySession.close();
+    	return usr;
     }
     
 	public static void main(String[] args){
@@ -90,9 +105,13 @@ public class DatabaseController
     	
     	db.saveEntityToDatabase(sh);*/
 
+    	Shadow cred = db.getShadowEntityByLogin("pidanciwo");
     	
-    	System.out.print(db.getShadowEntityByLogin("pidanciwo").getPass());
+    	System.out.print(cred.getUser().getName());
     	
-        //System.out.println( "Success!" );
+    	//User userloaded = db.getUserByShadow(cred);
+    	
+    	//System.out.print(userloaded.getName());
+
     }
 }

@@ -8,10 +8,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import database.entities.User;
+
 public class MainFrame {
 
 	private JFrame frmNoToFit;
 	private LoginDialog myLoginDialog;
+	private User userlogged;
 	private ImageIcon userIcon;
 	private ImageIcon mealIcon;
 	private ImageIcon exerciseIcon;
@@ -33,7 +36,6 @@ public class MainFrame {
 	 * Create the application.
 	 */
 	public MainFrame() {
-		
 		initialize();
 	}
 
@@ -46,9 +48,10 @@ public class MainFrame {
 	
 	private void initialize() {
 		createFrame();
-		login();
+		//login();
 		loadIcons();
 		prepareTabbedPane();
+		frmNoToFit.setVisible(true);
 	}
 	
 	private void createFrame(){

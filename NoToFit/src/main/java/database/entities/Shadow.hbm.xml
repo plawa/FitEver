@@ -10,7 +10,7 @@
                 <param name="property">user</param>
             </generator>
         </id>
-        <one-to-one name="user" class="database.entities.User" constrained="true"></one-to-one>
+        <one-to-one name="user" class="database.entities.User" constrained="true" fetch="join"></one-to-one>
         <property name="login" type="string">
             <column name="login" length="32" not-null="true" unique="true" />
         </property>
