@@ -27,14 +27,16 @@ public class UserPanel extends JPanel {
 	private JLabel lblValueUserObjective;
 	private JLabel lblValueFatPercentage;
 	private JLabel lblValueSex;
+	private User userDisplaying;
 	
 	
 	
 	public UserPanel(User userToMaintain) {
+		userDisplaying = userToMaintain;
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 25, 0, 0, 0, 10, 0, 0, 64, 125, 0, 0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 25, 0, 0, 0, 10, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 16, 0, 23, 0, 0, 0, 0, 0, 20, 0, 0, 136, 1, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
@@ -60,7 +62,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionName.gridy = 1;
 		add(lblDescriptionName, gbc_lblDescriptionName);
 		
-		lblValueNameAndSurname = new JLabel(userToMaintain.getName() + " " + userToMaintain.getSurname());
+		lblValueNameAndSurname = new JLabel();
 		GridBagConstraints gbc_lblValueNameAndSurname = new GridBagConstraints();
 		gbc_lblValueNameAndSurname.anchor = GridBagConstraints.WEST;
 		gbc_lblValueNameAndSurname.insets = new Insets(0, 0, 5, 5);
@@ -76,7 +78,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionSex.gridy = 2;
 		add(lblDescriptionSex, gbc_lblDescriptionSex);
 		
-		lblValueSex = new JLabel(parseSexFromChar(userToMaintain.getSex()));
+		lblValueSex = new JLabel();
 		GridBagConstraints gbc_lblValueSex = new GridBagConstraints();
 		gbc_lblValueSex.anchor = GridBagConstraints.WEST;
 		gbc_lblValueSex.insets = new Insets(0, 0, 5, 5);
@@ -100,13 +102,6 @@ public class UserPanel extends JPanel {
 		gbc_lblValueAge.gridy = 3;
 		add(lblValueAge, gbc_lblValueAge);
 		
-		JLabel lblDescriptionManagement = new JLabel("Management");
-		GridBagConstraints gbc_lblDescriptionManagement = new GridBagConstraints();
-		gbc_lblDescriptionManagement.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescriptionManagement.gridx = 9;
-		gbc_lblDescriptionManagement.gridy = 3;
-		add(lblDescriptionManagement, gbc_lblDescriptionManagement);
-		
 		JLabel lblDescriptionHeight = new JLabel("Height:");
 		GridBagConstraints gbc_lblDescriptionHeight = new GridBagConstraints();
 		gbc_lblDescriptionHeight.anchor = GridBagConstraints.WEST;
@@ -115,7 +110,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionHeight.gridy = 4;
 		add(lblDescriptionHeight, gbc_lblDescriptionHeight);
 		
-		lblValueHeight = new JLabel(Integer.toString(userToMaintain.getHeight()));
+		lblValueHeight = new JLabel();
 		GridBagConstraints gbc_lblValueHeight = new GridBagConstraints();
 		gbc_lblValueHeight.anchor = GridBagConstraints.WEST;
 		gbc_lblValueHeight.insets = new Insets(0, 0, 5, 5);
@@ -131,7 +126,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionFatPercentage.gridy = 5;
 		add(lblDescriptionFatPercentage, gbc_lblDescriptionFatPercentage);
 		
-		lblValueFatPercentage = new JLabel(Integer.toString(userToMaintain.getFatPercentage()));
+		lblValueFatPercentage = new JLabel();
 		GridBagConstraints gbc_lblValueFatPercentage = new GridBagConstraints();
 		gbc_lblValueFatPercentage.anchor = GridBagConstraints.WEST;
 		gbc_lblValueFatPercentage.insets = new Insets(0, 0, 5, 5);
@@ -147,7 +142,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionStartWeight.gridy = 6;
 		add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
 		
-		lblValueStartWeight = new JLabel(Float.toString(userToMaintain.getStartWeight()));
+		lblValueStartWeight = new JLabel();
 		GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
 		gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
@@ -163,7 +158,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionGoalWeight.gridy = 7;
 		add(lblDescriptionGoalWeight, gbc_lblDescriptionGoalWeight);
 		
-		lblValueGoalWeight = new JLabel(Float.toString(userToMaintain.getGoalWeight()));
+		lblValueGoalWeight = new JLabel();
 		GridBagConstraints gbc_lblValueGoalWeight = new GridBagConstraints();
 		gbc_lblValueGoalWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblValueGoalWeight.insets = new Insets(0, 0, 5, 5);
@@ -179,7 +174,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionMainObjective.gridy = 8;
 		add(lblDescriptionMainObjective, gbc_lblDescriptionMainObjective);
 		
-		lblValueUserObjective = new JLabel(parseObjectiveFromChar(userToMaintain.getUserObjective()));
+		lblValueUserObjective = new JLabel();
 		GridBagConstraints gbc_lblValueUserObjective = new GridBagConstraints();
 		gbc_lblValueUserObjective.anchor = GridBagConstraints.WEST;
 		gbc_lblValueUserObjective.insets = new Insets(0, 0, 5, 5);
@@ -190,7 +185,9 @@ public class UserPanel extends JPanel {
 		JButton btnEditUser = new JButton("Edit User");
 		btnEditUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
+				EditUserDialog editDialog = new EditUserDialog(userDisplaying);
+				editDialog.setVisible(true);
+				refreshContent();
 			}
 		});
 		GridBagConstraints gbc_btnEditUser = new GridBagConstraints();
@@ -199,27 +196,21 @@ public class UserPanel extends JPanel {
 		gbc_btnEditUser.gridx = 2;
 		gbc_btnEditUser.gridy = 10;
 		add(btnEditUser, gbc_btnEditUser);
+		refreshContent();
 
 	}
 	
-	private String parseObjectiveFromChar(Character objectiveChar){
-		switch(objectiveChar){
-		case 'm':
-			return "Mass Gain";
-		case 'r':
-			return "Reduction";
-		case 's':
-			return "Strength";
-		default:
-			return "Parse Error!";
-		}
+	protected void refreshContent() {
+		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
+		lblValueSex.setText(userDisplaying.getSexString());
+		//TODO lblValueAge.setText("");
+		lblValueHeight.setText(Integer.toString(userDisplaying.getHeight()));
+		lblValueStartWeight.setText(Float.toString(userDisplaying.getStartWeight()));
+		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()));
+		lblValueFatPercentage.setText(Integer.toString(userDisplaying.getFatPercentage()));
+		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
 	}
-	
-	private String parseSexFromChar(Character sexChar){
-		Map<Character, String> sexTranslation = new HashMap<Character, String>();
-		sexTranslation.put('m', "Male");
-		sexTranslation.put('f', "Female");
-		return sexTranslation.getOrDefault(sexChar, "Parse Error!");
-	}
+
+
 	
 }

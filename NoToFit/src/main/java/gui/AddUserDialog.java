@@ -53,9 +53,6 @@ public class AddUserDialog extends JDialog {
 	private JPasswordField passwordField;
 	
 	
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		try {
 			AddUserDialog dialog = new AddUserDialog();
@@ -66,9 +63,6 @@ public class AddUserDialog extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public AddUserDialog() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Add New User");
@@ -186,10 +180,6 @@ public class AddUserDialog extends JDialog {
 		gbc_lblDateOfBirth.gridx = 1;
 		gbc_lblDateOfBirth.gridy = 6;
 		getContentPane().add(lblDateOfBirth, gbc_lblDateOfBirth);
-		
-		
-		//DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-		
 		
 		formatTxtFldDate = new JFormattedTextField(createFormatter("##-##-####"));
 		formatTxtFldDate.setInputVerifier(createInputVerifier());
@@ -342,28 +332,16 @@ public class AddUserDialog extends JDialog {
 	}
 	
 	private void saveButtonPressed(){
-		Map<String, Character> sexTranslations = new HashMap<String, Character>();
-		sexTranslations.put("male", 'm');
-		sexTranslations.put("female", 'f');
-		
-		Map<String, Character> objectiveTranslations = new HashMap<String, Character>();
-		objectiveTranslations.put("Mass Gain", 'm');
-		objectiveTranslations.put("Reduction", 'r');
-		objectiveTranslations.put("Stength", 'p');
-		
-		
 		String login = textFieldLogin.getText();
 		String passwordRaw = passwordField.getText();
 		String name = textFieldName.getText();
 		String surname = textFieldSurname.getText();
-		String sexFull = (String) comboBoxSex.getSelectedItem();
-		Character sex = sexTranslations.get(sexFull);
+		String sexString = (String) comboBoxSex.getSelectedItem();
 		int height = Integer.parseInt(textFieldHeight.getText());
 		float startWeight = Float.parseFloat(textFieldStartWeight.getText());
 		float goalWeight = Float.parseFloat(textFieldGoalWeight.getText());
 		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
-		String userObjectiveFull = (String) comboBoxUserObjective.getSelectedItem();
-		Character userObjective = objectiveTranslations.get(userObjectiveFull);
+		String userObjectiveString = (String) comboBoxUserObjective.getSelectedItem();
 		String dateRaw = formatTxtFldDate.getText();
 		Date date = null;
 		try { date = dateFormatter.parse(dateRaw); } 
@@ -377,12 +355,12 @@ public class AddUserDialog extends JDialog {
 		newUser.setName(name);
 		newUser.setSurname(surname);
 		newUser.setDateOfBirth(date);
-		newUser.setSex(sex);
+		newUser.setSexFromString(sexString);
 		newUser.setHeight(height);
 		newUser.setStartWeight(startWeight);
 		newUser.setGoalWeight(goalWeight);
 		newUser.setFatPercentage(fatPercentage);
-		newUser.setUserObjective(userObjective);
+		newUser.setUserObjectiveFromString(userObjectiveString);
 		
 		newUser.setShadow(userCredentials);
 		userCredentials.setUser(newUser);

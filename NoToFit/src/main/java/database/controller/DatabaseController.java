@@ -42,6 +42,14 @@ public class DatabaseController
     	mySession.close();
     }
     
+	public <T extends Entity> void updateEntityToDatabase(T entity) {
+    	Session mySession = mySessionFactory.openSession();
+    	Transaction myTransaction = mySession.beginTransaction();
+    	mySession.update(entity);
+    	myTransaction.commit();
+    	mySession.close();
+	}
+    
     public <T extends Entity> List<T> getAll(Class<T> type) throws RuntimeException {
     	Session mySession = mySessionFactory.openSession();
     	Transaction myTransaction = mySession.beginTransaction();
@@ -65,6 +73,7 @@ public class DatabaseController
     	mySession.close();
     	return result;
     }
+
     
 	public static void main(String[] args){
 		//main function only for test purposes
@@ -95,8 +104,9 @@ public class DatabaseController
     	db.saveEntityToDatabase(sh);*/
 
     	Shadow cred = db.getShadowEntityByLogin("pidanciwo");
-    	
+    	cred.getUser().setSurname("Jakowyż");
     	System.out.print(cred.getUser().getName());
 
     }
+
 }

@@ -10,8 +10,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -22,7 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -30,11 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
 import database.controller.DatabaseController;
-import database.entities.Shadow;
 import database.entities.User;
-import logic.Encrypter;
-
-import javax.swing.JPasswordField;
 
 public class EditUserDialog extends JDialog {
 	
@@ -51,11 +45,8 @@ public class EditUserDialog extends JDialog {
 	private DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	private JTextField textFieldLogin;
 	private JPasswordField passwordField;
+	private User userToEdit;
 	
-	
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		try {
 			EditUserDialog dialog = new EditUserDialog(null);
@@ -66,10 +57,8 @@ public class EditUserDialog extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public EditUserDialog(User userToEdit) {
+		this.userToEdit = userToEdit;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Add New User");
 		setModal(true);
@@ -96,7 +85,7 @@ public class EditUserDialog extends JDialog {
 		gbc_lblLogin.gridy = 1;
 		getContentPane().add(lblLogin, gbc_lblLogin);
 		
-		textFieldLogin = new JTextField();
+		textFieldLogin = new JTextField(userToEdit.getShadow().getLogin());
 		textFieldLogin.setEnabled(false);
 		textFieldLogin.setEditable(false);
 		GridBagConstraints gbc_textFieldLogin = new GridBagConstraints();
@@ -116,7 +105,7 @@ public class EditUserDialog extends JDialog {
 		gbc_lblPassword.gridy = 2;
 		getContentPane().add(lblPassword, gbc_lblPassword);
 		
-		passwordField = new JPasswordField();
+		passwordField = new JPasswordField("encodedPassword");
 		passwordField.setEnabled(false);
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
 		gbc_passwordField.gridwidth = 3;
@@ -173,13 +162,14 @@ public class EditUserDialog extends JDialog {
 		getContentPane().add(lblSex, gbc_lblSex);
 		
 		comboBoxSex = new JComboBox<String>();
-		comboBoxSex.setModel(new DefaultComboBoxModel<String>(new String[] {"male", "female"}));
+		comboBoxSex.setModel(new DefaultComboBoxModel<String>(new String[] {"Male", "Female"}));
 		GridBagConstraints gbc_comboBoxSex = new GridBagConstraints();
 		gbc_comboBoxSex.gridwidth = 3;
 		gbc_comboBoxSex.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxSex.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxSex.gridx = 2;
 		gbc_comboBoxSex.gridy = 5;
+		comboBoxSex.setSelectedItem(userToEdit.getSexString());
 		getContentPane().add(comboBoxSex, gbc_comboBoxSex);
 		
 		JLabel lblDateOfBirth = new JLabel("Date of Birth:");
@@ -190,10 +180,6 @@ public class EditUserDialog extends JDialog {
 		gbc_lblDateOfBirth.gridy = 6;
 		getContentPane().add(lblDateOfBirth, gbc_lblDateOfBirth);
 		
-		
-		//DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
-		
-		
 		formatTxtFldDate = new JFormattedTextField(createFormatter("##-##-####"));
 		formatTxtFldDate.setInputVerifier(createInputVerifier());
 		GridBagConstraints gbc_formatTxtFldDate = new GridBagConstraints();
@@ -202,6 +188,9 @@ public class EditUserDialog extends JDialog {
 		gbc_formatTxtFldDate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_formatTxtFldDate.gridx = 2;
 		gbc_formatTxtFldDate.gridy = 6;
+		DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");		
+		String dateString = dateFormatter.format(userToEdit.getDateOfBirth());
+		formatTxtFldDate.setText(dateString);
 		getContentPane().add(formatTxtFldDate, gbc_formatTxtFldDate);
 		
 		JLabel lblHeight = new JLabel("Height:");
@@ -212,7 +201,7 @@ public class EditUserDialog extends JDialog {
 		gbc_lblHeight.gridy = 7;
 		getContentPane().add(lblHeight, gbc_lblHeight);
 		
-		textFieldHeight = new JTextField(userToEdit.getHeight());
+		textFieldHeight = new JTextField(Integer.toString(userToEdit.getHeight()));
 		GridBagConstraints gbc_textFieldHeight = new GridBagConstraints();
 		gbc_textFieldHeight.gridwidth = 3;
 		gbc_textFieldHeight.insets = new Insets(0, 0, 5, 5);
@@ -346,54 +335,33 @@ public class EditUserDialog extends JDialog {
 	}
 	
 	private void saveButtonPressed(){
-		Map<String, Character> sexTranslations = new HashMap<String, Character>();
-		sexTranslations.put("male", 'm');
-		sexTranslations.put("female", 'f');
-		
-		Map<String, Character> objectiveTranslations = new HashMap<String, Character>();
-		objectiveTranslations.put("Mass Gain", 'm');
-		objectiveTranslations.put("Reduction", 'r');
-		objectiveTranslations.put("Stength", 'p');
-		
-		
-		String login = textFieldLogin.getText();
-		String passwordRaw = passwordField.getText();
+	
 		String name = textFieldName.getText();
 		String surname = textFieldSurname.getText();
-		String sexFull = (String) comboBoxSex.getSelectedItem();
-		Character sex = sexTranslations.get(sexFull);
+		String sexString = (String) comboBoxSex.getSelectedItem();
 		int height = Integer.parseInt(textFieldHeight.getText());
 		float startWeight = Float.parseFloat(textFieldStartWeight.getText());
 		float goalWeight = Float.parseFloat(textFieldGoalWeight.getText());
 		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
-		String userObjectiveFull = (String) comboBoxUserObjective.getSelectedItem();
-		Character userObjective = objectiveTranslations.get(userObjectiveFull);
+		String userObjectiveString = (String) comboBoxUserObjective.getSelectedItem();
 		String dateRaw = formatTxtFldDate.getText();
 		Date date = null;
 		try { date = dateFormatter.parse(dateRaw); } 
 		catch (ParseException e) { e.printStackTrace();	}
 		
-		Shadow userCredentials = new Shadow();
-		userCredentials.setLogin(login);
-		userCredentials.setAndEncryptPass(passwordRaw);
-		
-		User newUser = new User();
-		newUser.setName(name);
-		newUser.setSurname(surname);
-		newUser.setDateOfBirth(date);
-		newUser.setSex(sex);
-		newUser.setHeight(height);
-		newUser.setStartWeight(startWeight);
-		newUser.setGoalWeight(goalWeight);
-		newUser.setFatPercentage(fatPercentage);
-		newUser.setUserObjective(userObjective);
-		
-		newUser.setShadow(userCredentials);
-		userCredentials.setUser(newUser);
-		
+		userToEdit.setName(name);
+		userToEdit.setSurname(surname);
+		userToEdit.setDateOfBirth(date);
+		userToEdit.setSexFromString(sexString);
+		userToEdit.setHeight(height);
+		userToEdit.setStartWeight(startWeight);
+		userToEdit.setGoalWeight(goalWeight);
+		userToEdit.setFatPercentage(fatPercentage);
+		userToEdit.setUserObjectiveFromString(userObjectiveString);
+
 		try {
 			DatabaseController db = new DatabaseController();
-			db.saveEntityToDatabase(userCredentials);
+			db.updateEntityToDatabase(userToEdit);
 			dispose();
 		} catch (Exception e){
 			e.printStackTrace();

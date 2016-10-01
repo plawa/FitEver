@@ -139,14 +139,11 @@ public class LoginDialog extends JDialog {
 				JButton okButton = new JButton("Login");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						
-
 						String username = textFieldUsername.getText();
 						String passwordRaw = passwordField.getText();
 						LoginDialog.this.authorizedUser = LoginDialog.this.loginLogic.performLogin(username, passwordRaw);
 						
 						if (LoginDialog.this.authorizedUser != null) {
-							JOptionPane.showMessageDialog(LoginDialog.this, "Logged in.", "Good!", 2);
 							LoginDialog.this.setVisible(false);
 							LoginDialog.this.dispose();
 						} else {

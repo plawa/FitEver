@@ -12,5 +12,4 @@ public class MainApplication {
 		User loggedUser = myLoginDialog.getAuthorizedUser();
 		new MainFrame(loggedUser);
 	}
-
 }
