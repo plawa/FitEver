@@ -2,23 +2,23 @@ package database.controller;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import javax.persistence.TypedQuery;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.spi.ServiceException;
 
 import database.entities.Entity;
 import database.entities.Shadow;
-import database.entities.User;
 
 public class DatabaseController 
 {
-	private User usr;
 	
 	private static SessionFactory mySessionFactory = null;
 	
-    public DatabaseController() {
+    public DatabaseController() throws ServiceException {
     	if (mySessionFactory == null)
     		mySessionFactory = new Configuration().configure().buildSessionFactory();
 	}
@@ -54,27 +54,16 @@ public class DatabaseController
     public Shadow getShadowEntityByLogin(String login) throws RuntimeException{
     	Session mySession = mySessionFactory.openSession();
     	Transaction myTransaction = mySession.beginTransaction();
-    	Query<Shadow> queryForShadow = mySession.createQuery("FROM Shadow WHERE login = :login");
-    	queryForShadow.setString("login", login);
-    	//queryForShadow.
-    	List<Shadow> resultList = queryForShadow.list();
+    	String queryText = "SELECT s FROM Shadow s JOIN FETCH s.user WHERE s.login = :login";
+    	TypedQuery<Shadow> queryForShadow = mySession.createQuery(queryText);
+    	queryForShadow.setParameter("login", login);
+    	List<Shadow> resultList = queryForShadow.getResultList();//  list();
     	if (resultList.isEmpty())
     		return null;
-    	Shadow result = (Shadow) resultList.get(0);
-    	//usr = result.getUser();
-    	//String name = usr.getName();
+    	Shadow result = resultList.get(0);
     	myTransaction.commit();
     	mySession.close();
     	return result;
-    }
-    
-    public User getUserByShadow(Shadow credentials) throws RuntimeException {
-    	Session mySession = mySessionFactory.openSession();
-    	Transaction myTransaction = mySession.beginTransaction(); 	
-    	usr = credentials.getUser();
-    	myTransaction.commit();
-    	mySession.close();
-    	return usr;
     }
     
 	public static void main(String[] args){
@@ -108,10 +97,6 @@ public class DatabaseController
     	Shadow cred = db.getShadowEntityByLogin("pidanciwo");
     	
     	System.out.print(cred.getUser().getName());
-    	
-    	//User userloaded = db.getUserByShadow(cred);
-    	
-    	//System.out.print(userloaded.getName());
 
     }
 }

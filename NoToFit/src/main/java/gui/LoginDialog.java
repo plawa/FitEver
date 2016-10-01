@@ -17,6 +17,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.hibernate.service.spi.ServiceException;
+
 import database.entities.User;
 import logic.Login;
 import net.miginfocom.swing.MigLayout;
@@ -30,11 +32,12 @@ public class LoginDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 8472433868284888754L;
 
-	private User userLogged;
+	private User authorizedUser;
 	private final JPanel contentPanel = new JPanel();
 	private JDialog myAddUserDialog;
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
+	private Login loginLogic;
 
 	/**
 	 * Launch the application.
@@ -54,10 +57,16 @@ public class LoginDialog extends JDialog {
 	 */
 	public LoginDialog() {
 		super((Frame)null, true);
+		try{
+			LoginDialog.this.loginLogic = new Login();
+		} catch (ServiceException exc) {
+			JOptionPane.showMessageDialog(LoginDialog.this, "Unable to connect database. Please check your network connection.", "Error!", 0);
+			System.exit(1);
+		}
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				System.exit(0);
+				System.exit(1);
 			}
 		});
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -130,12 +139,13 @@ public class LoginDialog extends JDialog {
 				JButton okButton = new JButton("Login");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						Login myLogin = new Login();
+						
 
 						String username = textFieldUsername.getText();
 						String passwordRaw = passwordField.getText();
-
-						if (myLogin.performLogin(username, passwordRaw)!= null) {
+						LoginDialog.this.authorizedUser = LoginDialog.this.loginLogic.performLogin(username, passwordRaw);
+						
+						if (LoginDialog.this.authorizedUser != null) {
 							JOptionPane.showMessageDialog(LoginDialog.this, "Logged in.", "Good!", 2);
 							LoginDialog.this.setVisible(false);
 							LoginDialog.this.dispose();
@@ -160,6 +170,10 @@ public class LoginDialog extends JDialog {
 			}
 		}
 		setLocationRelativeTo(null);
+	}
+
+	public User getAuthorizedUser() {
+		return authorizedUser;
 	}
 
 }

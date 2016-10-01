@@ -13,8 +13,7 @@ import database.entities.User;
 public class MainFrame {
 
 	private JFrame frmNoToFit;
-	private LoginDialog myLoginDialog;
-	private User userlogged;
+	private User userLogged;
 	private ImageIcon userIcon;
 	private ImageIcon mealIcon;
 	private ImageIcon exerciseIcon;
@@ -23,7 +22,7 @@ public class MainFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainFrame window = new MainFrame();
+					MainFrame window = new MainFrame(null);
 					window.frmNoToFit.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -35,20 +34,13 @@ public class MainFrame {
 	/**
 	 * Create the application.
 	 */
-	public MainFrame() {
-		initialize();
-	}
-
-	private boolean login(){
-		myLoginDialog = new LoginDialog();
-		myLoginDialog.setVisible(true);
-		return false;
-		
+	public MainFrame(User authorizedUser) {
+		this.userLogged = authorizedUser;
+		initializeInterface();
 	}
 	
-	private void initialize() {
+	private void initializeInterface() {
 		createFrame();
-		//login();
 		loadIcons();
 		prepareTabbedPane();
 		frmNoToFit.setVisible(true);
@@ -68,7 +60,7 @@ public class MainFrame {
 	private void prepareTabbedPane(){
 		frmNoToFit.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-		UsersPanel usersPanel = new UsersPanel();
+		UserPanel usersPanel = new UserPanel(userLogged);
 		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 42, 0};
 		tabbedPane.addTab("Your Stats", userIcon, usersPanel);

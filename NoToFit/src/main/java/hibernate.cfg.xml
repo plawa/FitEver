@@ -14,7 +14,7 @@
         <property name="hibernate.search.autoregister_listeners">true</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.validator.apply_to_ddl">false</property>
-        <property name="hibernate.enable_lazy_load_no_trans">true</property>
+        <!-- property name="hibernate.enable_lazy_load_no_trans">true</property-->
         <mapping resource="database/entities/User.hbm.xml" />
         <mapping resource="database/entities/Diet.hbm.xml" />
         <mapping resource="database/entities/WorkoutExercise.hbm.xml" />
