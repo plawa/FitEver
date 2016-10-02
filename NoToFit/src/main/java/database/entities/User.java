@@ -56,6 +56,7 @@ public class User extends Entity {
 		this.sex = sex;
 		this.height = height;
 		this.startWeight = startWeight;
+		this.actualWeight = startWeight; //TO OBSERVE!
 		this.goalWeight = goalWeight;
 		this.fatPercentage = fatPercentage;
 		this.userObjective = userObjective;
@@ -195,7 +196,7 @@ public class User extends Entity {
 
 	public float calculateBMI(){
 		float heightMeters = height / 100f;
-		return startWeight / (heightMeters*heightMeters);
+		return actualWeight / (heightMeters*heightMeters);
 	}
 	
 	private void initializeMaps(){
