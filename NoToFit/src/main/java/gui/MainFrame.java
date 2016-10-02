@@ -63,9 +63,9 @@ public class MainFrame {
 		UserPanel usersPanel = new UserPanel(userLogged);
 		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 42, 0};
-		tabbedPane.addTab("Your Stats", userIcon, usersPanel);
-		tabbedPane.addTab("Meals", mealIcon, new MealsPanel());
-		tabbedPane.addTab("Exercises", exerciseIcon, new ExercisesPanel());
+		tabbedPane.addTab("Overview", userIcon, usersPanel);
+		tabbedPane.addTab("Diet", mealIcon, new MealsPanel());
+		tabbedPane.addTab("Workout", exerciseIcon, new ExercisesPanel());
 		frmNoToFit.getContentPane().add(tabbedPane);
 	}
 }

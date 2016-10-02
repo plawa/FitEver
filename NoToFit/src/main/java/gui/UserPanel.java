@@ -4,19 +4,19 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Years;
+
 import database.entities.User;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.awt.event.ActionEvent;
 
 public class UserPanel extends JPanel {
 
@@ -205,7 +205,7 @@ public class UserPanel extends JPanel {
 	protected void refreshContent() {
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
 		lblValueSex.setText(userDisplaying.getSexString());
-		//TODO lblValueAge.setText("");
+		lblValueAge.setText(Integer.toString(calculateAge(userDisplaying.getDateOfBirth())));
 		lblValueHeight.setText(Integer.toString(userDisplaying.getHeight()));
 		lblValueStartWeight.setText(Float.toString(userDisplaying.getStartWeight()));
 		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()));
@@ -213,10 +213,10 @@ public class UserPanel extends JPanel {
 		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
 	}
 	
-	private int calculateAge(Date datePast) {
-		return 0;
-		// TODO 
-		//Date dateNow = new SimpleDateFormat().;
+	private int calculateAge(Date dateOfBirth) {
+		LocalDate birthDate = new LocalDate(dateOfBirth.getTime());
+		Years age = Years.yearsBetween(birthDate, LocalDate.now());
+		return age.getYears();
 	}
 
 
