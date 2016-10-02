@@ -218,25 +218,12 @@ public class AddMealDialog extends JDialog {
 		gbc_verticalStrutBottom.gridx = 2;
 		gbc_verticalStrutBottom.gridy = 12;
 		getContentPane().add(verticalStrutBottom, gbc_verticalStrutBottom);
-		initializeFields();
-	}
-	
-	protected void initializeFields() {
-		//for inheritance!
-		;
 	}
 
-	private void proceedButtonPressed(){
 
+	protected void proceedButtonPressed(){
 		Meal newMeal = new Meal();
-		
-		newMeal.setName(textFieldName.getText());
-		newMeal.setGramature(Integer.parseInt(textFieldGrammage.getText()));
-		newMeal.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
-		newMeal.setFatPercentage((Integer) spinnerFatPercentage.getValue());
-		newMeal.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
-		newMeal.setObjectiveFromString((String) comboBoxObjective.getSelectedItem());
-		
+		setMealAttributesFromFields(newMeal);
 		
 		try {
 			new DatabaseController().saveEntityToDatabase(newMeal);
@@ -246,8 +233,17 @@ public class AddMealDialog extends JDialog {
 			JOptionPane.showMessageDialog(this, "You have probably lost connection to database.", "Error!", 0);
 		}
 	}
+
+	protected void setMealAttributesFromFields(Meal newMeal) {
+		newMeal.setName(textFieldName.getText());
+		newMeal.setGramature(Integer.parseInt(textFieldGrammage.getText()));
+		newMeal.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
+		newMeal.setFatPercentage((Integer) spinnerFatPercentage.getValue());
+		newMeal.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
+		newMeal.setObjectiveFromString((String) comboBoxObjective.getSelectedItem());
+	}
 	
-	private void tearDown(){
+	protected void tearDown(){
 		setVisible(false);
 		dispose();
 	}

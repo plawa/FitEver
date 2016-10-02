@@ -1,5 +1,8 @@
 package gui.meals;
 
+import javax.swing.JOptionPane;
+
+import database.controller.DatabaseController;
 import database.entities.Meal;
 
 public class EditMealDialog extends AddMealDialog {
@@ -14,6 +17,7 @@ public class EditMealDialog extends AddMealDialog {
 	public EditMealDialog(Meal mealToMaintain){
 		this();
 		mealToEdit = mealToMaintain;
+		initializeFields();
 	}
 	
 	protected void initializeFields(){
@@ -21,5 +25,15 @@ public class EditMealDialog extends AddMealDialog {
 		this.textFieldGrammage.setText(Integer.toString(mealToEdit.getGramature()));
 	}
 	
+	protected void proceedButtonPressed(){
+		setMealAttributesFromFields(mealToEdit);
+		try {
+			new DatabaseController().updateEntityToDatabase(mealToEdit);
+			tearDown();
+		} catch (RuntimeException e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "You have probably lost connection to database.", "Error!", 0);
+		}
+	}
 
 }
