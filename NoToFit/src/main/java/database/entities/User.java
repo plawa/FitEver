@@ -21,6 +21,7 @@ public class User extends Entity {
 	private char sex;
 	private int height;
 	private float startWeight;
+	private float actualWeight;
 	private float goalWeight;
 	private Integer fatPercentage;
 	private Character userObjective;
@@ -126,6 +127,14 @@ public class User extends Entity {
 
 	public void setStartWeight(float startWeight) {
 		this.startWeight = startWeight;
+	}
+
+	public float getActualWeight() {
+		return actualWeight;
+	}
+
+	public void setActualWeight(float actualWeight) {
+		this.actualWeight = actualWeight;
 	}
 
 	public float getGoalWeight() {

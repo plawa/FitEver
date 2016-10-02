@@ -211,15 +211,16 @@ public class EditUserDialog extends JDialog {
 		getContentPane().add(textFieldHeight, gbc_textFieldHeight);
 		textFieldHeight.setColumns(10);
 		
-		JLabel lblWeight = new JLabel("Weight:");
-		GridBagConstraints gbc_lblWeight = new GridBagConstraints();
-		gbc_lblWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblWeight.gridx = 1;
-		gbc_lblWeight.gridy = 8;
-		getContentPane().add(lblWeight, gbc_lblWeight);
+		JLabel lblStartWeight = new JLabel("Start Weight:");
+		GridBagConstraints gbc_lblStartWeight = new GridBagConstraints();
+		gbc_lblStartWeight.anchor = GridBagConstraints.WEST;
+		gbc_lblStartWeight.insets = new Insets(0, 0, 5, 5);
+		gbc_lblStartWeight.gridx = 1;
+		gbc_lblStartWeight.gridy = 8;
+		getContentPane().add(lblStartWeight, gbc_lblStartWeight);
 		
 		textFieldStartWeight = new JTextField(Float.toString(userToEdit.getStartWeight()));
+		textFieldStartWeight.setEnabled(false);
 		GridBagConstraints gbc_textFieldWeight = new GridBagConstraints();
 		gbc_textFieldWeight.gridwidth = 3;
 		gbc_textFieldWeight.insets = new Insets(0, 0, 5, 5);

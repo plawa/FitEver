@@ -28,6 +28,9 @@
         <property name="startWeight" type="float">
             <column name="startWeight" precision="12" scale="0" not-null="true" />
         </property>
+                <property name="actualWeight" type="float">
+            <column name="actualWeight" precision="12" scale="0" not-null="true" />
+        </property>
         <property name="goalWeight" type="float">
             <column name="goalWeight" precision="12" scale="0" not-null="true" />
         </property>
@@ -36,7 +39,7 @@
         </property>
         <property name="userObjective" type="java.lang.Character">
             <column name="userObjective" length="1">
-                <comment>One char: 'm' stands for mass gain 'r' stands for reduction 'p' stands for power &#160;</comment>
+                <comment>One char: 'm' stands for mass gain 'r' stands for reduction 's' stands for strength &#160;</comment>
             </column>
         </property>
         <set name="diets" table="diet" inverse="true" lazy="true" fetch="select">

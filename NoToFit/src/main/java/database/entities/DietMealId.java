@@ -6,6 +6,10 @@ package database.entities;
  */
 public class DietMealId implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2143350625459986271L;
 	private int dietId;
 	private int mealId;
 

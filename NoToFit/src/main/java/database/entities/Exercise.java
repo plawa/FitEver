@@ -9,6 +9,10 @@ import java.util.Set;
  */
 public class Exercise implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6537066909440506914L;
 	private Integer id;
 	private String name;
 	private String description;
