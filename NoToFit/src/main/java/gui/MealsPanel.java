@@ -14,6 +14,8 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MealsPanel extends JPanel {
 
@@ -38,15 +40,31 @@ public class MealsPanel extends JPanel {
 		gbc_toolBar.gridy = 0;
 		add(toolBar, gbc_toolBar);
 		
+		JButton btnOpenSelectedDiet = new JButton("Open Selected Plan");
+		toolBar.add(btnOpenSelectedDiet);
+		
 		JButton btnAddNewMeal = new JButton("Add New Meal");
+		btnAddNewMeal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addNewMeal();
+			}
+		});
 		btnAddNewMeal.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnAddNewMeal.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnAddNewMeal.setIcon(new ImageIcon(MealsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
 		btnAddNewMeal.setToolTipText("adds new meal to a public database");
 		toolBar.add(btnAddNewMeal);
 		
-		JButton btnOpenSelectedDiet = new JButton("Open Selected");
-		toolBar.add(btnOpenSelectedDiet);
+		JButton btnShowAllMeals = new JButton("Show All Meals");
+		btnShowAllMeals.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showAllMeals();
+			}
+		});
+		btnShowAllMeals.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnShowAllMeals.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnShowAllMeals.setIcon(new ImageIcon(MealsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
+		toolBar.add(btnShowAllMeals);
 		
 		Component leftStrut = Box.createHorizontalStrut(20);
 		GridBagConstraints gbc_leftStrut = new GridBagConstraints();
@@ -118,6 +136,17 @@ public class MealsPanel extends JPanel {
 		gbc_bottomStrut.gridy = 4;
 		add(bottomStrut, gbc_bottomStrut);
 
+	}
+
+	protected void showAllMeals() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void addNewMeal() {
+		AddMealDialog addMealDlg = new AddMealDialog();
+		addMealDlg.setLocationRelativeTo(this);
+		addMealDlg.setVisible(true);
 	}
 
 }

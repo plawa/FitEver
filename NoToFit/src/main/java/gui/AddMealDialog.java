@@ -6,8 +6,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -15,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -161,7 +160,7 @@ public class AddMealDialog extends JDialog {
 		getContentPane().add(lblObjective, gbc_lblObjective);
 		
 		comboBoxObjective = new JComboBox<String>();
-		comboBoxObjective.setModel(new DefaultComboBoxModel(new String[] {"Mass Gain", "Reduction", "Strength"}));
+		comboBoxObjective.setModel(new DefaultComboBoxModel<String>(new String[] {"Mass Gain", "Reduction", "Strength"}));
 		GridBagConstraints gbc_comboBoxObjective = new GridBagConstraints();
 		gbc_comboBoxObjective.gridwidth = 3;
 		gbc_comboBoxObjective.insets = new Insets(0, 0, 5, 5);
@@ -200,7 +199,7 @@ public class AddMealDialog extends JDialog {
 			getContentPane().add(cancelButton, gbc_cancelButton);
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
+					tearDown();
 				}
 			});
 			cancelButton.setActionCommand("Cancel");
@@ -235,11 +234,16 @@ public class AddMealDialog extends JDialog {
 		
 		try {
 			new DatabaseController().saveEntityToDatabase(newMeal);
-			dispose();
-		} catch (Exception e){
+			tearDown();
+		} catch (RuntimeException e){
 			e.printStackTrace();
-			//JOptionPane.showMessageDialog(this, e.getStackTrace().toString(), "Error!", 2);
+			JOptionPane.showMessageDialog(this, "You have probably lost connection to database.", "Error!", 0);
 		}
+	}
+	
+	private void tearDown(){
+		setVisible(false);
+		dispose();
 	}
 	
 }
