@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -17,6 +18,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.Years;
 
+import database.entities.Shadow;
 import database.entities.User;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -35,7 +37,10 @@ public class UserPanel extends JPanel {
 	private JLabel lblValueSex;
 	private User userDisplaying;
 	
-	
+	public UserPanel(){
+		this(new User("name", "surname", new Date(3214122), 'f', 200, 66.9f,
+				80.1f, new Integer(10), new Character('s'), (Set) null, new Shadow(), (Set) null));
+	}
 	
 	public UserPanel(User userToMaintain) {
 		userDisplaying = userToMaintain;
@@ -61,11 +66,54 @@ public class UserPanel extends JPanel {
 		btnEditUser.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnEditUser.setIcon(new ImageIcon(UserPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/info.png")));
 		toolBar.add(btnEditUser);
+		
+		JButton btnUpdateStats = new JButton("Update Stats");
+		btnUpdateStats.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateStats();
+			}
+		});
+		btnUpdateStats.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnUpdateStats.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnUpdateStats.setIcon(new ImageIcon(UserPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/question.png")));
+		toolBar.add(btnUpdateStats);
+		
+		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
+		btnGenerateDietPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generateDietPlan();
+			}
+		});
+		btnGenerateDietPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnGenerateDietPlan.setIcon(new ImageIcon(UserPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/error.png")));
+		toolBar.add(btnGenerateDietPlan);
+		
+		JButton btnGenerateWorkoutPlan = new JButton("Generate Workout Plan");
+		btnGenerateWorkoutPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generateWorkoutPlan();
+			}
+		});
+		btnGenerateWorkoutPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnGenerateWorkoutPlan.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnGenerateWorkoutPlan.setIcon(new ImageIcon(UserPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
+		toolBar.add(btnGenerateWorkoutPlan);
+		
+		JButton btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				logout();
+			}
+		});
+		btnLogout.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnLogout.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnLogout.setIcon(new ImageIcon(UserPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
+		toolBar.add(btnLogout);
 		btnEditUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				EditUserDialog editDialog = new EditUserDialog(userDisplaying);
-				editDialog.setVisible(true);
-				refreshContent();
+				editUser();
+
 			}
 		});
 		
@@ -214,14 +262,40 @@ public class UserPanel extends JPanel {
 
 	}
 	
+	protected void generateWorkoutPlan() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void generateDietPlan() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void editUser() {
+		EditUserDialog editDialog = new EditUserDialog(userDisplaying);
+		editDialog.setVisible(true);
+		refreshContent();
+	}
+
+	protected void updateStats() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void logout(){
+		//TODO
+		//dispose();
+	}
+	
 	protected void refreshContent() {
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
 		lblValueSex.setText(userDisplaying.getSexString());
 		lblValueAge.setText(Integer.toString(calculateAge(userDisplaying.getDateOfBirth())));
-		lblValueHeight.setText(Integer.toString(userDisplaying.getHeight()));
-		lblValueStartWeight.setText(Float.toString(userDisplaying.getStartWeight()));
-		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()));
-		lblValueFatPercentage.setText(Integer.toString(userDisplaying.getFatPercentage()));
+		lblValueHeight.setText(Integer.toString(userDisplaying.getHeight()) + " " + "cm");
+		lblValueStartWeight.setText(Float.toString(userDisplaying.getStartWeight()) + " " + "kg");
+		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()) + " " + "kg");
+		lblValueFatPercentage.setText(Integer.toString(userDisplaying.getFatPercentage()) + " " + "%");
 		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
 	}
 	

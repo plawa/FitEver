@@ -3,11 +3,14 @@ package gui;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.Date;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import database.entities.Shadow;
 import database.entities.User;
 
 public class MainFrame {
@@ -22,7 +25,7 @@ public class MainFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainFrame window = new MainFrame(null);
+					MainFrame window = new MainFrame();
 					window.frmNoToFit.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -34,6 +37,11 @@ public class MainFrame {
 	/**
 	 * Create the application.
 	 */
+	public MainFrame(){
+		this(new User("name", "surname", new Date(3214122), 'f', 200, 66.9f,
+			80.1f, new Integer(10), new Character('s'), (Set) null, new Shadow(), (Set) null));
+	}
+	
 	public MainFrame(User authorizedUser) {
 		this.userLogged = authorizedUser;
 		initializeInterface();

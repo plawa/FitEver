@@ -63,6 +63,7 @@ public class User extends Entity {
 		this.workouts = workouts;
 	}
 
+
 	public Integer getId() {
 		return this.id;
 	}
