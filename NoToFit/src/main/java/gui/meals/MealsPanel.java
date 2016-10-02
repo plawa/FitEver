@@ -139,8 +139,9 @@ public class MealsPanel extends JPanel {
 	}
 
 	protected void showAllMeals() {
-		// TODO Auto-generated method stub
-		
+		ShowAllMealsDialog showAllMealDlg = new ShowAllMealsDialog();
+		showAllMealDlg.setLocationRelativeTo(this);
+		showAllMealDlg.setVisible(true);
 	}
 
 	protected void addNewMeal() {
