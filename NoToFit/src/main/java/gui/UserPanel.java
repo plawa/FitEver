@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,6 +24,7 @@ import database.entities.User;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
+import javax.swing.JSlider;
 
 public class UserPanel extends JPanel {
 
@@ -36,6 +38,7 @@ public class UserPanel extends JPanel {
 	private JLabel lblValueFatPercentage;
 	private JLabel lblValueSex;
 	private User userDisplaying;
+	private JLabel lblValueBmi;
 	
 	public UserPanel(){
 		this(new User("name", "surname", new Date(3214122), 'f', 200, 66.9f,
@@ -45,9 +48,9 @@ public class UserPanel extends JPanel {
 	public UserPanel(User userToMaintain) {
 		userDisplaying = userToMaintain;
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 25, 0, 0, 0, 10, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 16, 0, 23, 0, 0, 0, 0, 0, 20, 0, 0, 136, 1, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
@@ -55,8 +58,8 @@ public class UserPanel extends JPanel {
 		toolBar.setFloatable(false);
 		GridBagConstraints gbc_toolBar = new GridBagConstraints();
 		gbc_toolBar.anchor = GridBagConstraints.WEST;
-		gbc_toolBar.gridwidth = 10;
-		gbc_toolBar.insets = new Insets(0, 0, 5, 5);
+		gbc_toolBar.gridwidth = 11;
+		gbc_toolBar.insets = new Insets(0, 0, 5, 0);
 		gbc_toolBar.gridx = 0;
 		gbc_toolBar.gridy = 0;
 		add(toolBar, gbc_toolBar);
@@ -146,6 +149,21 @@ public class UserPanel extends JPanel {
 		gbc_lblValueNameAndSurname.gridx = 2;
 		gbc_lblValueNameAndSurname.gridy = 2;
 		add(lblValueNameAndSurname, gbc_lblValueNameAndSurname);
+		
+		JLabel lblDescriptionBmi = new JLabel("BMI:");
+		GridBagConstraints gbc_lblDescriptionBmi = new GridBagConstraints();
+		gbc_lblDescriptionBmi.anchor = GridBagConstraints.WEST;
+		gbc_lblDescriptionBmi.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescriptionBmi.gridx = 4;
+		gbc_lblDescriptionBmi.gridy = 2;
+		add(lblDescriptionBmi, gbc_lblDescriptionBmi);
+		
+		lblValueBmi = new JLabel("");
+		GridBagConstraints gbc_lblValueBmi = new GridBagConstraints();
+		gbc_lblValueBmi.insets = new Insets(0, 0, 5, 5);
+		gbc_lblValueBmi.gridx = 5;
+		gbc_lblValueBmi.gridy = 2;
+		add(lblValueBmi, gbc_lblValueBmi);
 		
 		JLabel lblDescriptionSex = new JLabel("Sex:");
 		GridBagConstraints gbc_lblDescriptionSex = new GridBagConstraints();
@@ -264,11 +282,13 @@ public class UserPanel extends JPanel {
 	
 	protected void generateWorkoutPlan() {
 		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 		
 	}
 
 	protected void generateDietPlan() {
 		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 		
 	}
 
@@ -280,12 +300,13 @@ public class UserPanel extends JPanel {
 
 	protected void updateStats() {
 		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	private void logout(){
 		//TODO
 		//dispose();
+		throw new UnsupportedOperationException();
 	}
 	
 	protected void refreshContent() {
@@ -297,6 +318,15 @@ public class UserPanel extends JPanel {
 		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()) + " " + "kg");
 		lblValueFatPercentage.setText(Integer.toString(userDisplaying.getFatPercentage()) + " " + "%");
 		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
+		setFormattedBmiLabel(userDisplaying.calculateBMI());
+	}
+	
+	private void setFormattedBmiLabel(float bmi){
+		lblValueBmi.setText(Float.toString(bmi));
+		if(bmi >= 25.0f || bmi < 18.5f)
+			lblValueBmi.setForeground(Color.RED);
+		else
+			lblValueBmi.setForeground(Color.GREEN);
 	}
 	
 	private int calculateAge(Date dateOfBirth) {

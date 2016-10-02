@@ -10,6 +10,10 @@ import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 public class MealsPanel extends JPanel {
 
@@ -24,12 +28,25 @@ public class MealsPanel extends JPanel {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		Component topStrut = Box.createVerticalStrut(20);
-		GridBagConstraints gbc_topStrut = new GridBagConstraints();
-		gbc_topStrut.insets = new Insets(0, 0, 5, 5);
-		gbc_topStrut.gridx = 1;
-		gbc_topStrut.gridy = 0;
-		add(topStrut, gbc_topStrut);
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		GridBagConstraints gbc_toolBar = new GridBagConstraints();
+		gbc_toolBar.anchor = GridBagConstraints.WEST;
+		gbc_toolBar.gridwidth = 4;
+		gbc_toolBar.insets = new Insets(0, 0, 5, 0);
+		gbc_toolBar.gridx = 0;
+		gbc_toolBar.gridy = 0;
+		add(toolBar, gbc_toolBar);
+		
+		JButton btnAddNewMeal = new JButton("Add New Meal");
+		btnAddNewMeal.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnAddNewMeal.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnAddNewMeal.setIcon(new ImageIcon(MealsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
+		btnAddNewMeal.setToolTipText("adds new meal to a public database");
+		toolBar.add(btnAddNewMeal);
+		
+		JButton btnOpenSelectedDiet = new JButton("Open Selected");
+		toolBar.add(btnOpenSelectedDiet);
 		
 		Component leftStrut = Box.createHorizontalStrut(20);
 		GridBagConstraints gbc_leftStrut = new GridBagConstraints();

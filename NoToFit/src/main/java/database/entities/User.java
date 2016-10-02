@@ -183,6 +183,10 @@ public class User extends Entity {
 	public void setWorkouts(Set workouts) {
 		this.workouts = workouts;
 	}
+
+	public float calculateBMI(){
+		return startWeight / (height*height);
+	}
 	
 	private void initializeMaps(){
 		sexTranslations = HashBiMap.create();
