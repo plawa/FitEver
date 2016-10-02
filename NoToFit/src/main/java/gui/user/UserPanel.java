@@ -1,4 +1,4 @@
-package gui;
+package gui.user;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -23,6 +23,7 @@ import org.joda.time.Period;
 
 import database.entities.Shadow;
 import database.entities.User;
+
 import java.awt.Font;
 
 public class UserPanel extends JPanel {

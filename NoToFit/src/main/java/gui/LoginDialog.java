@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import org.hibernate.service.spi.ServiceException;
 
 import database.entities.User;
+import gui.user.AddUserDialog;
 import logic.Login;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.WindowAdapter;

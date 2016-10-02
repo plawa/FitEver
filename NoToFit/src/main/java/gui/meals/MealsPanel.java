@@ -1,4 +1,4 @@
-package gui;
+package gui.meals;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;

@@ -1,4 +1,4 @@
-package gui;
+package gui.meals;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -25,12 +25,12 @@ import database.entities.Meal;
 public class AddMealDialog extends JDialog {
 	
 	private static final long serialVersionUID = 7513700313890891626L;
-	private JTextField textFieldName;
-	private JTextField textFieldGrammage;
-	private JComboBox<String> comboBoxObjective;
-	private JSpinner spinnerFatPercentage;
-	private JSpinner spinnerProteinPercentage;
-	private JSpinner spinnerCarbohydratesPercentage;
+	protected JTextField textFieldName;
+	protected JTextField textFieldGrammage;
+	protected JComboBox<String> comboBoxObjective;
+	protected JSpinner spinnerFatPercentage;
+	protected JSpinner spinnerProteinPercentage;
+	protected JSpinner spinnerCarbohydratesPercentage;
 
 	public static void main(String[] args) {
 		try {
@@ -179,7 +179,7 @@ public class AddMealDialog extends JDialog {
 			JButton okButton = new JButton("Save");
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					saveButtonPressed();
+					proceedButtonPressed();
 				}
 			});
 			GridBagConstraints gbc_okButton = new GridBagConstraints();
@@ -218,9 +218,15 @@ public class AddMealDialog extends JDialog {
 		gbc_verticalStrutBottom.gridx = 2;
 		gbc_verticalStrutBottom.gridy = 12;
 		getContentPane().add(verticalStrutBottom, gbc_verticalStrutBottom);
+		initializeFields();
 	}
 	
-	private void saveButtonPressed(){
+	protected void initializeFields() {
+		//for inheritance!
+		;
+	}
+
+	private void proceedButtonPressed(){
 
 		Meal newMeal = new Meal();
 		

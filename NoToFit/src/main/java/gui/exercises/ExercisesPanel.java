@@ -1,4 +1,4 @@
-package gui;
+package gui.exercises;
 
 import javax.swing.JPanel;
 

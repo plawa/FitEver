@@ -12,6 +12,9 @@ import javax.swing.JTabbedPane;
 
 import database.entities.Shadow;
 import database.entities.User;
+import gui.exercises.ExercisesPanel;
+import gui.meals.MealsPanel;
+import gui.user.UserPanel;
 
 public class MainFrame {
 
