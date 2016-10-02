@@ -11,20 +11,18 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
-import org.joda.time.Years;
 
 import database.entities.Shadow;
 import database.entities.User;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
-import javax.swing.JSlider;
 
 public class UserPanel extends JPanel {
 
@@ -48,7 +46,7 @@ public class UserPanel extends JPanel {
 	public UserPanel(User userToMaintain) {
 		userDisplaying = userToMaintain;
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 25, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 16, 0, 23, 0, 0, 0, 0, 0, 20, 0, 0, 136, 1, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
@@ -326,15 +324,12 @@ public class UserPanel extends JPanel {
 		if(bmi >= 25.0f || bmi < 18.5f)
 			lblValueBmi.setForeground(Color.RED);
 		else
-			lblValueBmi.setForeground(Color.GREEN);
+			lblValueBmi.setForeground(new Color(0, 120, 0));
 	}
 	
 	private int calculateAge(Date dateOfBirth) {
 		LocalDate birthDate = LocalDate.fromDateFields(dateOfBirth);
 		Period age = Period.fieldDifference(birthDate, LocalDate.now());
 		return age.getYears();
-	}
-
-
-	
+	}	
 }

@@ -185,7 +185,8 @@ public class User extends Entity {
 	}
 
 	public float calculateBMI(){
-		return startWeight / (height*height);
+		float heightMeters = height / 100f;
+		return startWeight / (heightMeters*heightMeters);
 	}
 	
 	private void initializeMaps(){
