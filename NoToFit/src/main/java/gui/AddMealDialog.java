@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -28,15 +27,12 @@ public class AddMealDialog extends JDialog {
 	
 	private static final long serialVersionUID = 7513700313890891626L;
 	private JTextField textFieldName;
-	private JTextField textFieldGramature;
+	private JTextField textFieldGrammage;
 	private JComboBox<String> comboBoxObjective;
 	private JSpinner spinnerFatPercentage;
 	private JSpinner spinnerProteinPercentage;
 	private JSpinner spinnerCarbohydratesPercentage;
-	
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		try {
 			AddMealDialog dialog = new AddMealDialog();
@@ -46,10 +42,7 @@ public class AddMealDialog extends JDialog {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Create the dialog.
-	 */
+	
 	public AddMealDialog() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Add New Meal");
@@ -88,23 +81,23 @@ public class AddMealDialog extends JDialog {
 		getContentPane().add(textFieldName, gbc_textFieldName);
 		textFieldName.setColumns(10);
 		
-		JLabel lblGramature = new JLabel("Gramature:");
-		GridBagConstraints gbc_lblGramature = new GridBagConstraints();
-		gbc_lblGramature.anchor = GridBagConstraints.WEST;
-		gbc_lblGramature.insets = new Insets(0, 0, 5, 5);
-		gbc_lblGramature.gridx = 1;
-		gbc_lblGramature.gridy = 2;
-		getContentPane().add(lblGramature, gbc_lblGramature);
+		JLabel lblGrammage = new JLabel("Grammage:");
+		GridBagConstraints gbc_lblGrammage = new GridBagConstraints();
+		gbc_lblGrammage.anchor = GridBagConstraints.WEST;
+		gbc_lblGrammage.insets = new Insets(0, 0, 5, 5);
+		gbc_lblGrammage.gridx = 1;
+		gbc_lblGrammage.gridy = 2;
+		getContentPane().add(lblGrammage, gbc_lblGrammage);
 		
-		textFieldGramature = new JTextField();
-		GridBagConstraints gbc_textFieldGramature = new GridBagConstraints();
-		gbc_textFieldGramature.gridwidth = 3;
-		gbc_textFieldGramature.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldGramature.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldGramature.gridx = 2;
-		gbc_textFieldGramature.gridy = 2;
-		getContentPane().add(textFieldGramature, gbc_textFieldGramature);
-		textFieldGramature.setColumns(10);
+		textFieldGrammage = new JTextField();
+		GridBagConstraints gbc_textFieldGrammage = new GridBagConstraints();
+		gbc_textFieldGrammage.gridwidth = 3;
+		gbc_textFieldGrammage.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldGrammage.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldGrammage.gridx = 2;
+		gbc_textFieldGrammage.gridy = 2;
+		getContentPane().add(textFieldGrammage, gbc_textFieldGrammage);
+		textFieldGrammage.setColumns(10);
 		
 		JLabel lblCarbohydratesPercentage = new JLabel("Carbohydrates Percentage (%):");
 		GridBagConstraints gbc_lblCarbohydratesPercentage = new GridBagConstraints();
@@ -168,7 +161,7 @@ public class AddMealDialog extends JDialog {
 		getContentPane().add(lblObjective, gbc_lblObjective);
 		
 		comboBoxObjective = new JComboBox<String>();
-		comboBoxObjective.setModel(new DefaultComboBoxModel<String>(new String[] {"Mass Gain", "Reduction", "Strenght"}));
+		comboBoxObjective.setModel(new DefaultComboBoxModel(new String[] {"Mass Gain", "Reduction", "Strength"}));
 		GridBagConstraints gbc_comboBoxObjective = new GridBagConstraints();
 		gbc_comboBoxObjective.gridwidth = 3;
 		gbc_comboBoxObjective.insets = new Insets(0, 0, 5, 5);
@@ -229,22 +222,16 @@ public class AddMealDialog extends JDialog {
 	}
 	
 	private void saveButtonPressed(){
+
+		Meal newMeal = new Meal();
 		
-		Map<String, Character> objectiveTranslations = new HashMap<String, Character>();
-		objectiveTranslations.put("Mass Gain", 'm');
-		objectiveTranslations.put("Reduction", 'r');
-		objectiveTranslations.put("Stength", 'p');
+		newMeal.setName(textFieldName.getText());
+		newMeal.setGramature(Integer.parseInt(textFieldGrammage.getText()));
+		newMeal.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
+		newMeal.setFatPercentage((Integer) spinnerFatPercentage.getValue());
+		newMeal.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
+		newMeal.setObjectiveFromString((String) comboBoxObjective.getSelectedItem());
 		
-		
-		String name = textFieldName.getText();
-		int gramature = Integer.parseInt(textFieldGramature.getText());
-		int carbohydratesPercentage = (Integer) spinnerCarbohydratesPercentage.getValue();
-		int proteinPercentage = (Integer) spinnerFatPercentage.getValue();
-		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
-		String objectiveFull = (String) comboBoxObjective.getSelectedItem();
-		Character objective = objectiveTranslations.get(objectiveFull);
-		
-		Meal newMeal = new Meal(name, objective, gramature, carbohydratesPercentage, proteinPercentage, fatPercentage);
 		
 		try {
 			new DatabaseController().saveEntityToDatabase(newMeal);
@@ -254,33 +241,5 @@ public class AddMealDialog extends JDialog {
 			//JOptionPane.showMessageDialog(this, e.getStackTrace().toString(), "Error!", 2);
 		}
 	}
-	/*
-	private MaskFormatter createFormatter(String s){
-	    MaskFormatter formatter = null;
-	    try {
-	        formatter = new MaskFormatter(s);
-	    } catch (java.text.ParseException exc) {
-	        System.err.println("formatter is bad: " + exc.getMessage());
-	    }
-	    return formatter;
-	}
-	*/
-	/*private InputVerifier createInputVerifier(){
-		return new InputVerifier() {
-			
-			@Override
-			public boolean verify(JComponent input) {
-				dateFormatter.setLenient(false);
-				JFormattedTextField ft = (JFormattedTextField) input;
-				String text = ft.getText();
-				try {
-					dateFormatter.parse(text);
-					return true;
-				} catch (ParseException e) {
-					return false;
-				}
-			}
-		};
-	}*/
 	
 }

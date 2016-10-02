@@ -1,7 +1,5 @@
 package logic;
 
-import java.util.Locale;
-
 import database.entities.User;
 import gui.LoginDialog;
 import gui.MainFrame;

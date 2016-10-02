@@ -364,11 +364,11 @@ public class UserPanel extends JPanel {
 		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()) + " kg");
 		lblValueFatPercentage.setText(Integer.toString(userDisplaying.getFatPercentage()) + " %");
 		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
-		setFormattedBmiLabel(userDisplaying.calculateBMI());
+		setBmiLabelFormatted(userDisplaying.calculateBMI());
 		lblValueActualWeight.setText(Float.toString(userDisplaying.getActualWeight()) + " kg");
 	}
 	
-	private void setFormattedBmiLabel(float bmi){
+	private void setBmiLabelFormatted(float bmi){
 		lblValueBmi.setText(String.format("%.2f", bmi));
 		if(bmi >= 25.0f || bmi < 18.5f)
 			lblValueBmi.setForeground(Color.RED);
