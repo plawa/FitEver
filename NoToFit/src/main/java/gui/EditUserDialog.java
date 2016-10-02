@@ -274,7 +274,7 @@ public class EditUserDialog extends JDialog {
 		getContentPane().add(lblMainGoal, gbc_lblMainGoal);
 		
 		comboBoxUserObjective = new JComboBox<String>();
-		comboBoxUserObjective.setModel(new DefaultComboBoxModel<String>(new String[] {"Mass Gain", "Reduction", "Strenght"}));
+		comboBoxUserObjective.setModel(new DefaultComboBoxModel(new String[] {"Mass Gain", "Reduction", "Strength"}));
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.gridwidth = 3;
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);

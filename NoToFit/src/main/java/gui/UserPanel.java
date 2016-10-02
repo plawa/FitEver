@@ -191,7 +191,7 @@ public class UserPanel extends JPanel {
 			}
 		});
 		GridBagConstraints gbc_btnEditUser = new GridBagConstraints();
-		gbc_btnEditUser.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnEditUser.anchor = GridBagConstraints.WEST;
 		gbc_btnEditUser.insets = new Insets(0, 0, 5, 5);
 		gbc_btnEditUser.gridx = 2;
 		gbc_btnEditUser.gridy = 10;

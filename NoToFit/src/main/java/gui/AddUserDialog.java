@@ -10,8 +10,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -22,7 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -32,9 +30,6 @@ import javax.swing.text.MaskFormatter;
 import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
-import logic.Encrypter;
-
-import javax.swing.JPasswordField;
 
 public class AddUserDialog extends JDialog {
 	
@@ -271,7 +266,7 @@ public class AddUserDialog extends JDialog {
 		getContentPane().add(lblMainGoal, gbc_lblMainGoal);
 		
 		comboBoxUserObjective = new JComboBox<String>();
-		comboBoxUserObjective.setModel(new DefaultComboBoxModel<String>(new String[] {"Mass Gain", "Reduction", "Strenght"}));
+		comboBoxUserObjective.setModel(new DefaultComboBoxModel(new String[] {"Mass Gain", "Reduction", "Strength"}));
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.gridwidth = 3;
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
