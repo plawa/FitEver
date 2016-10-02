@@ -27,9 +27,6 @@ import java.awt.event.WindowEvent;
 
 public class LoginDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8472433868284888754L;
 
 	private User authorizedUser;
@@ -39,28 +36,22 @@ public class LoginDialog extends JDialog {
 	private JPasswordField passwordField;
 	private Login loginLogic;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
-		try {
-			LoginDialog dialog = new LoginDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		LoginDialog dialog = new LoginDialog();
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setVisible(true);
 	}
 
 	/**
 	 * Create the dialog.
 	 */
 	public LoginDialog() {
-		super((Frame)null, true);
-		try{
+		super((Frame) null, true);
+		try {
 			LoginDialog.this.loginLogic = new Login();
 		} catch (ServiceException exc) {
-			JOptionPane.showMessageDialog(LoginDialog.this, "Unable to connect database. Please check your network connection.", "Error!", 0);
+			JOptionPane.showMessageDialog(LoginDialog.this,
+					"Unable to connect database. Please check your network connection.", "Error!", 0);
 			System.exit(1);
 		}
 		addWindowListener(new WindowAdapter() {
@@ -141,13 +132,15 @@ public class LoginDialog extends JDialog {
 					public void actionPerformed(ActionEvent arg0) {
 						String username = textFieldUsername.getText();
 						String passwordRaw = passwordField.getText();
-						LoginDialog.this.authorizedUser = LoginDialog.this.loginLogic.performLogin(username, passwordRaw);
-						
+						LoginDialog.this.authorizedUser = LoginDialog.this.loginLogic.performLogin(username,
+								passwordRaw);
+
 						if (LoginDialog.this.authorizedUser != null) {
 							LoginDialog.this.setVisible(false);
 							LoginDialog.this.dispose();
 						} else {
-							JOptionPane.showMessageDialog(LoginDialog.this, "Username or password incorrect.", "Error!", 2);
+							JOptionPane.showMessageDialog(LoginDialog.this, "Username or password incorrect.", "Error!",
+									2);
 						}
 					}
 				});
@@ -166,10 +159,11 @@ public class LoginDialog extends JDialog {
 				buttonPane.add(cancelButton, "cell 3 0,alignx left,aligny center");
 			}
 		}
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(null);		
 	}
 
 	public User getAuthorizedUser() {
+		dispose();
 		return authorizedUser;
 	}
 

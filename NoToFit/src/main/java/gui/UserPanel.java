@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import javax.swing.JPanel;
 
 import database.entities.User;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 
 public class UserPanel extends JPanel {
@@ -209,6 +211,12 @@ public class UserPanel extends JPanel {
 		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()));
 		lblValueFatPercentage.setText(Integer.toString(userDisplaying.getFatPercentage()));
 		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
+	}
+	
+	private int calculateAge(Date datePast) {
+		return 0;
+		// TODO 
+		//Date dateNow = new SimpleDateFormat().;
 	}
 
 
