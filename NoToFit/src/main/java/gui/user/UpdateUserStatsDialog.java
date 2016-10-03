@@ -55,7 +55,7 @@ public class UpdateUserStatsDialog extends JDialog {
 		{
 			Component topStrut = Box.createVerticalStrut(20);
 			GridBagConstraints gbc_topStrut = new GridBagConstraints();
-			gbc_topStrut.insets = new Insets(0, 0, 5, 5);
+			gbc_topStrut.insets = new Insets(0, 0, 0, 5);
 			gbc_topStrut.gridx = 1;
 			gbc_topStrut.gridy = 0;
 			contentPanel.add(topStrut, gbc_topStrut);
@@ -139,7 +139,6 @@ public class UpdateUserStatsDialog extends JDialog {
 				}
 			});
 			slider.setPaintTicks(true);
-			slider.setPaintLabels(true);
 			slider.setMajorTickSpacing(1);
 
 			slider.setMinimum(-20);
@@ -157,6 +156,7 @@ public class UpdateUserStatsDialog extends JDialog {
 	        sliderLabels.put(20, new JLabel("+"));
 	        sliderLabels.put(-20, new JLabel("-"));
 	        slider.setLabelTable(sliderLabels);
+			slider.setPaintLabels(true);
 			
 			contentPanel.add(slider, gbc_slider);
 		}
