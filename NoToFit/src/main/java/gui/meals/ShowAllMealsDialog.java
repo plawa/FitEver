@@ -13,13 +13,17 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
+import database.controller.DatabaseController;
 import database.entities.Meal;
 
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.enterprise.inject.Default;
 import javax.swing.ImageIcon;
 import java.awt.Component;
 
@@ -28,6 +32,7 @@ public class ShowAllMealsDialog extends JDialog {
 	private static final long serialVersionUID = 8721491617478602101L;
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
+	private MealsTableModel tableModel;
 
 
 	public static void main(String[] args) {
@@ -41,6 +46,7 @@ public class ShowAllMealsDialog extends JDialog {
 	}
 
 	public ShowAllMealsDialog() {
+		tableModel = new MealsTableModel(new DatabaseController().getAll(Meal.class));
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Meals Library");
 		setBounds(100, 100, 660, 478);
@@ -106,30 +112,7 @@ public class ShowAllMealsDialog extends JDialog {
 			contentPanel.add(scrollPane, gbc_scrollPane);
 			{
 				table = new JTable();
-				table.setModel(new DefaultTableModel(
-					new Object[][] {
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-						{null, null, null, null, null},
-					},
-					new String[] {
-						"Name", "Grammage", "Carbohydrates (%)", "Protein (%)", "Fat (%)"
-					}
-				) {
-					Class[] columnTypes = new Class[] {
-						String.class, Integer.class, Integer.class, Integer.class, Integer.class
-					};
-					public Class getColumnClass(int columnIndex) {
-						return columnTypes[columnIndex];
-					}
-				});
+				table.setModel(tableModel );
 				scrollPane.setViewportView(table);
 			}
 		}
@@ -149,7 +132,8 @@ public class ShowAllMealsDialog extends JDialog {
 	}
 
 	protected void editMeal() {
-		EditMealDialog editMealDlg = new EditMealDialog(new Meal("posilek", 'm', 200, 10, 11, 12));
+		Meal mealToEdit = tableModel.getMealAt(table.getSelectedRow());
+		EditMealDialog editMealDlg = new EditMealDialog(mealToEdit);
 		editMealDlg.setLocationRelativeTo(this);
 		editMealDlg.setVisible(true);
 	}
@@ -165,6 +149,22 @@ public class ShowAllMealsDialog extends JDialog {
 		dispose();
 	}
 	
-	
-
+	protected DefaultTableModel getTableModelWithAllMealEntities(){
+		DefaultTableModel tableModel = new DefaultTableModel();
+		tableModel.setColumnIdentifiers(new String[] {
+				"Name", "Grammage (g)", "Carbohydrates (%)", "Protein (%)", "Fat (%)"
+			});
+		List<Meal> allMeals = new DatabaseController().getAll(Meal.class);
+		for (Meal meal : allMeals){
+			Object [] rowData = new Object [] { 
+				meal.getName(),
+				meal.getGramature(),
+				meal.getCarbohydratesPercentage(),
+				meal.getProteinPercentage(),
+				meal.getFatPercentage()					
+			};
+			tableModel.addRow(rowData);
+		}
+		return tableModel;
+	}
 }

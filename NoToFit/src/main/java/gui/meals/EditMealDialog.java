@@ -23,6 +23,10 @@ public class EditMealDialog extends AddMealDialog {
 	protected void initializeFields(){
 		this.textFieldName.setText(mealToEdit.getName());
 		this.textFieldGrammage.setText(Integer.toString(mealToEdit.getGramature()));
+		this.spinnerCarbohydratesPercentage.setValue(mealToEdit.getCarbohydratesPercentage());
+		this.spinnerProteinPercentage.setValue(mealToEdit.getProteinPercentage());
+		this.spinnerFatPercentage.setValue(mealToEdit.getFatPercentage());
+		this.comboBoxObjective.setSelectedItem(mealToEdit.getObjectiveString());
 	}
 	
 	protected void proceedButtonPressed(){
