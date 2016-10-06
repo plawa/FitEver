@@ -40,6 +40,7 @@ public class Meal extends Entity {
 
 	public Meal(String name, char objective, int gramature, int carbohydratesPercentage, int proteinPercentage,
 			int fatPercentage, Set<DietMeal> dietMeals) {
+		this();
 		this.name = name;
 		this.objective = objective;
 		this.gramature = gramature;

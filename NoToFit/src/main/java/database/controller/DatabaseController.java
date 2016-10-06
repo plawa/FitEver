@@ -49,6 +49,13 @@ public class DatabaseController
     	myTransaction.commit();
     	mySession.close();
 	}
+    public <T extends Entity> void deleteEntityFromDatabase(T entity) throws RuntimeException{
+    	Session mySession = mySessionFactory.openSession();
+    	Transaction myTransaction = mySession.beginTransaction();
+    	mySession.delete(entity);
+    	myTransaction.commit();
+    	mySession.close();
+    }
     
     public <T extends Entity> List<T> getAll(Class<T> type) throws RuntimeException {
     	Session mySession = mySessionFactory.openSession();

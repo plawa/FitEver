@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
@@ -33,7 +34,7 @@ public class ShowAllMealsDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
 	private MealsTableModel tableModel;
-
+	private DatabaseController db;
 
 	public static void main(String[] args) {
 		try {
@@ -46,7 +47,7 @@ public class ShowAllMealsDialog extends JDialog {
 	}
 
 	public ShowAllMealsDialog() {
-		tableModel = new MealsTableModel(new DatabaseController().getAll(Meal.class));
+		db = new DatabaseController();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Meals Library");
 		setBounds(100, 100, 660, 478);
@@ -54,13 +55,14 @@ public class ShowAllMealsDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JToolBar toolBar = new JToolBar();
+			toolBar.setRollover(true);
 			toolBar.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			toolBar.setOrientation(SwingConstants.VERTICAL);
 			toolBar.setFloatable(false);
@@ -79,7 +81,8 @@ public class ShowAllMealsDialog extends JDialog {
 				});
 				btnAdd.setVerticalTextPosition(SwingConstants.BOTTOM);
 				btnAdd.setHorizontalTextPosition(SwingConstants.CENTER);
-				btnAdd.setIcon(new ImageIcon(ShowAllMealsDialog.class.getResource("/com/sun/java/swing/plaf/windows/icons/Question.gif")));
+				btnAdd.setIcon(new ImageIcon(
+						ShowAllMealsDialog.class.getResource("/com/sun/java/swing/plaf/windows/icons/Question.gif")));
 				toolBar.add(btnAdd);
 			}
 			{
@@ -91,14 +94,21 @@ public class ShowAllMealsDialog extends JDialog {
 				});
 				btnEdit.setHorizontalTextPosition(SwingConstants.CENTER);
 				btnEdit.setVerticalTextPosition(SwingConstants.BOTTOM);
-				btnEdit.setIcon(new ImageIcon(ShowAllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
+				btnEdit.setIcon(new ImageIcon(
+						ShowAllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
 				toolBar.add(btnEdit);
 			}
 			{
 				JButton btnDelete = new JButton("Delete");
+				btnDelete.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						deleteMeal();
+					}
+				});
 				btnDelete.setHorizontalTextPosition(SwingConstants.CENTER);
 				btnDelete.setVerticalTextPosition(SwingConstants.BOTTOM);
-				btnDelete.setIcon(new ImageIcon(ShowAllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/error.png")));
+				btnDelete.setIcon(new ImageIcon(
+						ShowAllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/error.png")));
 				toolBar.add(btnDelete);
 			}
 		}
@@ -112,7 +122,7 @@ public class ShowAllMealsDialog extends JDialog {
 			contentPanel.add(scrollPane, gbc_scrollPane);
 			{
 				table = new JTable();
-				table.setModel(tableModel );
+				refreshTable();
 				scrollPane.setViewportView(table);
 			}
 		}
@@ -131,40 +141,53 @@ public class ShowAllMealsDialog extends JDialog {
 		}
 	}
 
+	protected void deleteMeal() {
+		int rowIndex = table.getSelectedRow();
+		if (rowIndex != -1) {
+			int confirmationInput = JOptionPane.showConfirmDialog(contentPanel, "Are you sure to delete?", "Confirm",
+					JOptionPane.YES_NO_OPTION);
+			if (confirmationInput == JOptionPane.YES_OPTION) {
+				Meal mealToDelete = tableModel.getMealAt(rowIndex);
+				db.deleteEntityFromDatabase(mealToDelete);
+				refreshTable();
+			}
+		} else {
+			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error", 0);
+		}
+	}
+
 	protected void editMeal() {
-		Meal mealToEdit = tableModel.getMealAt(table.getSelectedRow());
-		EditMealDialog editMealDlg = new EditMealDialog(mealToEdit);
-		editMealDlg.setLocationRelativeTo(this);
-		editMealDlg.setVisible(true);
+		int rowIndex = table.getSelectedRow();
+		if (rowIndex != -1) {
+			Meal mealToEdit = tableModel.getMealAt(rowIndex);
+			EditMealDialog editMealDlg = new EditMealDialog(mealToEdit);
+			editMealDlg.setLocationRelativeTo(this);
+			editMealDlg.setVisible(true);
+			refreshTable();
+		} else {
+			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error", 0);
+		}
 	}
 
 	protected void addMeal() {
-		AddMealDialog addMealDlg = new AddMealDialog();
-		addMealDlg.setLocationRelativeTo(this);
-		addMealDlg.setVisible(true);
+		int rowIndex = table.getSelectedRow();
+		if (rowIndex != -1) {
+			AddMealDialog addMealDlg = new AddMealDialog();
+			addMealDlg.setLocationRelativeTo(this);
+			addMealDlg.setVisible(true);
+			refreshTable();
+		} else {
+			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error", 0);
+		}
+	}
+
+	protected void refreshTable() {
+		tableModel = new MealsTableModel(db.getAll(Meal.class));
+		table.setModel(tableModel);
 	}
 
 	protected void tearDown() {
 		setVisible(false);
 		dispose();
-	}
-	
-	protected DefaultTableModel getTableModelWithAllMealEntities(){
-		DefaultTableModel tableModel = new DefaultTableModel();
-		tableModel.setColumnIdentifiers(new String[] {
-				"Name", "Grammage (g)", "Carbohydrates (%)", "Protein (%)", "Fat (%)"
-			});
-		List<Meal> allMeals = new DatabaseController().getAll(Meal.class);
-		for (Meal meal : allMeals){
-			Object [] rowData = new Object [] { 
-				meal.getName(),
-				meal.getGramature(),
-				meal.getCarbohydratesPercentage(),
-				meal.getProteinPercentage(),
-				meal.getFatPercentage()					
-			};
-			tableModel.addRow(rowData);
-		}
-		return tableModel;
 	}
 }

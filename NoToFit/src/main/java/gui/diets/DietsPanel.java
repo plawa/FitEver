@@ -1,4 +1,4 @@
-package gui.meals;
+package gui.diets;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -9,6 +9,10 @@ import javax.swing.JTable;
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.table.DefaultTableModel;
+
+import gui.meals.AddMealDialog;
+import gui.meals.ShowAllMealsDialog;
+
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -17,30 +21,33 @@ import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class MealsPanel extends JPanel {
+public class DietsPanel extends JPanel {
 
 	private static final long serialVersionUID = -3015175045558720497L;
 	private JTable table;
 
-	public MealsPanel() {
+	public DietsPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 430, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWidths = new int[]{0, 430, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		GridBagConstraints gbc_toolBar = new GridBagConstraints();
 		gbc_toolBar.anchor = GridBagConstraints.WEST;
-		gbc_toolBar.gridwidth = 4;
+		gbc_toolBar.gridwidth = 3;
 		gbc_toolBar.insets = new Insets(0, 0, 5, 0);
 		gbc_toolBar.gridx = 0;
 		gbc_toolBar.gridy = 0;
 		add(toolBar, gbc_toolBar);
 		
 		JButton btnOpenSelectedDiet = new JButton("Open Selected Plan");
+		btnOpenSelectedDiet.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnOpenSelectedDiet.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnOpenSelectedDiet.setIcon(new ImageIcon(DietsPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/info.png")));
 		toolBar.add(btnOpenSelectedDiet);
 		
 		JButton btnAddNewMeal = new JButton("Add New Meal");
@@ -51,7 +58,7 @@ public class MealsPanel extends JPanel {
 		});
 		btnAddNewMeal.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnAddNewMeal.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnAddNewMeal.setIcon(new ImageIcon(MealsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
+		btnAddNewMeal.setIcon(new ImageIcon(DietsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
 		btnAddNewMeal.setToolTipText("adds new meal to a public database");
 		toolBar.add(btnAddNewMeal);
 		
@@ -63,7 +70,7 @@ public class MealsPanel extends JPanel {
 		});
 		btnShowAllMeals.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnShowAllMeals.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnShowAllMeals.setIcon(new ImageIcon(MealsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
+		btnShowAllMeals.setIcon(new ImageIcon(DietsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
 		toolBar.add(btnShowAllMeals);
 		
 		Component leftStrut = Box.createHorizontalStrut(20);
@@ -84,13 +91,12 @@ public class MealsPanel extends JPanel {
 		Component rightStrut = Box.createHorizontalStrut(20);
 		GridBagConstraints gbc_rightStrut = new GridBagConstraints();
 		gbc_rightStrut.insets = new Insets(0, 0, 5, 0);
-		gbc_rightStrut.gridx = 3;
+		gbc_rightStrut.gridx = 2;
 		gbc_rightStrut.gridy = 1;
 		add(rightStrut, gbc_rightStrut);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridheight = 2;
 		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 1;
@@ -98,24 +104,12 @@ public class MealsPanel extends JPanel {
 		add(scrollPane, gbc_scrollPane);
 		
 		table = new JTable();
+		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"Mass Gain", "02.10.2016", "09.10.2016"},
 				{"Reduction", "10.10.2016", "17.10.2016"},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
 			},
 			new String[] {
 				"Diet Type", "Start Date", "Valid To"
@@ -133,7 +127,7 @@ public class MealsPanel extends JPanel {
 		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
 		gbc_bottomStrut.insets = new Insets(0, 0, 0, 5);
 		gbc_bottomStrut.gridx = 1;
-		gbc_bottomStrut.gridy = 4;
+		gbc_bottomStrut.gridy = 3;
 		add(bottomStrut, gbc_bottomStrut);
 
 	}

@@ -13,7 +13,7 @@ import javax.swing.JTabbedPane;
 import database.entities.Shadow;
 import database.entities.User;
 import gui.exercises.ExercisesPanel;
-import gui.meals.MealsPanel;
+import gui.diets.DietsPanel;
 import gui.user.UserPanel;
 
 public class MainFrame {
@@ -76,7 +76,7 @@ public class MainFrame {
 		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 42, 0};
 		tabbedPane.addTab("Overview", userIcon, usersPanel);
-		tabbedPane.addTab("Diet", mealIcon, new MealsPanel());
+		tabbedPane.addTab("Diet", mealIcon, new DietsPanel());
 		tabbedPane.addTab("Workout", exerciseIcon, new ExercisesPanel());
 		frmNoToFit.getContentPane().add(tabbedPane);
 	}

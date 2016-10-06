@@ -4,7 +4,7 @@ import java.util.List;
 
 import database.entities.Meal;
 
-public class MealsTableModel extends javax.swing.table.AbstractTableModel {
+class MealsTableModel extends javax.swing.table.AbstractTableModel {
 
 	private static final long serialVersionUID = 7470997421970268078L;
 	private List<Meal> meals;
