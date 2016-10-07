@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class DietsPanel extends JPanel {
@@ -134,7 +135,8 @@ public class DietsPanel extends JPanel {
 	}
 	
 	protected void refreshTable(){
-		tableModel = new DietsTableModel(db.getAll(Diet.class));
+		List<Diet> diets = db.getAll(Diet.class);
+		tableModel = new DietsTableModel(diets);
 		table.setModel(tableModel);
 	}
 

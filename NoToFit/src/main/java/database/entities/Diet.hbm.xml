@@ -11,11 +11,17 @@
         <many-to-one name="user" class="database.entities.User" fetch="select">
             <column name="UserID" not-null="true" />
         </many-to-one>
+        <property name="name" type="string">
+            <column name="name" length="80" not-null="true" />
+        </property>
         <property name="mealIds" type="int">
             <column name="MealIDs" not-null="true" />
         </property>
         <property name="validFrom" type="date">
             <column name="validFrom" length="10" not-null="true" />
+        </property>      
+		<property name="validTo" type="date">
+            <column name="validTo" length="10" not-null="true" />
         </property>
         <set name="dietMeals" table="diet_meal" inverse="true" lazy="true" fetch="select">
             <key>
