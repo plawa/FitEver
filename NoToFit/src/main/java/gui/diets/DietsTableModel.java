@@ -5,13 +5,18 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import database.entities.Diet;
-import database.entities.Meal;
 
 class DietsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 7436925452072118635L;
 	private List<Diet> diets;
 	final String[] columnNames = { "Diet Name", "Diet Type", "Valid From", "Valid To" };
+	
+	public DietsTableModel(List<Diet> diets) {
+		super();
+		this.diets = diets;
+	}	
+	
 	
     public String getColumnName(int columnIndex) {
         return columnNames[columnIndex];
@@ -55,7 +60,11 @@ class DietsTableModel extends AbstractTableModel {
 		default:
 			return String.class;
 		}*/
-		return String.class;
+		return String.class; //only String-type table
+	}
+	
+	public Diet getDietAt(int rowNumber){
+		return diets.get(rowNumber);		
 	}
 
 }

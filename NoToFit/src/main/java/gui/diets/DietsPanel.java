@@ -10,6 +10,8 @@ import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.table.DefaultTableModel;
 
+import database.controller.DatabaseController;
+import database.entities.Diet;
 import gui.meals.AddMealDialog;
 import gui.meals.ShowAllMealsDialog;
 
@@ -25,6 +27,8 @@ public class DietsPanel extends JPanel {
 
 	private static final long serialVersionUID = -3015175045558720497L;
 	private JTable table;
+	private DietsTableModel tableModel;
+	private DatabaseController db;
 
 	public DietsPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -106,22 +110,7 @@ public class DietsPanel extends JPanel {
 		table = new JTable();
 		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Mass Gain", "02.10.2016", "09.10.2016"},
-				{"Reduction", "10.10.2016", "17.10.2016"},
-			},
-			new String[] {
-				"Diet Type", "Start Date", "Valid To"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
+		refreshTable();
 		
 		Component bottomStrut = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
@@ -142,6 +131,11 @@ public class DietsPanel extends JPanel {
 		AddMealDialog addMealDlg = new AddMealDialog();
 		addMealDlg.setLocationRelativeTo(this);
 		addMealDlg.setVisible(true);
+	}
+	
+	protected void refreshTable(){
+		tableModel = new DietsTableModel(db.getAll(Diet.class));
+		table.setModel(tableModel);
 	}
 
 }
