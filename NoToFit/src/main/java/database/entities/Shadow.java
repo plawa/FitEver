@@ -50,7 +50,7 @@ public class Shadow extends Entity {
 		this.pass = pass;
 	}
 	
-	public void setAndEncryptPass(String pass){
+	public void encryptAndSetPass(String pass){
 		this.pass = Encrypter.encryptWithMD5(pass);
 	}
 	

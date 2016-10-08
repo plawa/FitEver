@@ -159,7 +159,7 @@ public class AddUserDialog extends JDialog {
 		getContentPane().add(lblSex, gbc_lblSex);
 		
 		comboBoxSex = new JComboBox<String>();
-		comboBoxSex.setModel(new DefaultComboBoxModel<String>(new String[] {"male", "female"}));
+		comboBoxSex.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female"}));
 		GridBagConstraints gbc_comboBoxSex = new GridBagConstraints();
 		gbc_comboBoxSex.gridwidth = 3;
 		gbc_comboBoxSex.insets = new Insets(0, 0, 5, 5);
@@ -333,8 +333,8 @@ public class AddUserDialog extends JDialog {
 		String surname = textFieldSurname.getText();
 		String sexString = (String) comboBoxSex.getSelectedItem();
 		int height = Integer.parseInt(textFieldHeight.getText());
-		float startWeight = Float.parseFloat(textFieldStartWeight.getText());
-		float goalWeight = Float.parseFloat(textFieldGoalWeight.getText());
+		float startWeight = Float.parseFloat(textFieldStartWeight.getText().replace(',', '.'));
+		float goalWeight = Float.parseFloat(textFieldGoalWeight.getText().replace(',', '.'));
 		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
 		String userObjectiveString = (String) comboBoxUserObjective.getSelectedItem();
 		String dateRaw = formatTxtFldDate.getText();
@@ -344,7 +344,7 @@ public class AddUserDialog extends JDialog {
 		
 		Shadow userCredentials = new Shadow();
 		userCredentials.setLogin(login);
-		userCredentials.setAndEncryptPass(passwordRaw);
+		userCredentials.encryptAndSetPass(passwordRaw);
 		
 		User newUser = new User();
 		newUser.setName(name);
@@ -353,6 +353,7 @@ public class AddUserDialog extends JDialog {
 		newUser.setSexFromString(sexString);
 		newUser.setHeight(height);
 		newUser.setStartWeight(startWeight);
+		newUser.setActualWeight(startWeight);
 		newUser.setGoalWeight(goalWeight);
 		newUser.setFatPercentage(fatPercentage);
 		newUser.setUserObjectiveFromString(userObjectiveString);

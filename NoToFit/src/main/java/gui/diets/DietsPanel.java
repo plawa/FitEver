@@ -111,7 +111,7 @@ public class DietsPanel extends JPanel {
 		table = new JTable();
 		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
-		refreshTable();
+		//refreshTable();
 		
 		Component bottomStrut = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();

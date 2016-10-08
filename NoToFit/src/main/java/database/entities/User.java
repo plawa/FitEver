@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -56,7 +59,6 @@ public class User extends Entity {
 		this.sex = sex;
 		this.height = height;
 		this.startWeight = startWeight;
-		this.actualWeight = startWeight; //TO OBSERVE!
 		this.goalWeight = goalWeight;
 		this.fatPercentage = fatPercentage;
 		this.userObjective = userObjective;
@@ -225,4 +227,10 @@ public class User extends Entity {
 	private Character parseSexStringToChar(String sexString){
 		return sexTranslations.inverse().getOrDefault(sexString, 'e');
 	}
+	public int calculateAge() {
+		LocalDate birthDate = LocalDate.fromDateFields(dateOfBirth);
+		Period age = Period.fieldDifference(birthDate, LocalDate.now());
+		return age.getYears();
+	}	
+
 }

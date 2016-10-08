@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
 
@@ -114,6 +115,17 @@ public class UserPanel extends JPanel {
 		btnLogout.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnLogout.setIcon(new ImageIcon(UserPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
 		toolBar.add(btnLogout);
+		
+		JButton btnExit = new JButton("Exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				exit();
+			}
+		});
+		btnExit.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnExit.setIcon(new ImageIcon(UserPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/Error.gif")));
+		toolBar.add(btnExit);
 		btnEditUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				editUser();
@@ -181,6 +193,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionSex = new JLabel("Sex:");
 		lblDescriptionSex.setForeground(Color.GRAY);
+		lblDescriptionSex.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionSex = new GridBagConstraints();
 		gbc_lblDescriptionSex.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionSex.insets = new Insets(0, 0, 5, 5);
@@ -196,6 +209,16 @@ public class UserPanel extends JPanel {
 		gbc_lblValueSex.gridx = 2;
 		gbc_lblValueSex.gridy = 3;
 		add(lblValueSex, gbc_lblValueSex);
+		
+		JLabel lblBmiState = new JLabel("Overall state:");
+		lblBmiState.setForeground(Color.GRAY);
+		lblBmiState.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblBmiState = new GridBagConstraints();
+		gbc_lblBmiState.anchor = GridBagConstraints.WEST;
+		gbc_lblBmiState.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBmiState.gridx = 4;
+		gbc_lblBmiState.gridy = 3;
+		add(lblBmiState, gbc_lblBmiState);
 		
 		JLabel lblDescriptionAge = new JLabel("Age:");
 		lblDescriptionAge.setForeground(Color.GRAY);
@@ -325,6 +348,11 @@ public class UserPanel extends JPanel {
 
 	}
 	
+	protected void exit() {
+		new DatabaseController().tidyUp();
+		System.exit(0);
+	}
+
 	protected void generateWorkoutPlan() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
@@ -351,22 +379,20 @@ public class UserPanel extends JPanel {
 	}
 
 	private void logout(){
-		//TODO
-		//dispose();
-		throw new UnsupportedOperationException();
+		//this.
 	}
 	
 	protected void refreshContent() {
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
 		lblValueSex.setText(userDisplaying.getSexString());
-		lblValueAge.setText(Integer.toString(calculateAge(userDisplaying.getDateOfBirth())));
-		lblValueHeight.setText(Integer.toString(userDisplaying.getHeight()) + " cm");
-		lblValueStartWeight.setText(Float.toString(userDisplaying.getStartWeight()) + " kg");
-		lblValueGoalWeight.setText(Float.toString(userDisplaying.getGoalWeight()) + " kg");
-		lblValueFatPercentage.setText(Integer.toString(userDisplaying.getFatPercentage()) + " %");
+		lblValueAge.setText(String.format("%d years", userDisplaying.calculateAge()));
+		lblValueHeight.setText(String.format("%d cm", userDisplaying.getHeight()));
+		lblValueStartWeight.setText(String.format("%.1f kg", userDisplaying.getStartWeight()));
+		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
+		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
 		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
 		setBmiLabelFormatted(userDisplaying.calculateBMI());
-		lblValueActualWeight.setText(Float.toString(userDisplaying.getActualWeight()) + " kg");
+		lblValueActualWeight.setText(String.format("%.1f kg", userDisplaying.getActualWeight()));
 	}
 	
 	private void setBmiLabelFormatted(float bmi){
@@ -377,9 +403,5 @@ public class UserPanel extends JPanel {
 			lblValueBmi.setForeground(new Color(0, 120, 0));
 	}
 	
-	private int calculateAge(Date dateOfBirth) {
-		LocalDate birthDate = LocalDate.fromDateFields(dateOfBirth);
-		Period age = Period.fieldDifference(birthDate, LocalDate.now());
-		return age.getYears();
-	}	
+
 }

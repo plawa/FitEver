@@ -37,9 +37,6 @@ public class MainFrame {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public MainFrame(){
 		this(new User("name", "surname", new Date(3214122), 'f', 200, 66.9f,
 			80.1f, new Integer(10), new Character('s'), (Set) null, new Shadow(), (Set) null));
