@@ -175,6 +175,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionBmi = new JLabel("BMI:");
 		lblDescriptionBmi.setForeground(Color.GRAY);
+		lblDescriptionBmi.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionBmi = new GridBagConstraints();
 		gbc_lblDescriptionBmi.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionBmi.insets = new Insets(0, 0, 5, 5);
@@ -222,6 +223,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionAge = new JLabel("Age:");
 		lblDescriptionAge.setForeground(Color.GRAY);
+		lblDescriptionAge.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionAge = new GridBagConstraints();
 		gbc_lblDescriptionAge.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionAge.insets = new Insets(0, 0, 5, 5);
@@ -240,6 +242,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionHeight = new JLabel("Height:");
 		lblDescriptionHeight.setForeground(Color.GRAY);
+		lblDescriptionHeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionHeight = new GridBagConstraints();
 		gbc_lblDescriptionHeight.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionHeight.insets = new Insets(0, 0, 5, 5);
@@ -258,6 +261,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionFatPercentage = new JLabel("Fat Percentage:");
 		lblDescriptionFatPercentage.setForeground(Color.GRAY);
+		lblDescriptionFatPercentage.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionFatPercentage = new GridBagConstraints();
 		gbc_lblDescriptionFatPercentage.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionFatPercentage.insets = new Insets(0, 0, 5, 5);
@@ -276,6 +280,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
 		lblDescriptionStartWeight.setForeground(Color.GRAY);
+		lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
 		gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
@@ -294,6 +299,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionActualWeight = new JLabel("Actual Weight:");
 		lblDescriptionActualWeight.setForeground(Color.GRAY);
+		lblDescriptionActualWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionActualWeight = new GridBagConstraints();
 		gbc_lblDescriptionActualWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionActualWeight.insets = new Insets(0, 0, 5, 5);
@@ -311,6 +317,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionGoalWeight = new JLabel("Goal Weight:");
 		lblDescriptionGoalWeight.setForeground(Color.GRAY);
+		lblDescriptionGoalWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionGoalWeight = new GridBagConstraints();
 		gbc_lblDescriptionGoalWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionGoalWeight.insets = new Insets(0, 0, 5, 5);
@@ -329,6 +336,7 @@ public class UserPanel extends JPanel {
 		
 		JLabel lblDescriptionMainObjective = new JLabel("Main Objective:");
 		lblDescriptionMainObjective.setForeground(Color.GRAY);
+		lblDescriptionMainObjective.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		GridBagConstraints gbc_lblDescriptionMainObjective = new GridBagConstraints();
 		gbc_lblDescriptionMainObjective.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionMainObjective.insets = new Insets(0, 0, 5, 5);
