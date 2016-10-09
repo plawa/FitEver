@@ -22,6 +22,7 @@ public class Diet extends Entity {
 	private Date validTo;
 	private Character objective;
 	private Set<DietMeal> dietMeals = new HashSet<DietMeal>(0);
+	
 	private static BiMap<Character, String> objectiveTranslations;
 
 	public Diet(){

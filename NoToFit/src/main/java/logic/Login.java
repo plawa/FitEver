@@ -26,10 +26,4 @@ public class Login {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		Login loginTest = new Login();
-		User result = loginTest.performLogin("pidanciwo", "andrzej123");
-		System.out.print(result.getName());
-	}
-
 }

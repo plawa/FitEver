@@ -57,10 +57,10 @@ public class DatabaseController
     	mySession.close();
     }
     
-    public <T extends Entity> List<T> getAll(Class<T> type) throws RuntimeException {
+    public <T extends Entity> List<T> getAll(Class<T> entityType) throws RuntimeException {
     	Session mySession = mySessionFactory.openSession();
     	Transaction myTransaction = mySession.beginTransaction();
-    	List<T> resultList = mySession.createCriteria(type).list();
+    	List<T> resultList = mySession.createCriteria(entityType).list();
     	myTransaction.commit();
     	mySession.close();
     	return resultList;
@@ -81,6 +81,15 @@ public class DatabaseController
     	return result;
     }
 
+    public <T extends Entity> T getEntityByID(Class<T> entityType, int ID){
+    	Session mySession = mySessionFactory.openSession();
+    	Transaction myTransaction = mySession.beginTransaction();
+    	T entityFound = mySession.get(entityType, ID);
+    	myTransaction.commit();
+    	mySession.close();
+    	return entityFound;
+    }
+    
     
 	public static void main(String[] args){
 		//main function only for test purposes
