@@ -1,34 +1,28 @@
 package gui.meals;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
 import javax.swing.JScrollPane;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
 
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.awt.event.ActionEvent;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.enterprise.inject.Default;
-import javax.swing.ImageIcon;
-import java.awt.Component;
-
-public class ShowAllMealsDialog extends JDialog {
+public class AllMealsDialog extends JDialog {
 
 	private static final long serialVersionUID = 8721491617478602101L;
 	private final JPanel contentPanel = new JPanel();
@@ -38,7 +32,7 @@ public class ShowAllMealsDialog extends JDialog {
 
 	public static void main(String[] args) {
 		try {
-			ShowAllMealsDialog dialog = new ShowAllMealsDialog();
+			AllMealsDialog dialog = new AllMealsDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -46,7 +40,7 @@ public class ShowAllMealsDialog extends JDialog {
 		}
 	}
 
-	public ShowAllMealsDialog() {
+	public AllMealsDialog() {
 		db = new DatabaseController();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Meals Library");
@@ -82,7 +76,7 @@ public class ShowAllMealsDialog extends JDialog {
 				btnAdd.setVerticalTextPosition(SwingConstants.BOTTOM);
 				btnAdd.setHorizontalTextPosition(SwingConstants.CENTER);
 				btnAdd.setIcon(new ImageIcon(
-						ShowAllMealsDialog.class.getResource("/com/sun/java/swing/plaf/windows/icons/Question.gif")));
+						AllMealsDialog.class.getResource("/com/sun/java/swing/plaf/windows/icons/Question.gif")));
 				toolBar.add(btnAdd);
 			}
 			{
@@ -95,7 +89,7 @@ public class ShowAllMealsDialog extends JDialog {
 				btnEdit.setHorizontalTextPosition(SwingConstants.CENTER);
 				btnEdit.setVerticalTextPosition(SwingConstants.BOTTOM);
 				btnEdit.setIcon(new ImageIcon(
-						ShowAllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
+						AllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
 				toolBar.add(btnEdit);
 			}
 			{
@@ -108,7 +102,7 @@ public class ShowAllMealsDialog extends JDialog {
 				btnDelete.setHorizontalTextPosition(SwingConstants.CENTER);
 				btnDelete.setVerticalTextPosition(SwingConstants.BOTTOM);
 				btnDelete.setIcon(new ImageIcon(
-						ShowAllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/error.png")));
+						AllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/error.png")));
 				toolBar.add(btnDelete);
 			}
 		}
@@ -170,15 +164,10 @@ public class ShowAllMealsDialog extends JDialog {
 	}
 
 	protected void addMeal() {
-		int rowIndex = table.getSelectedRow();
-		if (rowIndex != -1) {
-			AddMealDialog addMealDlg = new AddMealDialog();
-			addMealDlg.setLocationRelativeTo(this);
-			addMealDlg.setVisible(true);
-			refreshTable();
-		} else {
-			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error", 0);
-		}
+		AddMealDialog addMealDlg = new AddMealDialog();
+		addMealDlg.setLocationRelativeTo(this);
+		addMealDlg.setVisible(true);
+		refreshTable();
 	}
 
 	protected void refreshTable() {

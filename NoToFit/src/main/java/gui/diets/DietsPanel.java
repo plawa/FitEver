@@ -1,28 +1,26 @@
 package gui.diets;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JTable;
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.Box;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 
 import database.controller.DatabaseController;
 import database.entities.Diet;
-import gui.meals.AddMealDialog;
-import gui.meals.ShowAllMealsDialog;
-
-import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.awt.event.ActionEvent;
+import gui.meals.AllMealsDialog;
 
 public class DietsPanel extends JPanel {
 
@@ -32,6 +30,7 @@ public class DietsPanel extends JPanel {
 	private DatabaseController db;
 
 	public DietsPanel() {
+		db = new DatabaseController();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 430, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
@@ -50,22 +49,15 @@ public class DietsPanel extends JPanel {
 		add(toolBar, gbc_toolBar);
 		
 		JButton btnOpenSelectedDiet = new JButton("Open Selected Plan");
+		btnOpenSelectedDiet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openSelectedDietPlan();
+			}
+		});
 		btnOpenSelectedDiet.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnOpenSelectedDiet.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnOpenSelectedDiet.setIcon(new ImageIcon(DietsPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/info.png")));
 		toolBar.add(btnOpenSelectedDiet);
-		
-		JButton btnAddNewMeal = new JButton("Add New Meal");
-		btnAddNewMeal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addNewMeal();
-			}
-		});
-		btnAddNewMeal.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnAddNewMeal.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnAddNewMeal.setIcon(new ImageIcon(DietsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
-		btnAddNewMeal.setToolTipText("adds new meal to a public database");
-		toolBar.add(btnAddNewMeal);
 		
 		JButton btnShowAllMeals = new JButton("Show All Meals");
 		btnShowAllMeals.addActionListener(new ActionListener() {
@@ -111,7 +103,7 @@ public class DietsPanel extends JPanel {
 		table = new JTable();
 		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
-		//refreshTable();
+		refreshTable();
 		
 		Component bottomStrut = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
@@ -122,16 +114,15 @@ public class DietsPanel extends JPanel {
 
 	}
 
-	protected void showAllMeals() {
-		ShowAllMealsDialog showAllMealDlg = new ShowAllMealsDialog();
-		showAllMealDlg.setLocationRelativeTo(this);
-		showAllMealDlg.setVisible(true);
+	protected void openSelectedDietPlan() {
+		Diet selectedDiet = tableModel.getDietAt(table.getSelectedRow());
+		
 	}
 
-	protected void addNewMeal() {
-		AddMealDialog addMealDlg = new AddMealDialog();
-		addMealDlg.setLocationRelativeTo(this);
-		addMealDlg.setVisible(true);
+	protected void showAllMeals() {
+		AllMealsDialog showAllMealDlg = new AllMealsDialog();
+		showAllMealDlg.setLocationRelativeTo(this);
+		showAllMealDlg.setVisible(true);
 	}
 	
 	protected void refreshTable(){

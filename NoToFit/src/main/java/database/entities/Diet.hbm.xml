@@ -1,33 +1,37 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
-    <class name="database.entities.Diet" table="diet" catalog="notofit" optimistic-lock="version">
-        <id name="id" type="java.lang.Integer">
-            <column name="ID" />
-            <generator class="identity" />
-        </id>
-        <many-to-one name="user" class="database.entities.User" fetch="select">
-            <column name="UserID" not-null="true" />
-        </many-to-one>
-        <property name="name" type="string">
-            <column name="name" length="80" not-null="true" />
-        </property>
-        <property name="mealIds" type="int">
-            <column name="MealIDs" not-null="true" />
-        </property>
-        <property name="validFrom" type="date">
-            <column name="validFrom" length="10" not-null="true" />
-        </property>      
-		<property name="validTo" type="date">
-            <column name="validTo" length="10" not-null="true" />
-        </property>
-        <set name="dietMeals" table="diet_meal" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="DietID" not-null="true" />
-            </key>
-            <one-to-many class="database.entities.DietMeal" />
-        </set>
-    </class>
+ <class catalog="notofit" name="database.entities.Diet" table="diet">
+  <id name="id" type="java.lang.Integer">
+   <column name="ID"/>
+   <generator class="identity"/>
+  </id>
+  <many-to-one class="database.entities.User" fetch="select" name="user">
+   <column name="UserID" not-null="true"/>
+  </many-to-one>
+  <property generated="never" lazy="false" name="name" type="string">
+   <column length="80" name="name" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="mealIds" type="int">
+   <column name="MealIDs" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="validFrom" type="date">
+   <column length="10" name="validFrom" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="validTo" type="date">
+   <column length="10" name="validTo" not-null="true"/>
+  </property>
+  <set fetch="join" inverse="true" lazy="true" name="dietMeals"
+   sort="unsorted" table="diet_meal">
+   <key>
+    <column name="DietID" not-null="true"/>
+   </key>
+   <one-to-many class="database.entities.DietMeal"/>
+  </set>
+  <property generated="never" lazy="false" name="objective" type="char">
+   <column length="1" name="objective" not-null="true"/>
+  </property>
+ </class>
 </hibernate-mapping>
