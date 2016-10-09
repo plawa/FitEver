@@ -3,6 +3,10 @@ package database.entities;
 
 public class DietMeal extends Entity {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7645787240053240386L;
 	private DietMealId id;
 	private Diet diet;
 	private Meal meal;
