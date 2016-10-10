@@ -101,9 +101,6 @@ public class DatabaseController
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		Shadow sh = new Shadow();
-		sh.setLogin("mojLogin");
-		sh.setPass("md511111111111jdhs");
 		
     	User us = new User();
     	us.setName("Marek");
