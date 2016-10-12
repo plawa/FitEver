@@ -22,6 +22,6 @@
   <mapping resource="database/entities/Exercise.hbm.xml"/>
   <mapping resource="database/entities/Shadow.hbm.xml"/>
   <mapping resource="database/entities/Meal.hbm.xml"/>
-  <mapping resource="database/entities/DietMeal.hbm.xml"/>
+  <!-- mapping resource="database/entities/DietMeal.hbm.xml"/-->
  </session-factory>
 </hibernate-configuration>

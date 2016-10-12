@@ -23,13 +23,21 @@
   <property generated="never" lazy="false" name="validTo" type="date">
    <column length="10" name="validTo" not-null="true"/>
   </property>
-  <set fetch="join" inverse="true" lazy="true" name="dietMeals"
+  <!-- >set fetch="join" inverse="true" lazy="true" name="meals"
    sort="unsorted" table="diet_meal">
    <key>
     <column name="DietID" not-null="true"/>
    </key>
-   <one-to-many class="database.entities.DietMeal"/>
-  </set>
+   <many-to-many class="Meal" entity-name="database.entities.Meal"/>
+  </set -->
+  
+  		<set name="meals" table="diet_meal"
+			inverse="true" lazy="true" fetch="select" cascade="all">
+			<key column="DietID" />
+			<many-to-many column="MealID" class="database.entities.Meal" />
+		</set>
+  
+  
   <property generated="never" lazy="false" name="objective" type="char">
    <column length="1" name="objective" not-null="true"/>
   </property>

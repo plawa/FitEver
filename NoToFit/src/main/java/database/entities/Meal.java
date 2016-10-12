@@ -20,7 +20,8 @@ public class Meal extends Entity {
 	private int carbohydratesPercentage;
 	private int proteinPercentage;
 	private int fatPercentage;
-	private Set<DietMeal> dietMeals = new HashSet<DietMeal>(0);
+	private Set<Diet> diets = new HashSet<Diet>(0);
+	
 	private static BiMap<Character, String> objectiveTranslations;
 
 	public Meal() {
@@ -36,18 +37,6 @@ public class Meal extends Entity {
 		this.carbohydratesPercentage = carbohydratesPercentage;
 		this.proteinPercentage = proteinPercentage;
 		this.fatPercentage = fatPercentage;
-	}
-
-	public Meal(String name, char objective, int gramature, int carbohydratesPercentage, int proteinPercentage,
-			int fatPercentage, Set<DietMeal> dietMeals) {
-		this();
-		this.name = name;
-		this.objective = objective;
-		this.gramature = gramature;
-		this.carbohydratesPercentage = carbohydratesPercentage;
-		this.proteinPercentage = proteinPercentage;
-		this.fatPercentage = fatPercentage;
-		this.dietMeals = dietMeals;
 	}
 
 	public Integer getId() {
@@ -113,12 +102,12 @@ public class Meal extends Entity {
 		this.fatPercentage = fatPercentage;
 	}
 
-	public Set<DietMeal> getDietMeals() {
-		return this.dietMeals;
+	public Set<Diet> getDiets() {
+		return this.diets;
 	}
  
-	public void setDietMeals(Set<DietMeal> dietMeals) {
-		this.dietMeals = dietMeals;
+	public void setDiets(Set<Diet> diets) {
+		this.diets = diets;
 	}
 
 	private void initializeMap(){		

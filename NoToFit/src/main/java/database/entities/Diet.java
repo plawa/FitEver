@@ -21,7 +21,7 @@ public class Diet extends Entity {
 	private Date validFrom;
 	private Date validTo;
 	private Character objective;
-	private Set<DietMeal> dietMeals = new HashSet<DietMeal>(0);
+	private Set<Meal> meals = new HashSet<Meal>(0);
 	
 	private static BiMap<Character, String> objectiveTranslations;
 
@@ -35,15 +35,6 @@ public class Diet extends Entity {
 		this.user = user;
 		this.mealIds = mealIds;
 		this.validFrom = validFrom;
-	}
-
-	public Diet(String name, User user, int mealIds, Date validFrom, Set<DietMeal> dietMeals) {
-		this();
-		this.setName(name);
-		this.user = user;
-		this.mealIds = mealIds;
-		this.validFrom = validFrom;
-		this.dietMeals = dietMeals;
 	}
 
 	public Integer getId() {
@@ -109,12 +100,12 @@ public class Diet extends Entity {
 		this.objective = parseObjectiveStringToChar(objectiveString);
 	}
 
-	public Set<DietMeal> getDietMeals() {
-		return this.dietMeals;
+	public Set<Meal> getMeals() {
+		return this.meals;
 	}
 
-	public void setDietMeals(Set<DietMeal> dietMeals) {
-		this.dietMeals = dietMeals;
+	public void setMeals(Set<Meal> meals) {
+		this.meals = meals;
 	}
 	
 	private void initializeMap(){		
