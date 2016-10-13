@@ -10,10 +10,11 @@ import java.util.Set;
  */
 public class Workout implements java.io.Serializable {
 
+	private static final long serialVersionUID = 9209194375975264761L;
 	private Integer id;
 	private User user;
 	private Date validFrom;
-	private Set workoutExercises = new HashSet(0);
+	private Set<Exercise> exercises = new HashSet<>(0);
 
 	public Workout() {
 	}
@@ -23,11 +24,6 @@ public class Workout implements java.io.Serializable {
 		this.validFrom = validFrom;
 	}
 
-	public Workout(User user, Date validFrom, Set workoutExercises) {
-		this.user = user;
-		this.validFrom = validFrom;
-		this.workoutExercises = workoutExercises;
-	}
 
 	public Integer getId() {
 		return this.id;
@@ -53,12 +49,12 @@ public class Workout implements java.io.Serializable {
 		this.validFrom = validFrom;
 	}
 
-	public Set getWorkoutExercises() {
-		return this.workoutExercises;
+	public Set<Exercise> getExercises() {
+		return this.exercises;
 	}
 
-	public void setWorkoutExercises(Set workoutExercises) {
-		this.workoutExercises = workoutExercises;
+	public void setExercises(Set<Exercise> workoutExercises) {
+		this.exercises = workoutExercises;
 	}
 
 }

@@ -1,21 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1 -->
-<hibernate-mapping>
-    <class name="database.entities.Shadow" table="shadow" catalog="notofit" optimistic-lock="version">
-        <id name="userId" type="int">
-            <column name="UserID" />
-            <generator class="foreign">
-                <param name="property">user</param>
-            </generator>
-        </id>
-        <one-to-one name="user" class="database.entities.User" constrained="true" fetch="join"></one-to-one>
-        <property name="login" type="string">
-            <column name="login" length="32" not-null="true" unique="true" />
-        </property>
-        <property name="pass" type="string">
-            <column name="pass" length="32" not-null="true" />
-        </property>
-    </class>
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-12 20:49:43 by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping default-lazy="false">
+ <class catalog="notofit" name="database.entities.Shadow" table="shadow">
+  <id name="userId" type="int">
+   <column name="UserID" unique="true"/>
+   <generator class="assigned"/>
+  </id>
+  <property generated="never" lazy="false" name="login" type="string">
+   <column length="32" name="login" not-null="true" unique="true"/>
+  </property>
+  <property generated="never" lazy="false" name="encryptedPass" type="string">
+   <column length="32" name="encryptedPass" not-null="true"/>
+  </property>
+ </class>
 </hibernate-mapping>

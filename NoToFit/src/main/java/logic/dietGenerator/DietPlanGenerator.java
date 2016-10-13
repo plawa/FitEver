@@ -4,13 +4,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 import database.controller.DatabaseController;
 import database.entities.Diet;
-import database.entities.DietMeal;
 import database.entities.Meal;
 import database.entities.User;
 
@@ -41,18 +38,14 @@ public class DietPlanGenerator {
 		
 		
 		//getting Meal
-		Meal meal = db.getEntityByID(Meal.class, 4);
+		Meal mealOne = db.getEntityByID(Meal.class, 1);
+		Meal mealTwo = db.getEntityByID(Meal.class, 2);
 		
 		//setting Relation Diet-Meal
-		DietMeal relationTest = new DietMeal();
-		relationTest.setDiet(newDiet);
-		relationTest.setMeal(meal);
+		newDiet.getMeals().add(mealOne);
+		newDiet.getMeals().add(mealTwo);
 		
-		Set<DietMeal> dietMeals = new HashSet<DietMeal>();
-		dietMeals.add(relationTest);
-		
-		newDiet.setDietMeals(dietMeals);
-		
+
 		db.saveEntityToDatabase(newDiet);
 	}
 

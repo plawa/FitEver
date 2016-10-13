@@ -28,6 +28,8 @@ public class User extends Entity {
 	private float goalWeight;
 	private Integer fatPercentage;
 	private Character userObjective;
+	private Integer lifeStyle;
+	private Integer somatotype;
 	private Set diets = new HashSet(0);
 	private Shadow shadow;
 	private Set workouts = new HashSet(0);
@@ -48,23 +50,6 @@ public class User extends Entity {
 		this.height = height;
 		this.startWeight = startWeight;
 		this.goalWeight = goalWeight;
-	}
-
-	public User(String name, String surname, Date dateOfBirth, char sex, int height, float startWeight,
-			float goalWeight, Integer fatPercentage, Character userObjective, Set diets, Shadow shadow, Set workouts) {
-		this();
-		this.name = name;
-		this.surname = surname;
-		this.dateOfBirth = dateOfBirth;
-		this.sex = sex;
-		this.height = height;
-		this.startWeight = startWeight;
-		this.goalWeight = goalWeight;
-		this.fatPercentage = fatPercentage;
-		this.userObjective = userObjective;
-		this.diets = diets;
-		this.shadow = shadow;
-		this.workouts = workouts;
 	}
 
 
@@ -172,6 +157,22 @@ public class User extends Entity {
 		this.userObjective = parseUserObjectiveStringToChar(userObjectiveString);
 	}
 	
+	public Integer getLifeStyle() {
+		return lifeStyle;
+	}
+
+	public void setLifeStyle(Integer lifeStyle) {
+		this.lifeStyle = lifeStyle;
+	}
+
+	public Integer getSomatotype() {
+		return somatotype;
+	}
+
+	public void setSomatotype(Integer somatotype) {
+		this.somatotype = somatotype;
+	}
+
 	public Set getDiets() {
 		return this.diets;
 	}

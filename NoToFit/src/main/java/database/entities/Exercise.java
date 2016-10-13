@@ -20,7 +20,7 @@ public class Exercise implements java.io.Serializable {
 	private boolean requiresEquipment;
 	private Integer difficultyLevel;
 	private String musclesTargeted;
-	private Set workoutExercises = new HashSet(0);
+	private Set<Workout> workouts = new HashSet<>(0);
 
 	public Exercise() {
 	}
@@ -29,17 +29,6 @@ public class Exercise implements java.io.Serializable {
 		this.name = name;
 		this.objective = objective;
 		this.requiresEquipment = requiresEquipment;
-	}
-
-	public Exercise(String name, String description, char objective, boolean requiresEquipment, Integer difficultyLevel,
-			String musclesTargeted, Set workoutExercises) {
-		this.name = name;
-		this.description = description;
-		this.objective = objective;
-		this.requiresEquipment = requiresEquipment;
-		this.difficultyLevel = difficultyLevel;
-		this.musclesTargeted = musclesTargeted;
-		this.workoutExercises = workoutExercises;
 	}
 
 	public Integer getId() {
@@ -98,12 +87,12 @@ public class Exercise implements java.io.Serializable {
 		this.musclesTargeted = musclesTargeted;
 	}
 
-	public Set getWorkoutExercises() {
-		return this.workoutExercises;
+	public Set<Workout> getWorkouts() {
+		return this.workouts;
 	}
 
-	public void setWorkoutExercises(Set workoutExercises) {
-		this.workoutExercises = workoutExercises;
+	public void setWorkouts(Set<Workout> workoutExercises) {
+		this.workouts = workoutExercises;
 	}
 
 }

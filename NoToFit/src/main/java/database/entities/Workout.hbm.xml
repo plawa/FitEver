@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated 2016-10-12 20:49:43 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="database.entities.Workout" table="workout" catalog="notofit" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -14,11 +14,13 @@
         <property name="validFrom" type="date">
             <column name="validFrom" length="10" not-null="true" />
         </property>
-        <set name="workoutExercises" table="workout_exercise" inverse="true" lazy="true" fetch="select">
+        <set name="exercises" table="workout_exercise" inverse="false" lazy="true" fetch="select">
             <key>
                 <column name="WorkoutID" not-null="true" />
             </key>
-            <one-to-many class="database.entities.WorkoutExercise" />
+            <many-to-many entity-name="database.entities.Exercise">
+                <column name="ExerciseID" not-null="true" />
+            </many-to-many>
         </set>
     </class>
 </hibernate-mapping>
