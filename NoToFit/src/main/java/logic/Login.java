@@ -8,14 +8,8 @@ import database.entities.User;
 
 public class Login {
 
-	private DatabaseController myDatabaseController;
-
-	public Login() throws ServiceException {
-		myDatabaseController = new DatabaseController();
-	}
-
-	public User performLogin(String login, String passwordRaw) {
-		Shadow credentialsInDatabase = myDatabaseController.getShadowEntityByLogin(login);
+	public static User performLogin(String login, String passwordRaw) throws ServiceException {
+		Shadow credentialsInDatabase = new DatabaseController().getShadowEntityByLogin(login);
 		if (credentialsInDatabase != null) {
 			Shadow credentialsEntered = new Shadow();
 			credentialsEntered.setLogin(login);

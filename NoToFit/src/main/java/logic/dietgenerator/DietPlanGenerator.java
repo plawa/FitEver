@@ -1,4 +1,6 @@
-package logic.dietGenerator;
+package logic.dietgenerator;
+
+
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -60,7 +62,7 @@ public class DietPlanGenerator {
 		newDiet.getMeals().add(newMeal2);
 		//newDiet.getMeals().add(mealOne);
 		//newDiet.getMeals().add(mealTwo);
-		
+		 
 		db.saveEntityToDatabase(newDiet);
 	}
 

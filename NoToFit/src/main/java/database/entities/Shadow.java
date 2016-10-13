@@ -13,7 +13,7 @@ public class Shadow extends Entity {
 	private int userId;
 	private User user;
 	private String login;
-	private String pass;
+	private String encryptedPass;
 
 	public Shadow() {
 	}
@@ -42,20 +42,20 @@ public class Shadow extends Entity {
 		this.login = login;
 	}
 
-	public String getPass() {
-		return this.pass;
+	public String getEncryptedPass() {
+		return this.encryptedPass;
 	}
 
-	public void setPass(String pass) {
-		this.pass = pass;
+	public void setEncryptedPass(String pass) {
+		this.encryptedPass = pass;
 	}
 	
 	public void encryptAndSetPass(String pass){
-		this.pass = Encrypter.encryptWithMD5(pass);
+		this.encryptedPass = Encrypter.encryptWithMD5(pass);
 	}
 	
 	public boolean equals(Shadow other){
-		if (this.pass.equals(other.pass))
+		if (this.encryptedPass.equals(other.encryptedPass))
 			return true;
 		else
 			return false;

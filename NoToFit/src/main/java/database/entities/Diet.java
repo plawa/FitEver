@@ -21,7 +21,7 @@ public class Diet extends Entity {
 	private Date validFrom;
 	private Date validTo;
 	private Character objective;
-	private Set<Meal> meals = new HashSet<Meal>(0);
+	private Set<Meal> meals = new HashSet<>(0);
 	
 	private static BiMap<Character, String> objectiveTranslations;
 
@@ -104,8 +104,8 @@ public class Diet extends Entity {
 		return this.meals;
 	}
 
-	public void setMeals(Set<Meal> meals) {
-		this.meals = meals;
+	public void setMeals(Set<Meal> dietMeals) {
+		this.meals = dietMeals;
 	}
 	
 	private void initializeMap(){		
@@ -122,5 +122,5 @@ public class Diet extends Entity {
 	private Character parseObjectiveStringToChar(String objectiveString){
 		return objectiveTranslations.inverse().getOrDefault(objectiveString, 'e');
 	}
-
+ 
 }

@@ -2,13 +2,12 @@ package gui.user;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -18,14 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-
 import database.controller.DatabaseController;
-import database.entities.Shadow;
 import database.entities.User;
-
-import java.awt.Font;
+import logic.entitytools.UserTools;
 
 public class UserPanel extends JPanel {
 
@@ -43,8 +37,7 @@ public class UserPanel extends JPanel {
 	private JLabel lblValueActualWeight;
 	
 	public UserPanel(){
-		this(new User("name", "surname", new Date(3214122), 'f', 200, 66.9f,
-				80.1f, new Integer(10), new Character('s'), (Set) null, new Shadow(), (Set) null));
+		this(new User());
 	}
 	
 	public UserPanel(User userToMaintain) {
@@ -387,19 +380,20 @@ public class UserPanel extends JPanel {
 	}
 
 	private void logout(){
-		//this.
+		// TODO
+		throw new UnsupportedOperationException();
 	}
 	
 	protected void refreshContent() {
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
-		lblValueSex.setText(userDisplaying.getSexString());
-		lblValueAge.setText(String.format("%d years", userDisplaying.calculateAge()));
+		lblValueSex.setText(UserTools.parseSexCharToString(userDisplaying.getSex()));
+		lblValueAge.setText(String.format("%d years", UserTools.calculateAge(userDisplaying)));
 		lblValueHeight.setText(String.format("%d cm", userDisplaying.getHeight()));
 		lblValueStartWeight.setText(String.format("%.1f kg", userDisplaying.getStartWeight()));
 		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
 		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
-		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
-		setBmiLabelFormatted(userDisplaying.calculateBMI());
+		lblValueUserObjective.setText(UserTools.parseUserObjectiveCharToString(userDisplaying.getUserObjective()));
+		setBmiLabelFormatted(UserTools.calculateBMI(userDisplaying));
 		lblValueActualWeight.setText(String.format("%.1f kg", userDisplaying.getActualWeight()));
 	}
 	

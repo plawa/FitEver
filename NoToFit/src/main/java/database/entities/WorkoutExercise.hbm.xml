@@ -19,7 +19,7 @@
             <column name="WorkoutID" not-null="true" />
         </many-to-one>
         <property name="orderNumber" type="int">
-            <column name="orderNumber" not-null="true" />
+            <column name="orderNumber"/>
         </property>
     </class>
 </hibernate-mapping>

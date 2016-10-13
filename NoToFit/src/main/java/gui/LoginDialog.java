@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -23,8 +25,6 @@ import database.entities.User;
 import gui.user.AddUserDialog;
 import logic.Login;
 import net.miginfocom.swing.MigLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class LoginDialog extends JDialog {
 
@@ -51,8 +51,7 @@ public class LoginDialog extends JDialog {
 		try {
 			LoginDialog.this.loginLogic = new Login();
 		} catch (ServiceException exc) {
-			JOptionPane.showMessageDialog(LoginDialog.this,
-					"Unable to connect database. Please check your network connection.", "Error!", 0);
+			JOptionPane.showMessageDialog(LoginDialog.this, "Unable to connect database.", "Error!", 0);
 			System.exit(1);
 		}
 		addWindowListener(new WindowAdapter() {

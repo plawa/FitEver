@@ -1,48 +1,40 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1 -->
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-10-12 20:49:43 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
- <class catalog="notofit" name="database.entities.Meal" table="meal">
-  <id name="id" type="java.lang.Integer">
-   <column name="ID"/>
-   <generator class="identity"/>
-  </id>
-  <property generated="never" lazy="false" name="name" type="string">
-   <column length="80" name="name" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="objective" type="char">
-   <column length="1" name="objective" not-null="true">
-    <comment>One char: 'm' stands for mass gain 'r' stands for reduction 'p' stands for power      </comment>
-   </column>
-  </property>
-  <property generated="never" lazy="false" name="gramature" type="int">
-   <column name="gramature" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false"
-   name="carbohydratesPercentage" type="int">
-   <column name="carbohydratesPercentage" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="proteinPercentage" type="int">
-   <column name="proteinPercentage" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="fatPercentage" type="int">
-   <column name="fatPercentage" not-null="true"/>
-  </property>
-  <!-- >set fetch="select" inverse="true" lazy="true" name="diets"
-   sort="unsorted" table="diet_meal">
-   <key>
-    <column name="MealID" not-null="true"/>
-   </key>
-   <many-to-many class="Diet" entity-name="database.entities.Diet" unique="false"/>
-  </set-->
-  
-  		<set name="diets" table="diet_meal"
-			inverse="false" lazy="true" fetch="select">
-			<key column="DietID" />
-			<many-to-many column="MealID" class="database.entities.Meal" />
-		</set>
-  
-  
- </class>
+    <class name="database.entities.Meal" table="meal" catalog="notofit" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="80" not-null="true" />
+        </property>
+        <property name="objective" type="char">
+            <column name="objective" length="1" not-null="true">
+                <comment>One char: 'm' stands for mass gain 'r' stands for reduction 'p' stands for power &#160; &#160; &#160;</comment>
+            </column>
+        </property>
+        <property name="gramature" type="int">
+            <column name="gramature" not-null="true" />
+        </property>
+        <property name="carbohydratesPercentage" type="int">
+            <column name="carbohydratesPercentage" not-null="true" />
+        </property>
+        <property name="proteinPercentage" type="int">
+            <column name="proteinPercentage" not-null="true" />
+        </property>
+        <property name="fatPercentage" type="int">
+            <column name="fatPercentage" not-null="true" />
+        </property>
+        <set name="diets" table="diet_meal" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="MealID" not-null="true" />
+            </key>
+            <many-to-many entity-name="database.entities.Diet">
+                <column name="DietID" not-null="true" />
+            </many-to-many>
+        </set> 
+    </class>
 </hibernate-mapping>

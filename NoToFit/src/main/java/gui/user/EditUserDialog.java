@@ -29,6 +29,7 @@ import javax.swing.text.MaskFormatter;
 
 import database.controller.DatabaseController;
 import database.entities.User;
+import logic.entitytools.UserTools;
 
 public class EditUserDialog extends JDialog {
 	
@@ -169,7 +170,7 @@ public class EditUserDialog extends JDialog {
 		gbc_comboBoxSex.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxSex.gridx = 2;
 		gbc_comboBoxSex.gridy = 5;
-		comboBoxSex.setSelectedItem(userToEdit.getSexString());
+		comboBoxSex.setSelectedItem(UserTools.parseUserObjectiveCharToString(userToEdit.getSex()));
 		getContentPane().add(comboBoxSex, gbc_comboBoxSex);
 		
 		JLabel lblDateOfBirth = new JLabel("Date of Birth:");
@@ -353,12 +354,12 @@ public class EditUserDialog extends JDialog {
 		userToEdit.setName(name);
 		userToEdit.setSurname(surname);
 		userToEdit.setDateOfBirth(date);
-		userToEdit.setSexFromString(sexString);
+		userToEdit.setSex(UserTools.parseSexStringToChar(sexString));
 		userToEdit.setHeight(height);
 		userToEdit.setStartWeight(startWeight);
 		userToEdit.setGoalWeight(goalWeight);
 		userToEdit.setFatPercentage(fatPercentage);
-		userToEdit.setUserObjectiveFromString(userObjectiveString);
+		userToEdit.setUserObjective(UserTools.parseUserObjectiveStringToChar(userObjectiveString));
 
 		try {
 			DatabaseController db = new DatabaseController();
