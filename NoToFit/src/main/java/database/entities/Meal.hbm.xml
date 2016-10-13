@@ -35,6 +35,6 @@
             <many-to-many entity-name="database.entities.Diet">
                 <column name="DietID" not-null="true" />
             </many-to-many>
-        </set>
+        </set> 
     </class>
 </hibernate-mapping>

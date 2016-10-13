@@ -1,5 +1,7 @@
 package logic.dietgenerator;
 
+
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,10 +16,8 @@ import database.entities.User;
 public class DietPlanGenerator {
 
 	
-	
 	public static void main(String[] args) {
 		DatabaseController db = new DatabaseController();
-
 		//getting User
 		User user = db.getEntityByID(User.class, 11);
 		
@@ -36,22 +36,34 @@ public class DietPlanGenerator {
 		newDiet.setUser(user);
 		newDiet.setValidFrom(dateFrom);
 		newDiet.setValidTo(dateTo);
+		newDiet.setObjective('r');
+		
 		
 		//getting Meal
-		Meal mealOne = db.getEntityByID(Meal.class, 1);
-		Meal mealTwo = db.getEntityByID(Meal.class, 2);
+		//Meal mealOne = db.getEntityByID(Meal.class, 4);
+		//Meal mealTwo = db.getEntityByID(Meal.class, 1);
 		
-		//setting Relation Diet-Meal
-		newDiet.getMeals().add(mealOne);
-		newDiet.getMeals().add(mealTwo);
+		Meal newMeal = new Meal();
+		newMeal.setName("dsa");
+		newMeal.setCarbohydratesPercentage(11);
+		newMeal.setFatPercentage(22);
+		newMeal.setObjective('s');
+		newMeal.setProteinPercentage(12);
 		
-
+		Meal newMeal2 = new Meal();
+		newMeal2.setName("dsa2");
+		newMeal2.setCarbohydratesPercentage(41);
+		newMeal2.setFatPercentage(12);
+		newMeal2.setObjective('r');
+		newMeal2.setProteinPercentage(2);
+		
+		//setting relationship
+		newDiet.getMeals().add(newMeal);
+		newDiet.getMeals().add(newMeal2);
+		//newDiet.getMeals().add(mealOne);
+		//newDiet.getMeals().add(mealTwo);
+		 
 		db.saveEntityToDatabase(newDiet);
-
-		/*
-		Set<Meal> meals = db.getEntityByID(Diet.class, 1).getMeals();
-		System.out.println(meals.size());
-		*/
 	}
 
 }

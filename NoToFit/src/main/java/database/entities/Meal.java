@@ -110,7 +110,7 @@ public class Meal extends Entity {
 
 	public Set<Diet> getDiets() {
 		return this.diets;
-	}
+	} 
  
 	public void setDiets(Set<Diet> dietMeals) {
 		this.diets = dietMeals;

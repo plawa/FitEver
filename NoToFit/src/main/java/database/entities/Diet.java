@@ -122,5 +122,5 @@ public class Diet extends Entity {
 	private Character parseObjectiveStringToChar(String objectiveString){
 		return objectiveTranslations.inverse().getOrDefault(objectiveString, 'e');
 	}
-
+ 
 }
