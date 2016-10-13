@@ -1,4 +1,4 @@
-package logic.dietgenerator;
+package logic.diet;
 
 import database.controller.DatabaseController;
 import database.entities.User;
