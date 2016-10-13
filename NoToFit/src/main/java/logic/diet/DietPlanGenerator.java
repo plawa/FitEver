@@ -1,4 +1,4 @@
-package logic.dietgenerator;
+package logic.diet;
 
 
 
@@ -32,7 +32,7 @@ public class DietPlanGenerator {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		newDiet.setName("Dieta przykładowa");
+		newDiet.setName("Dieta przykĹ‚adowa");
 		newDiet.setUser(user);
 		newDiet.setValidFrom(dateFrom);
 		newDiet.setValidTo(dateTo);

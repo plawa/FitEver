@@ -1,4 +1,4 @@
-package logic.dietgenerator;
+package logic.diet;
 
 import java.util.ArrayList;
 import java.util.HashSet;
