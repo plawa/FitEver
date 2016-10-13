@@ -1,4 +1,4 @@
-package logic.dietGenerator;
+package logic.dietgenerator;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -13,6 +13,7 @@ import database.entities.User;
 
 public class DietPlanGenerator {
 
+	
 	
 	public static void main(String[] args) {
 		DatabaseController db = new DatabaseController();
@@ -35,8 +36,6 @@ public class DietPlanGenerator {
 		newDiet.setUser(user);
 		newDiet.setValidFrom(dateFrom);
 		newDiet.setValidTo(dateTo);
-		newDiet.setObjective('r');
-		
 		
 		//getting Meal
 		Meal mealOne = db.getEntityByID(Meal.class, 1);

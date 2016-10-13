@@ -31,6 +31,7 @@ import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
 import gui.common.GuiTools;
+import logic.entitytools.UserTools;
 
 public class AddUserDialog extends JDialog {
 
@@ -312,9 +313,9 @@ public class AddUserDialog extends JDialog {
 		gbc_lblSomatotype.gridy = 13;
 		getContentPane().add(lblSomatotype, gbc_lblSomatotype);
 
-		JComboBox comboBoxSomatotype = new JComboBox();
+		JComboBox<Object> comboBoxSomatotype = new JComboBox<Object>();
 		comboBoxSomatotype.setModel(
-				new DefaultComboBoxModel(new String[] { "Undefined", "Ectomorphic", "Endomorphic", "Mesomorphic" }));
+				new DefaultComboBoxModel<Object>(new String[] { "Undefined", "Ectomorphic", "Endomorphic", "Mesomorphic" }));
 		GridBagConstraints gbc_comboBoxSomatotype = new GridBagConstraints();
 		gbc_comboBoxSomatotype.gridwidth = 3;
 		gbc_comboBoxSomatotype.insets = new Insets(0, 0, 5, 5);
@@ -432,13 +433,13 @@ public class AddUserDialog extends JDialog {
 		newUser.setName(name);
 		newUser.setSurname(surname);
 		newUser.setDateOfBirth(date);
-		newUser.setSexFromString(sexString);
+		newUser.setSex(UserTools.parseSexStringToChar(sexString));
 		newUser.setHeight(height);
 		newUser.setStartWeight(startWeight);
 		newUser.setActualWeight(startWeight);
 		newUser.setGoalWeight(goalWeight);
 		newUser.setFatPercentage(fatPercentage);
-		newUser.setUserObjectiveFromString(userObjectiveString);
+		newUser.setUserObjective(UserTools.parseUserObjectiveStringToChar(userObjectiveString));
 
 		newUser.setShadow(userCredentials);
 		userCredentials.setUser(newUser);

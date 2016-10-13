@@ -1,15 +1,17 @@
-package logic.dietGenerator;
+package logic.dietgenerator;
 
+import database.controller.DatabaseController;
 import database.entities.User;
+import logic.entitytools.UserTools;
 
 //based on http://www.budujmase.pl/diety/o-dietach/6297-obliczanie-wymaganej-ilosci-kalorii-krok-po-kroku.html
 
 public class EnergyRequirementCalculator {
 
-	public static int performCalculation(User user) throws Exception {
+	public static int performCalculation(User user) throws IllegalArgumentException {
 		float weight = user.getActualWeight();
 		int height = user.getHeight();
-		int age = user.calculateAge();
+		int age = UserTools.calculateAge(user);
 		Character sex = user.getSex();
 		float physicalActivityFactor = 1f + user.getLifeStyle()*0.2f;
 		float somatypeFactor = translateSomatypeToFactor(user.getSomatotype());
@@ -49,8 +51,10 @@ public class EnergyRequirementCalculator {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		User piotr = new DatabaseController().getEntityByID(User.class, 13);
+		
+		piotr.setSomatotype(3);
+		System.out.print(performCalculation(piotr));
 	}
 
 }

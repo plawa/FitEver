@@ -23,8 +23,15 @@ public class Meal extends Entity {
 	private Set<Diet> diets = new HashSet<Diet>(0);
 	private static BiMap<Character, String> objectiveTranslations;
 
+	static {
+		objectiveTranslations = HashBiMap.create();
+		objectiveTranslations.put('m', "Mass Gain");
+		objectiveTranslations.put('r', "Reduction");
+		objectiveTranslations.put('s', "Strength");
+	}
+	
 	public Meal() {
-		initializeMap();
+		
 	}
 
 	public Meal(String name, char objective, int gramature, int carbohydratesPercentage, int proteinPercentage,
@@ -107,13 +114,6 @@ public class Meal extends Entity {
  
 	public void setDiets(Set<Diet> dietMeals) {
 		this.diets = dietMeals;
-	}
-
-	private void initializeMap(){		
-		objectiveTranslations = HashBiMap.create();
-		objectiveTranslations.put('m', "Mass Gain");
-		objectiveTranslations.put('r', "Reduction");
-		objectiveTranslations.put('s', "Strength");
 	}
 	
 	private String parseObjectiveCharToString(Character objectiveChar){

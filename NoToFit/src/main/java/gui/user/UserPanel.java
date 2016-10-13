@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import database.controller.DatabaseController;
 import database.entities.User;
+import logic.entitytools.UserTools;
 
 public class UserPanel extends JPanel {
 
@@ -379,19 +380,20 @@ public class UserPanel extends JPanel {
 	}
 
 	private void logout(){
-		//this.
+		// TODO
+		throw new UnsupportedOperationException();
 	}
 	
 	protected void refreshContent() {
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
-		lblValueSex.setText(userDisplaying.getSexString());
-		lblValueAge.setText(String.format("%d years", userDisplaying.calculateAge()));
+		lblValueSex.setText(UserTools.parseSexCharToString(userDisplaying.getSex()));
+		lblValueAge.setText(String.format("%d years", UserTools.calculateAge(userDisplaying)));
 		lblValueHeight.setText(String.format("%d cm", userDisplaying.getHeight()));
 		lblValueStartWeight.setText(String.format("%.1f kg", userDisplaying.getStartWeight()));
 		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
 		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
-		lblValueUserObjective.setText(userDisplaying.getUserObjectiveString());
-		setBmiLabelFormatted(userDisplaying.calculateBMI());
+		lblValueUserObjective.setText(UserTools.parseUserObjectiveCharToString(userDisplaying.getUserObjective()));
+		setBmiLabelFormatted(UserTools.calculateBMI(userDisplaying));
 		lblValueActualWeight.setText(String.format("%.1f kg", userDisplaying.getActualWeight()));
 	}
 	
