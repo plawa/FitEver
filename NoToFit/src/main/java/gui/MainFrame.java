@@ -3,17 +3,14 @@ package gui;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.Date;
-import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import database.entities.Shadow;
 import database.entities.User;
-import gui.exercises.ExercisesPanel;
 import gui.diets.DietsPanel;
+import gui.exercises.ExercisesPanel;
 import gui.user.UserPanel;
 
 public class MainFrame {
@@ -38,8 +35,7 @@ public class MainFrame {
 	}
 
 	public MainFrame(){
-		this(new User("name", "surname", new Date(3214122), 'f', 200, 66.9f,
-			80.1f, new Integer(10), new Character('s'), (Set) null, new Shadow(), (Set) null));
+		this(new User());
 	}
 	
 	public MainFrame(User authorizedUser) {

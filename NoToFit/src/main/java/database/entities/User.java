@@ -30,179 +30,13 @@ public class User extends Entity {
 	private Character userObjective;
 	private Integer lifeStyle;
 	private Integer somatotype;
-	private Set diets = new HashSet(0);
+	private Set<Diet> diets = new HashSet<>(0);
 	private Shadow shadow;
-	private Set workouts = new HashSet(0);
+	private Set<Workout> workouts = new HashSet<>(0);
 	private static BiMap<Character, String> sexTranslations;
 	private static BiMap<Character, String> objectiveTranslations;
 
-	public User() {
-		initializeMaps();
-	}
-
-	public User(String name, String surname, Date dateOfBirth, char sex, int height, float startWeight,
-			float goalWeight) {
-		this();
-		this.name = name;
-		this.surname = surname;
-		this.dateOfBirth = dateOfBirth;
-		this.sex = sex;
-		this.height = height;
-		this.startWeight = startWeight;
-		this.goalWeight = goalWeight;
-	}
-
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSurname() {
-		return this.surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public Date getDateOfBirth() {
-		return this.dateOfBirth;
-	}
-
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
-	public char getSex() {
-		return this.sex;
-	}
-	
-	public String getSexString(){
-		return parseSexCharToString(sex);
-	}
-	
-	public void setSex(char sex) {
-		this.sex = sex;
-	}
-	
-	public void setSexFromString(String sexString) {
-		this.sex = parseSexStringToChar(sexString);
-	}
-
-	public int getHeight() {
-		return this.height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public float getStartWeight() {
-		return this.startWeight;
-	}
-
-	public void setStartWeight(float startWeight) {
-		this.startWeight = startWeight;
-	}
-
-	public float getActualWeight() {
-		return actualWeight;
-	}
-
-	public void setActualWeight(float actualWeight) {
-		this.actualWeight = actualWeight;
-	}
-
-	public float getGoalWeight() {
-		return this.goalWeight;
-	}
-
-	public void setGoalWeight(float goalWeight) {
-		this.goalWeight = goalWeight;
-	}
-
-	public Integer getFatPercentage() {
-		return this.fatPercentage;
-	}
-
-	public void setFatPercentage(Integer fatPercentage) {
-		this.fatPercentage = fatPercentage;
-	}
-
-	public Character getUserObjective() {
-		return this.userObjective;
-	}
-	
-	public String getUserObjectiveString(){
-		return parseUserObjectiveCharToString(userObjective);
-	}
-
-	public void setUserObjective(Character userObjective) {
-		this.userObjective = userObjective;
-	}
-
-	public void setUserObjectiveFromString(String userObjectiveString){
-		this.userObjective = parseUserObjectiveStringToChar(userObjectiveString);
-	}
-	
-	public Integer getLifeStyle() {
-		return lifeStyle;
-	}
-
-	public void setLifeStyle(Integer lifeStyle) {
-		this.lifeStyle = lifeStyle;
-	}
-
-	public Integer getSomatotype() {
-		return somatotype;
-	}
-
-	public void setSomatotype(Integer somatotype) {
-		this.somatotype = somatotype;
-	}
-
-	public Set getDiets() {
-		return this.diets;
-	}
-
-	public void setDiets(Set diets) {
-		this.diets = diets;
-	}
-
-	public Shadow getShadow() {
-		return this.shadow;
-	}
-
-	public void setShadow(Shadow shadow) {
-		this.shadow = shadow;
-	}
-
-	public Set getWorkouts() {
-		return this.workouts;
-	}
-
-	public void setWorkouts(Set workouts) {
-		this.workouts = workouts;
-	}
-
-	public float calculateBMI(){
-		float heightMeters = height / 100f;
-		return actualWeight / (heightMeters*heightMeters);
-	}
-	
-	private void initializeMaps(){
+	static {
 		sexTranslations = HashBiMap.create();
 		sexTranslations.put('m', "Male");
 		sexTranslations.put('f', "Female");
@@ -211,6 +45,144 @@ public class User extends Entity {
 		objectiveTranslations.put('m', "Mass Gain");
 		objectiveTranslations.put('r', "Reduction");
 		objectiveTranslations.put('s', "Strength");
+	}
+	
+	
+	public User() {
+	}
+
+	public Integer getId() {
+		return this.id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSurname() {
+		return this.surname;
+	}
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public Date getDateOfBirth() {
+		return this.dateOfBirth;
+	}
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public char getSex() {
+		return this.sex;
+	}	
+	public void setSex(char sex) {
+		this.sex = sex;
+	}
+	
+	public String getSexString(){
+		return parseSexCharToString(sex);
+	}
+	public void setSexFromString(String sexString) {
+		this.sex = parseSexStringToChar(sexString);
+	}
+
+	public int getHeight() {
+		return this.height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public float getStartWeight() {
+		return this.startWeight;
+	}
+	public void setStartWeight(float startWeight) {
+		this.startWeight = startWeight;
+	}
+
+	public float getActualWeight() {
+		return actualWeight;
+	}
+	public void setActualWeight(float actualWeight) {
+		this.actualWeight = actualWeight;
+	}
+
+	public float getGoalWeight() {
+		return this.goalWeight;
+	}
+	public void setGoalWeight(float goalWeight) {
+		this.goalWeight = goalWeight;
+	}
+
+	public Integer getFatPercentage() {
+		return this.fatPercentage;
+	}
+	public void setFatPercentage(Integer fatPercentage) {
+		this.fatPercentage = fatPercentage;
+	}
+
+	public Character getUserObjective() {
+		return this.userObjective;
+	}
+	public void setUserObjective(Character userObjective) {
+		this.userObjective = userObjective;
+	}	
+	
+	public String getUserObjectiveString(){
+		return parseUserObjectiveCharToString(userObjective);
+	}
+	public void setUserObjectiveFromString(String userObjectiveString){
+		this.userObjective = parseUserObjectiveStringToChar(userObjectiveString);
+	}
+	
+	public Integer getLifeStyle() {
+		return lifeStyle;
+	}
+	public void setLifeStyle(Integer lifeStyle) {
+		this.lifeStyle = lifeStyle;
+	}
+
+	public Integer getSomatotype() {
+		return somatotype;
+	}
+	public void setSomatotype(Integer somatotype) {
+		this.somatotype = somatotype;
+	}
+
+	public Set<Diet> getDiets() {
+		return this.diets;
+	}
+	public void setDiets(Set<Diet> diets) {
+		this.diets = diets;
+	}
+
+	public Shadow getShadow() {
+		return this.shadow;
+	}
+	public void setShadow(Shadow shadow) {
+		this.shadow = shadow;
+	}
+
+	public Set<Workout> getWorkouts() {
+		return this.workouts;
+	}
+	public void setWorkouts(Set<Workout> workouts) {
+		this.workouts = workouts;
+	}
+
+	
+/* END OF GENERATED CODE REGION */	
+	
+	public float calculateBMI(){
+		float heightMeters = height / 100f;
+		return actualWeight / (heightMeters*heightMeters);
 	}
 	
 	private String parseUserObjectiveCharToString(Character objectiveChar){

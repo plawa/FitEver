@@ -2,13 +2,12 @@ package gui.user;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -18,14 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-
 import database.controller.DatabaseController;
-import database.entities.Shadow;
 import database.entities.User;
-
-import java.awt.Font;
 
 public class UserPanel extends JPanel {
 
@@ -43,8 +36,7 @@ public class UserPanel extends JPanel {
 	private JLabel lblValueActualWeight;
 	
 	public UserPanel(){
-		this(new User("name", "surname", new Date(3214122), 'f', 200, 66.9f,
-				80.1f, new Integer(10), new Character('s'), (Set) null, new Shadow(), (Set) null));
+		this(new User());
 	}
 	
 	public UserPanel(User userToMaintain) {

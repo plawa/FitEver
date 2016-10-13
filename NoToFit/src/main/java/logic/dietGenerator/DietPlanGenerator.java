@@ -16,6 +16,7 @@ public class DietPlanGenerator {
 	
 	public static void main(String[] args) {
 		DatabaseController db = new DatabaseController();
+
 		//getting User
 		User user = db.getEntityByID(User.class, 11);
 		
@@ -47,6 +48,11 @@ public class DietPlanGenerator {
 		
 
 		db.saveEntityToDatabase(newDiet);
+
+		/*
+		Set<Meal> meals = db.getEntityByID(Diet.class, 1).getMeals();
+		System.out.println(meals.size());
+		*/
 	}
 
 }
