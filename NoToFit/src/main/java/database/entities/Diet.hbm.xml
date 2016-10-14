@@ -23,7 +23,7 @@
         <property name="validTo" type="date">
             <column name="validTo" length="10" not-null="true" />
         </property>
-        <set name="meals" table="diet_meal" inverse="false" lazy="false" fetch="select">
+        <set name="meals" table="diet_meal" inverse="false" lazy="false" fetch="select" cascade="all">
             <key>
                 <column name="DietID" not-null="true" />
             </key>

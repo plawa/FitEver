@@ -10,7 +10,7 @@ class DietsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 7436925452072118635L;
 	private List<Diet> diets;
-	final String[] columnNames = { "Diet Name", "Diet Type", "Valid From", "Valid To" };
+	final private String[] columnNames = { "Diet Name", "Valid From", "Valid To" };
 	
 	public DietsTableModel(List<Diet> diets) {
 		super();
@@ -36,10 +36,8 @@ class DietsTableModel extends AbstractTableModel {
 		case 0:
 			return diet.getName();
 		case 1:
-			return diet.getObjectiveString();
-		case 2:
 			return diet.getValidFrom().toString();
-		case 3:
+		case 2:
 			return diet.getValidTo().toString();
 		default:
 			return "Error";
@@ -48,19 +46,7 @@ class DietsTableModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		/*switch (columnIndex) {
-		case 0:
-			return String.class;
-		case 1:
-			return Integer.class;
-		case 2:
-			return Integer.class;
-		case 3:
-			return Integer.class;
-		default:
-			return String.class;
-		}*/
-		return String.class; //only String-type table
+		return String.class; //this is only String-type table
 	}
 	
 	public Diet getDietAt(int rowNumber){

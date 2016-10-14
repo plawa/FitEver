@@ -11,18 +11,16 @@ import database.entities.Meal;
 
 public class MealChooser {
 
-	private Random randomGenerator;
 	private List<Meal> mealsLibrary;
 	
 	public MealChooser(){
 		mealsLibrary = new DatabaseController().getAll(Meal.class);
-		randomGenerator = new Random();
+		new Random();
 	}
 	
 	public List<Meal> chooseDayMealSet(int caloriesPerDay, int mealsPerDay){
 		Set<Meal> mealsAvailable = new HashSet<>(mealsLibrary);
 		List<Meal> dayMealSet = new ArrayList<>();
-		//int randomIndex = randomGenerator.nextInt(dayMealSet.size());
 		int caloriesCount = 0;
 		for (Meal meal : mealsAvailable){
 			caloriesCount += 0; //TODO: implement calories counting tool for meal

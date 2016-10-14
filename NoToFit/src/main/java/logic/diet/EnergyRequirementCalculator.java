@@ -8,7 +8,7 @@ import logic.entitytools.UserTools;
 
 public class EnergyRequirementCalculator {
 
-	public static int performCalculation(User user) throws IllegalArgumentException {
+	public static int performCalculation(User user) {
 		float weight = user.getActualWeight();
 		int height = user.getHeight();
 		int age = UserTools.calculateAge(user);
@@ -22,7 +22,7 @@ public class EnergyRequirementCalculator {
 		return Math.round(dailyReq + somatypeFactor*dailyReq);
 	}
 
-	private static float calculateBasicMetabolismRequirement(float weight, int height, int age, Character sex) throws IllegalArgumentException {
+	private static float calculateBasicMetabolismRequirement(float weight, int height, int age, Character sex) {
 		switch (sex){
 		case 'm':
 			return 66.5f + 13.7f*weight + 5f*height - 6.8f*age;
@@ -37,7 +37,7 @@ public class EnergyRequirementCalculator {
 		return bmr*physicalActivityFactor;		
 	}
 
-	private static float translateSomatypeToFactor(int somatypeIntValue) throws IllegalArgumentException{
+	private static float translateSomatypeToFactor(int somatypeIntValue) {
 		switch(somatypeIntValue){
 		case 1:
 			return 0.2f;	//ectomorphic

@@ -1,7 +1,5 @@
 package logic.diet;
 
-
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,9 +10,19 @@ import database.controller.DatabaseController;
 import database.entities.Diet;
 import database.entities.Meal;
 import database.entities.User;
+import logic.entitytools.DietGenerationPreferences;
 
 public class DietPlanGenerator {
 
+	public static Diet generateDiet(DietGenerationPreferences preferences){
+		User user = preferences.getUser();
+		int caloriesDailyRequirement = EnergyRequirementCalculator.performCalculation(user);
+		
+		
+		
+		return null;
+	}
+	
 	
 	public static void main(String[] args) {
 		DatabaseController db = new DatabaseController();
@@ -32,11 +40,10 @@ public class DietPlanGenerator {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		newDiet.setName("Dieta przykĹ‚adowa");
+		newDiet.setName("Dieta przykładowa");
 		newDiet.setUser(user);
 		newDiet.setValidFrom(dateFrom);
 		newDiet.setValidTo(dateTo);
-		newDiet.setObjective('r');
 		
 		
 		//getting Meal
@@ -44,14 +51,14 @@ public class DietPlanGenerator {
 		//Meal mealTwo = db.getEntityByID(Meal.class, 1);
 		
 		Meal newMeal = new Meal();
-		newMeal.setName("dsa");
+		newMeal.setName("Krowa");
 		newMeal.setCarbohydratesPercentage(11);
 		newMeal.setFatPercentage(22);
 		newMeal.setObjective('s');
 		newMeal.setProteinPercentage(12);
 		
 		Meal newMeal2 = new Meal();
-		newMeal2.setName("dsa2");
+		newMeal2.setName("Miód");
 		newMeal2.setCarbohydratesPercentage(41);
 		newMeal2.setFatPercentage(12);
 		newMeal2.setObjective('r');
@@ -60,8 +67,6 @@ public class DietPlanGenerator {
 		//setting relationship
 		newDiet.getMeals().add(newMeal);
 		newDiet.getMeals().add(newMeal2);
-		//newDiet.getMeals().add(mealOne);
-		//newDiet.getMeals().add(mealTwo);
 		 
 		db.saveEntityToDatabase(newDiet);
 	}

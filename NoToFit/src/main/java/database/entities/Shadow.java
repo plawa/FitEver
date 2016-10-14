@@ -1,7 +1,5 @@
 package database.entities;
 
-import logic.Encrypter;
-
 // Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1
 
 /**
@@ -49,12 +47,8 @@ public class Shadow extends Entity {
 	public void setEncryptedPass(String pass) {
 		this.encryptedPass = pass;
 	}
-	
-	public void encryptAndSetPass(String pass){
-		this.encryptedPass = Encrypter.encryptWithMD5(pass);
-	}
-	
-	public boolean equals(Shadow other){
+
+	public boolean equals(Shadow other) {
 		if (this.encryptedPass.equals(other.encryptedPass))
 			return true;
 		else

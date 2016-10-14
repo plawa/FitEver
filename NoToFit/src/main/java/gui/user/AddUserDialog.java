@@ -31,7 +31,8 @@ import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
 import gui.common.GuiTools;
-import logic.entitytools.UserTools;
+import gui.common.Translator;
+import logic.Encrypter;
 
 public class AddUserDialog extends JDialog {
 
@@ -60,7 +61,6 @@ public class AddUserDialog extends JDialog {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public AddUserDialog() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Add New User");
@@ -402,9 +402,10 @@ public class AddUserDialog extends JDialog {
 
 	private void saveButtonPressed() {
 		String login = textFieldLogin.getText();
-		String passwordRaw = null;
+		String encryptedPass = null;
 		if (arePasswordsTheSame()){
-			passwordRaw = passwordField.getText();
+			String enteredPassword = passwordField.getText();
+			encryptedPass = Encrypter.encryptWithMD5(enteredPassword);
 		} else {
 			JOptionPane.showMessageDialog(this, "Passwords are not the same.", "Error!", 2);
 			return;
@@ -427,19 +428,19 @@ public class AddUserDialog extends JDialog {
 
 		Shadow userCredentials = new Shadow();
 		userCredentials.setLogin(login);
-		userCredentials.encryptAndSetPass(passwordRaw);
+		userCredentials.setEncryptedPass(encryptedPass);
 
 		User newUser = new User();
 		newUser.setName(name);
 		newUser.setSurname(surname);
 		newUser.setDateOfBirth(date);
-		newUser.setSex(UserTools.parseSexStringToChar(sexString));
+		newUser.setSex(Translator.parseSexStringToChar(sexString));
 		newUser.setHeight(height);
 		newUser.setStartWeight(startWeight);
 		newUser.setActualWeight(startWeight);
 		newUser.setGoalWeight(goalWeight);
 		newUser.setFatPercentage(fatPercentage);
-		newUser.setUserObjective(UserTools.parseUserObjectiveStringToChar(userObjectiveString));
+		newUser.setUserObjective(Translator.parseObjectiveStringToChar(userObjectiveString));
 
 		newUser.setShadow(userCredentials);
 		userCredentials.setUser(newUser);
