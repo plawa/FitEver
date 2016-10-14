@@ -3,6 +3,7 @@ package gui.meals;
 import java.util.List;
 
 import database.entities.Meal;
+import gui.common.Translator;
 
 class MealsTableModel extends javax.swing.table.AbstractTableModel {
 
@@ -41,7 +42,7 @@ class MealsTableModel extends javax.swing.table.AbstractTableModel {
 		case 4:
 			return meal.getFatPercentage();
 		case 5:
-			return meal.getObjectiveString();
+			return Translator.parseObjectiveCharToString(meal.getObjective());
 		default:
 			return "Error";
 		}

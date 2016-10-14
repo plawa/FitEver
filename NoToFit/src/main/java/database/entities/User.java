@@ -24,8 +24,8 @@ public class User extends Entity {
 	private Character userObjective;
 	private Integer lifeStyle;
 	private Integer somatotype;
-	private Set<Diet> diets = new HashSet<>(0);
 	private Shadow shadow;
+	private Set<Diet> diets = new HashSet<>(0);
 	private Set<Workout> workouts = new HashSet<>(0);
 
 	
@@ -123,19 +123,19 @@ public class User extends Entity {
 	public void setSomatotype(Integer somatotype) {
 		this.somatotype = somatotype;
 	}
+	
+	public Shadow getShadow() {
+		return this.shadow;
+	}
+	public void setShadow(Shadow shadow) {
+		this.shadow = shadow;
+	}
 
 	public Set<Diet> getDiets() {
 		return this.diets;
 	}
 	public void setDiets(Set<Diet> diets) {
 		this.diets = diets;
-	}
-
-	public Shadow getShadow() {
-		return this.shadow;
-	}
-	public void setShadow(Shadow shadow) {
-		this.shadow = shadow;
 	}
 
 	public Set<Workout> getWorkouts() {

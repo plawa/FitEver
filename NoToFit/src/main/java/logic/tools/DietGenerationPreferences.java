@@ -1,4 +1,4 @@
-package logic.entitytools;
+package logic.tools;
 
 import database.entities.User;
 

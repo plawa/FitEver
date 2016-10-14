@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
+import gui.common.Translator;
 
 public class EditMealDialog extends AddMealDialog {
 
@@ -26,7 +27,7 @@ public class EditMealDialog extends AddMealDialog {
 		this.spinnerCarbohydratesPercentage.setValue(mealToEdit.getCarbohydratesPercentage());
 		this.spinnerProteinPercentage.setValue(mealToEdit.getProteinPercentage());
 		this.spinnerFatPercentage.setValue(mealToEdit.getFatPercentage());
-		this.comboBoxObjective.setSelectedItem(mealToEdit.getObjectiveString());
+		this.comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(mealToEdit.getObjective()));
 	}
 	
 	protected void proceedButtonPressed(){

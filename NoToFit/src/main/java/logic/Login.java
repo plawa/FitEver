@@ -13,7 +13,7 @@ public class Login {
 		if (credentialsInDatabase != null) {
 			Shadow credentialsEntered = new Shadow();
 			credentialsEntered.setLogin(login);
-			credentialsEntered.encryptAndSetPass(passwordRaw);
+			credentialsEntered.setEncryptedPass(Encrypter.encryptWithMD5(passwordRaw));
 			if (credentialsEntered.equals(credentialsInDatabase))
 				return credentialsInDatabase.getUser();
 		}

@@ -14,7 +14,7 @@
         <property name="validFrom" type="date">
             <column name="validFrom" length="10" not-null="true" />
         </property>
-        <set name="exercises" table="workout_exercise" inverse="false" lazy="true" fetch="select">
+        <set name="exercises" table="workout_exercise" inverse="false" lazy="false" fetch="select" cascade="all">
             <key>
                 <column name="WorkoutID" not-null="true" />
             </key>

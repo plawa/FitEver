@@ -19,12 +19,6 @@ public class Workout implements java.io.Serializable {
 	public Workout() {
 	}
 
-	public Workout(User user, Date validFrom) {
-		this.user = user;
-		this.validFrom = validFrom;
-	}
-
-
 	public Integer getId() {
 		return this.id;
 	}

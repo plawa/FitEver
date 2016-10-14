@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
+import gui.common.Translator;
 
 public class AddMealDialog extends JDialog {
 	
@@ -240,7 +241,7 @@ public class AddMealDialog extends JDialog {
 		newMeal.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
 		newMeal.setFatPercentage((Integer) spinnerFatPercentage.getValue());
 		newMeal.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
-		newMeal.setObjectiveFromString((String) comboBoxObjective.getSelectedItem());
+		newMeal.setObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
 	}
 	
 	protected void tearDown(){
