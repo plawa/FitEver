@@ -7,9 +7,8 @@ import gui.MainFrame;
 public class MainApplication {
 
 	public static void main(String[] args) {
-		LoginDialog myLoginDialog = new LoginDialog();
-		myLoginDialog.setVisible(true);
-		User loggedUser = myLoginDialog.getAuthorizedUser();
+		
+		User loggedUser = new LoginDialog().getAuthorizedUser();
 		new MainFrame(loggedUser);
 	}
 }

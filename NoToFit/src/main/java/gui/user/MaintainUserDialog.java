@@ -8,9 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -23,9 +21,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import database.controller.DatabaseController;
 import database.entities.Shadow;
@@ -34,46 +35,58 @@ import gui.common.GuiTools;
 import gui.common.Translator;
 import logic.Encrypter;
 
-public class AddUserDialog extends JDialog {
+public class MaintainUserDialog extends JDialog {
 
+	private static final String MSG_ERROR_PASSWORDS_INCONSISTENT = "Passwords are not the same.";
 	private static final long serialVersionUID = 9182720162758099907L;
+	private static final String MSG_SAVE_ERROR = "Error occured while saving data to database.";
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
 	private JTextField textFieldHeight;
-	private JTextField textFieldStartWeight;
-	private JTextField textFieldGoalWeight;
+	private JTextField txtFldStartWeight;
+	private JTextField txtFldGoalWeight;
 	private JComboBox<String> comboBoxSex;
-	private JComboBox<String> comboBoxUserObjective;
-	private JFormattedTextField formatTxtFldDate;
+	private JComboBox<String> comboBoxObjective;
+	private JFormattedTextField formatTxtFldDateOfBirth;
 	private JSpinner spinnerFatPercentage;
 	private DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	private JTextField textFieldLogin;
 	private JPasswordField passwordField;
 	private JPasswordField passwordFieldConfirm;
+	protected User userMaintained = null;
+	private JComboBox<String> comboBoxSomatotype;
+	private JTextArea textArea;
 
-	public static void main(String[] args) {
-		try {
-			AddUserDialog dialog = new AddUserDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public MaintainUserDialog() {
+		initializeFrame();
+		initializeLayout();
+		initializeSwingComponents();
 	}
 
-	public AddUserDialog() {
+	public MaintainUserDialog(User userToEdit) {
+		this();
+		userMaintained = userToEdit;
+		fillSwingComponentsWithUserValues();
+	}
+
+	private void initializeFrame() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Add New User");
 		setModal(true);
-		setBounds(100, 100, 471, 496);
+		setBounds(100, 100, 471, 540);
+	}
+
+	private void initializeLayout() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 49, 59, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 33, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 33, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+				0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
+	}
 
+	private void initializeSwingComponents() {
 		Component verticalStrut = Box.createVerticalStrut(10);
 		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
 		gbc_verticalStrut.insets = new Insets(0, 0, 5, 5);
@@ -204,15 +217,15 @@ public class AddUserDialog extends JDialog {
 		gbc_lblDateOfBirth.gridy = 7;
 		getContentPane().add(lblDateOfBirth, gbc_lblDateOfBirth);
 
-		formatTxtFldDate = new JFormattedTextField(GuiTools.createFormatterFromPattern("##-##-####"));
-		formatTxtFldDate.setInputVerifier(GuiTools.createInputVerifier(dateFormatter));
+		formatTxtFldDateOfBirth = new JFormattedTextField(GuiTools.createFormatterFromPattern("##-##-####"));
+		formatTxtFldDateOfBirth.setInputVerifier(GuiTools.createInputVerifier(dateFormatter));
 		GridBagConstraints gbc_formatTxtFldDate = new GridBagConstraints();
 		gbc_formatTxtFldDate.gridwidth = 3;
 		gbc_formatTxtFldDate.insets = new Insets(0, 0, 5, 5);
 		gbc_formatTxtFldDate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_formatTxtFldDate.gridx = 2;
 		gbc_formatTxtFldDate.gridy = 7;
-		getContentPane().add(formatTxtFldDate, gbc_formatTxtFldDate);
+		getContentPane().add(formatTxtFldDateOfBirth, gbc_formatTxtFldDate);
 
 		JLabel lblHeight = new JLabel("Height:");
 		GridBagConstraints gbc_lblHeight = new GridBagConstraints();
@@ -240,15 +253,15 @@ public class AddUserDialog extends JDialog {
 		gbc_lblWeight.gridy = 9;
 		getContentPane().add(lblWeight, gbc_lblWeight);
 
-		textFieldStartWeight = new JTextField();
+		txtFldStartWeight = new JTextField();
 		GridBagConstraints gbc_textFieldWeight = new GridBagConstraints();
 		gbc_textFieldWeight.gridwidth = 3;
 		gbc_textFieldWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldWeight.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldWeight.gridx = 2;
 		gbc_textFieldWeight.gridy = 9;
-		getContentPane().add(textFieldStartWeight, gbc_textFieldWeight);
-		textFieldStartWeight.setColumns(10);
+		getContentPane().add(txtFldStartWeight, gbc_textFieldWeight);
+		txtFldStartWeight.setColumns(10);
 
 		JLabel lblGoalWeight = new JLabel("Goal Weight:");
 		GridBagConstraints gbc_lblGoalWeight = new GridBagConstraints();
@@ -258,15 +271,15 @@ public class AddUserDialog extends JDialog {
 		gbc_lblGoalWeight.gridy = 10;
 		getContentPane().add(lblGoalWeight, gbc_lblGoalWeight);
 
-		textFieldGoalWeight = new JTextField();
+		txtFldGoalWeight = new JTextField();
 		GridBagConstraints gbc_textFieldGoalWeight = new GridBagConstraints();
 		gbc_textFieldGoalWeight.gridwidth = 3;
 		gbc_textFieldGoalWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldGoalWeight.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldGoalWeight.gridx = 2;
 		gbc_textFieldGoalWeight.gridy = 10;
-		getContentPane().add(textFieldGoalWeight, gbc_textFieldGoalWeight);
-		textFieldGoalWeight.setColumns(10);
+		getContentPane().add(txtFldGoalWeight, gbc_textFieldGoalWeight);
+		txtFldGoalWeight.setColumns(10);
 
 		JLabel lblFatPercentage = new JLabel("Fat Percentage (%):");
 		GridBagConstraints gbc_lblFatPercentage = new GridBagConstraints();
@@ -294,8 +307,8 @@ public class AddUserDialog extends JDialog {
 		gbc_lblMainGoal.gridy = 12;
 		getContentPane().add(lblMainGoal, gbc_lblMainGoal);
 
-		comboBoxUserObjective = new JComboBox<String>();
-		comboBoxUserObjective
+		comboBoxObjective = new JComboBox<String>();
+		comboBoxObjective
 				.setModel(new DefaultComboBoxModel<String>(new String[] { "Mass Gain", "Reduction", "Strength" }));
 		GridBagConstraints gbc_comboBoxUserObjective = new GridBagConstraints();
 		gbc_comboBoxUserObjective.gridwidth = 3;
@@ -303,7 +316,7 @@ public class AddUserDialog extends JDialog {
 		gbc_comboBoxUserObjective.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxUserObjective.gridx = 2;
 		gbc_comboBoxUserObjective.gridy = 12;
-		getContentPane().add(comboBoxUserObjective, gbc_comboBoxUserObjective);
+		getContentPane().add(comboBoxObjective, gbc_comboBoxUserObjective);
 
 		JLabel lblSomatotype = new JLabel("Somatotype:");
 		GridBagConstraints gbc_lblSomatotype = new GridBagConstraints();
@@ -313,9 +326,9 @@ public class AddUserDialog extends JDialog {
 		gbc_lblSomatotype.gridy = 13;
 		getContentPane().add(lblSomatotype, gbc_lblSomatotype);
 
-		JComboBox<Object> comboBoxSomatotype = new JComboBox<Object>();
-		comboBoxSomatotype.setModel(
-				new DefaultComboBoxModel<Object>(new String[] { "Undefined", "Ectomorphic", "Endomorphic", "Mesomorphic" }));
+		comboBoxSomatotype = new JComboBox<String>();
+		comboBoxSomatotype.setModel(new DefaultComboBoxModel<String>(
+				new String[] { "Undefined", "Ectomorphic", "Endomorphic", "Mesomorphic" }));
 		GridBagConstraints gbc_comboBoxSomatotype = new GridBagConstraints();
 		gbc_comboBoxSomatotype.gridwidth = 3;
 		gbc_comboBoxSomatotype.insets = new Insets(0, 0, 5, 5);
@@ -332,7 +345,35 @@ public class AddUserDialog extends JDialog {
 		gbc_lblLifeStyle.gridy = 14;
 		getContentPane().add(lblLifeStyle, gbc_lblLifeStyle);
 
-		JSlider sliderLifeStyle = new JSlider();
+		textArea = new JTextArea();
+		textArea.setOpaque(false);
+		textArea.setVerifyInputWhenFocusTarget(false);
+		textArea.setRows(2);
+		textArea.setEditable(false);
+		textArea.setWrapStyleWord(true);
+		textArea.setLineWrap(true);
+		GridBagConstraints gbc_textArea = new GridBagConstraints();
+		gbc_textArea.gridwidth = 3;
+		gbc_textArea.insets = new Insets(0, 0, 5, 5);
+		gbc_textArea.fill = GridBagConstraints.BOTH;
+		gbc_textArea.gridx = 2;
+		gbc_textArea.gridy = 15;
+		getContentPane().add(textArea, gbc_textArea);
+
+		final JSlider sliderLifeStyle = new JSlider();
+		sliderLifeStyle.setSnapToTicks(true);
+		sliderLifeStyle.setPaintTicks(true);
+		sliderLifeStyle.setPaintLabels(true);
+		sliderLifeStyle.setMinimum(1);
+		sliderLifeStyle.setMaximum(5);
+		sliderLifeStyle.setMajorTickSpacing(1);
+		sliderLifeStyle.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				int choice = sliderLifeStyle.getValue();
+				textArea.setText(Translator.getLifeStyleDescription(choice));
+			}
+		});
+		sliderLifeStyle.setValue(3);
 		GridBagConstraints gbc_sliderLifeStyle = new GridBagConstraints();
 		gbc_sliderLifeStyle.fill = GridBagConstraints.HORIZONTAL;
 		gbc_sliderLifeStyle.gridwidth = 3;
@@ -340,14 +381,6 @@ public class AddUserDialog extends JDialog {
 		gbc_sliderLifeStyle.gridx = 2;
 		gbc_sliderLifeStyle.gridy = 14;
 		getContentPane().add(sliderLifeStyle, gbc_sliderLifeStyle);
-
-		JLabel lblLifestyleDescription = new JLabel("lifestyle description");
-		GridBagConstraints gbc_lblLifestyleDescription = new GridBagConstraints();
-		gbc_lblLifestyleDescription.gridwidth = 3;
-		gbc_lblLifestyleDescription.insets = new Insets(0, 0, 5, 5);
-		gbc_lblLifestyleDescription.gridx = 2;
-		gbc_lblLifestyleDescription.gridy = 15;
-		getContentPane().add(lblLifestyleDescription, gbc_lblLifestyleDescription);
 
 		Component horizontalStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
@@ -379,7 +412,7 @@ public class AddUserDialog extends JDialog {
 			getContentPane().add(cancelButton, gbc_cancelButton);
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
+					tearDown();
 				}
 			});
 			cancelButton.setActionCommand("Cancel");
@@ -400,63 +433,102 @@ public class AddUserDialog extends JDialog {
 		getContentPane().add(verticalStrut_1, gbc_verticalStrut_1);
 	}
 
-	private void saveButtonPressed() {
+	protected void fillSwingComponentsWithUserValues() {
+		if (userMaintained == null)
+			return;
+		textFieldLogin.setText(userMaintained.getShadow().getLogin());
+		passwordField.setText("*********");
+		passwordFieldConfirm.setText("*********");
+		textFieldName.setText(userMaintained.getName());
+		textFieldSurname.setText(userMaintained.getSurname());
+		comboBoxSex.setSelectedItem(Translator.parseSexCharToString(userMaintained.getSex()));
+		formatTxtFldDateOfBirth.setText(GuiTools.parseDateToString(userMaintained.getDateOfBirth()));
+		textFieldHeight.setText(Integer.toString(userMaintained.getHeight()));
+		txtFldStartWeight.setText(Float.toString(userMaintained.getStartWeight()));
+		txtFldGoalWeight.setText(Float.toString(userMaintained.getGoalWeight()));
+		spinnerFatPercentage.setValue(userMaintained.getFatPercentage());
+		comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(userMaintained.getUserObjective()));
+		comboBoxSomatotype.setSelectedItem(Translator.parseSomatotypeIntegerToString(userMaintained.getSomatotype()));
+	}
+
+	protected void saveButtonPressed() {
+
+		setUserPropertiesFromEnteredValues();
+
+		if (userHasCredentialsAssigned()) {
+			if (areEnteredPasswordsTheSame()) {
+				assignNewUserCredentials();
+			} else {
+				JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, "Error!", 2);
+				return;
+			}
+		}
+		if (saveToDatabase())
+			tearDown();
+		else
+			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR, "Error!", 2);
+	}
+
+	private boolean userHasCredentialsAssigned() {
+		return userMaintained.getShadow() == null;
+	}
+
+	private void assignNewUserCredentials() {
+		Shadow userCredentials = createUserCredentialsFromEnteredValues();
+		userMaintained.setShadow(userCredentials);
+		userCredentials.setUser(userMaintained);
+	}
+
+	private boolean saveToDatabase() {
+		try {
+			new DatabaseController().saveEntityToDatabase(userMaintained);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private Shadow createUserCredentialsFromEnteredValues() {
 		String login = textFieldLogin.getText();
 		String encryptedPass = null;
-		if (arePasswordsTheSame()){
+		if (areEnteredPasswordsTheSame()) {
 			String enteredPassword = passwordField.getText();
 			encryptedPass = Encrypter.encryptWithMD5(enteredPassword);
 		} else {
-			JOptionPane.showMessageDialog(this, "Passwords are not the same.", "Error!", 2);
-			return;
-		}
-		String name = textFieldName.getText();
-		String surname = textFieldSurname.getText();
-		String sexString = (String) comboBoxSex.getSelectedItem();
-		int height = Integer.parseInt(textFieldHeight.getText());
-		float startWeight = Float.parseFloat(textFieldStartWeight.getText().replace(',', '.'));
-		float goalWeight = Float.parseFloat(textFieldGoalWeight.getText().replace(',', '.'));
-		int fatPercentage = (Integer) spinnerFatPercentage.getValue();
-		String userObjectiveString = (String) comboBoxUserObjective.getSelectedItem();
-		String dateRaw = formatTxtFldDate.getText();
-		Date date = new Date(); // present date and time given when parsing fails
-		try {
-			date = dateFormatter.parse(dateRaw);
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
 
 		Shadow userCredentials = new Shadow();
 		userCredentials.setLogin(login);
 		userCredentials.setEncryptedPass(encryptedPass);
-
-		User newUser = new User();
-		newUser.setName(name);
-		newUser.setSurname(surname);
-		newUser.setDateOfBirth(date);
-		newUser.setSex(Translator.parseSexStringToChar(sexString));
-		newUser.setHeight(height);
-		newUser.setStartWeight(startWeight);
-		newUser.setActualWeight(startWeight);
-		newUser.setGoalWeight(goalWeight);
-		newUser.setFatPercentage(fatPercentage);
-		newUser.setUserObjective(Translator.parseObjectiveStringToChar(userObjectiveString));
-
-		newUser.setShadow(userCredentials);
-		userCredentials.setUser(newUser);
-
-		try {
-			DatabaseController db = new DatabaseController();
-			db.saveEntityToDatabase(userCredentials);
-			this.setVisible(false);
-			dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		return userCredentials;
 	}
-	
-	private boolean arePasswordsTheSame(){
+
+	private void setUserPropertiesFromEnteredValues() {
+		float startWeight = GuiTools.parseFloatCommaOrDotSep(txtFldStartWeight.getText());
+		float goalWeight = GuiTools.parseFloatCommaOrDotSep(txtFldGoalWeight.getText());
+
+		userMaintained.setName(textFieldName.getText());
+		userMaintained.setSurname(textFieldSurname.getText());
+		userMaintained.setDateOfBirth(GuiTools.parseStringToDate(formatTxtFldDateOfBirth.getText()));
+		userMaintained.setSex(Translator.parseSexStringToChar((String) comboBoxSex.getSelectedItem()));
+		userMaintained.setHeight(Integer.parseInt(textFieldHeight.getText()));
+		userMaintained.setStartWeight(startWeight);
+		if (userMaintained.getActualWeight() == 0)
+			userMaintained.setActualWeight(startWeight);
+		userMaintained.setGoalWeight(goalWeight);
+		userMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
+		userMaintained
+				.setUserObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
+		userMaintained.setSomatotype((Integer) comboBoxSomatotype.getSelectedItem());
+	}
+
+	private boolean areEnteredPasswordsTheSame() {
 		return passwordField.getText().equals(passwordFieldConfirm.getText());
 	}
 
+	protected void tearDown() {
+		setVisible(false);
+		dispose();
+	}
 }

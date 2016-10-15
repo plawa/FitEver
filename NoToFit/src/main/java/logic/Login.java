@@ -1,6 +1,6 @@
 package logic;
 
-import org.hibernate.service.spi.ServiceException;
+import org.hibernate.exception.JDBCConnectionException;
 
 import database.controller.DatabaseController;
 import database.entities.Shadow;
@@ -8,8 +8,11 @@ import database.entities.User;
 
 public class Login {
 
-	public static User performLogin(String login, String passwordRaw) throws ServiceException {
+	
+	public static User performLogin(String login, String passwordRaw) throws JDBCConnectionException {
+		
 		Shadow credentialsInDatabase = new DatabaseController().getShadowEntityByLogin(login);
+		
 		if (credentialsInDatabase != null) {
 			Shadow credentialsEntered = new Shadow();
 			credentialsEntered.setLogin(login);
@@ -19,5 +22,7 @@ public class Login {
 		}
 		return null;
 	}
+	
+	
 
 }

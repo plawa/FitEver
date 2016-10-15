@@ -47,10 +47,10 @@ public class UpdateUserStatsDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			Component topStrut = Box.createVerticalStrut(20);
@@ -128,14 +128,14 @@ public class UpdateUserStatsDialog extends JDialog {
 			contentPanel.add(leftStrut, gbc_leftStrut);
 		}
 		{
-			
+
 			slider = new JSlider();
 			slider.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
-					newWeight = userToMaintain.getActualWeight() + slider.getValue()*0.1f;
+					newWeight = userToMaintain.getActualWeight() + slider.getValue() * 0.1f;
 					lblValueNewWeight.setText(String.format("%.1f kg", newWeight));
 					float differencePercentage = 100f * newWeight / userToMaintain.getActualWeight() - 100f;
-					lblValueDifference.setText(String.format("%.2f %%", differencePercentage)); 
+					lblValueDifference.setText(String.format("%.2f %%", differencePercentage));
 				}
 			});
 			slider.setPaintTicks(true);
@@ -150,14 +150,14 @@ public class UpdateUserStatsDialog extends JDialog {
 			gbc_slider.insets = new Insets(0, 0, 5, 5);
 			gbc_slider.gridx = 1;
 			gbc_slider.gridy = 4;
-			
-	        Hashtable<Integer, JLabel> sliderLabels = new Hashtable<Integer, JLabel>();
-	        sliderLabels.put(0, new JLabel("0"));
-	        sliderLabels.put(20, new JLabel("+"));
-	        sliderLabels.put(-20, new JLabel("-"));
-	        slider.setLabelTable(sliderLabels);
+
+			Hashtable<Integer, JLabel> sliderLabels = new Hashtable<Integer, JLabel>();
+			sliderLabels.put(0, new JLabel("0"));
+			sliderLabels.put(20, new JLabel("+"));
+			sliderLabels.put(-20, new JLabel("-"));
+			slider.setLabelTable(sliderLabels);
 			slider.setPaintLabels(true);
-			
+
 			contentPanel.add(slider, gbc_slider);
 		}
 		{
@@ -195,8 +195,7 @@ public class UpdateUserStatsDialog extends JDialog {
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						UpdateUserStatsDialog.this.setVisible(false);
-						UpdateUserStatsDialog.this.dispose();
+						tearDown();
 					}
 				});
 				cancelButton.setActionCommand("Cancel");
@@ -208,6 +207,10 @@ public class UpdateUserStatsDialog extends JDialog {
 	protected void proceedUpdate() {
 		userToMaintain.setActualWeight(newWeight);
 		db.updateEntityToDatabase(userToMaintain);
+		tearDown();
+	}
+
+	private void tearDown() {
 		setVisible(false);
 		dispose();
 	}

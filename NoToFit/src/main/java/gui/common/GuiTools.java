@@ -2,6 +2,8 @@ package gui.common;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
@@ -9,6 +11,27 @@ import javax.swing.JFormattedTextField;
 import javax.swing.text.MaskFormatter;
 
 public class GuiTools {
+	
+	private final static String DATE_FORMAT = "dd-MM-yyyy";
+	private final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);	
+	
+	public static String parseDateToString(Date date){	
+		return dateFormatter.format(date);
+	}
+	
+	public static Date parseStringToDate(String dateString){
+		Date date = new Date(0); //1970 year set to return if parsing fails
+		try {
+			 date = dateFormatter.parse(dateString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	public static float parseFloatCommaOrDotSep(String floatCommaOrDotSeparated){
+		return Float.parseFloat(floatCommaOrDotSeparated.replace(',', '.'));
+	}
 
 	public static MaskFormatter createFormatterFromPattern(String s) {
 		MaskFormatter formatter = null;
@@ -19,7 +42,6 @@ public class GuiTools {
 		}
 		return formatter;
 	}
-	
 	
 	public static InputVerifier createInputVerifier(final DateFormat dateFormatter) {
 		return new InputVerifier() {
@@ -38,6 +60,5 @@ public class GuiTools {
 			}
 		};
 	}
-	
 	
 }

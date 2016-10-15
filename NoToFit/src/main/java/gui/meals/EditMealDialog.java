@@ -7,8 +7,9 @@ import database.entities.Meal;
 import gui.common.Translator;
 
 public class EditMealDialog extends AddMealDialog {
-
 	private static final long serialVersionUID = 4604085912903033345L;
+
+	private static final String MSG_CONNECTION_LOST = "You have probably lost connection to database.";
 	private Meal mealToEdit;
 	
 	public EditMealDialog() {
@@ -29,7 +30,7 @@ public class EditMealDialog extends AddMealDialog {
 		this.spinnerFatPercentage.setValue(mealToEdit.getFatPercentage());
 		this.comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(mealToEdit.getObjective()));
 	}
-	
+	 
 	protected void proceedButtonPressed(){
 		setMealAttributesFromFields(mealToEdit);
 		try {
@@ -37,7 +38,7 @@ public class EditMealDialog extends AddMealDialog {
 			tearDown();
 		} catch (RuntimeException e){
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "You have probably lost connection to database.", "Error!", 0);
+			JOptionPane.showMessageDialog(this, MSG_CONNECTION_LOST, "Error!", 0);
 		}
 	}
 

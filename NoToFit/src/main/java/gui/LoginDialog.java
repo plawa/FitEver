@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,7 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -22,58 +30,60 @@ import javax.swing.border.EmptyBorder;
 import org.hibernate.service.spi.ServiceException;
 
 import database.entities.User;
-import gui.user.AddUserDialog;
+import gui.user.MaintainUserDialog;
 import logic.Login;
 import net.miginfocom.swing.MigLayout;
 
 public class LoginDialog extends JDialog {
 
 	private static final long serialVersionUID = 8472433868284888754L;
+	private static final String LBL_MSG_IMAGE_NOT_FOUND = "Error! Image not found.";
+	private static final String HEADER_IMAGE_PATH = "images\\login_image.png";
+	private static final String MSG_LOGIN_DENIED = "Username or password incorrect.";
+	private static final String MSG_DATABASE_ERROR = "Unable to reach database.";
 
-	private User authorizedUser;
+	private User authorizedUser = null;
 	private final JPanel contentPanel = new JPanel();
 	private JDialog myAddUserDialog;
-	private JTextField textFieldUsername;
-	private JPasswordField passwordField;
-	private Login loginLogic;
+	private JTextField txtFldLogin;
+	private JPasswordField passFld;
+	private JLabel lblImageLabel;
+	private JButton okButton;
 
-	public static void main(String[] args) {
-		LoginDialog dialog = new LoginDialog();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		dialog.setVisible(true);
-	}
-
-	/**
-	 * Create the dialog.
-	 */
 	public LoginDialog() {
 		super((Frame) null, true);
-		try {
-			LoginDialog.this.loginLogic = new Login();
-		} catch (ServiceException exc) {
-			JOptionPane.showMessageDialog(LoginDialog.this, "Unable to connect database.", "Error!", 0);
-			System.exit(1);
-		}
+		setType(Type.POPUP);
+		setResizable(false);
+		initializeFrame();
+		initializeLayout();
+		initializeSwingComponents();
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+
+	private void initializeFrame() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
+				tearDown();
 				System.exit(1);
 			}
 		});
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("NoToFit Login");
-		setType(Type.POPUP);
-		setResizable(false);
-		setBounds(100, 100, 450, 242);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[] { 10, 76, 171, 0, 0 };
-		gbl_contentPanel.rowHeights = new int[] { 10, 14, 0, 0, 0 };
-		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		contentPanel.setLayout(gbl_contentPanel);
+		setBounds(100, 100, 450, 360);
+	}
+
+	private void initializeSwingComponents() {
+		{
+			lblImageLabel = loadHeaderImageLabel();
+			GridBagConstraints gbc_lblImageLabel = new GridBagConstraints();
+			gbc_lblImageLabel.gridwidth = 4;
+			gbc_lblImageLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_lblImageLabel.gridx = 0;
+			gbc_lblImageLabel.gridy = 0;
+			contentPanel.add(lblImageLabel, gbc_lblImageLabel);
+		}
 		{
 			JLabel lblUsername = new JLabel("Username:");
 			GridBagConstraints gbc_lblUsername = new GridBagConstraints();
@@ -84,14 +94,14 @@ public class LoginDialog extends JDialog {
 			contentPanel.add(lblUsername, gbc_lblUsername);
 		}
 		{
-			textFieldUsername = new JTextField();
+			txtFldLogin = new JTextField();
 			GridBagConstraints gbc_textFieldUsername = new GridBagConstraints();
 			gbc_textFieldUsername.insets = new Insets(0, 0, 5, 5);
 			gbc_textFieldUsername.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textFieldUsername.gridx = 2;
 			gbc_textFieldUsername.gridy = 1;
-			contentPanel.add(textFieldUsername, gbc_textFieldUsername);
-			textFieldUsername.setColumns(10);
+			contentPanel.add(txtFldLogin, gbc_textFieldUsername);
+			txtFldLogin.setColumns(10);
 		}
 		{
 			JLabel lblPassword = new JLabel("Password:");
@@ -103,13 +113,22 @@ public class LoginDialog extends JDialog {
 			contentPanel.add(lblPassword, gbc_lblPassword);
 		}
 		{
-			passwordField = new JPasswordField();
+			passFld = new JPasswordField();
 			GridBagConstraints gbc_passwordField = new GridBagConstraints();
 			gbc_passwordField.insets = new Insets(0, 0, 5, 5);
 			gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
 			gbc_passwordField.gridx = 2;
 			gbc_passwordField.gridy = 2;
-			contentPanel.add(passwordField, gbc_passwordField);
+			contentPanel.add(passFld, gbc_passwordField);
+		}
+		{
+			Component bottomStrut = Box.createVerticalStrut(0);
+			bottomStrut.setForeground(Color.WHITE);
+			GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
+			gbc_bottomStrut.insets = new Insets(0, 0, 0, 5);
+			gbc_bottomStrut.gridx = 2;
+			gbc_bottomStrut.gridy = 3;
+			contentPanel.add(bottomStrut, gbc_bottomStrut);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -119,7 +138,7 @@ public class LoginDialog extends JDialog {
 				JButton btnCreateNewUser = new JButton("Create New User");
 				btnCreateNewUser.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						myAddUserDialog = new AddUserDialog();
+						myAddUserDialog = new MaintainUserDialog();
 						myAddUserDialog.setLocationRelativeTo(contentPanel);
 						myAddUserDialog.setVisible(true);
 					}
@@ -127,21 +146,10 @@ public class LoginDialog extends JDialog {
 				buttonPane.add(btnCreateNewUser, "cell 0 0,alignx left,aligny center");
 			}
 			{
-				JButton okButton = new JButton("Login");
+				okButton = new JButton("Login");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						String username = textFieldUsername.getText();
-						String passwordRaw = passwordField.getText();
-						LoginDialog.this.authorizedUser = LoginDialog.this.loginLogic.performLogin(username,
-								passwordRaw);
-
-						if (LoginDialog.this.authorizedUser != null) {
-							LoginDialog.this.setVisible(false);
-							LoginDialog.this.dispose();
-						} else {
-							JOptionPane.showMessageDialog(LoginDialog.this, "Username or password incorrect.", "Error!",
-									2);
-						}
+						loginButtonPressed();
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -152,6 +160,7 @@ public class LoginDialog extends JDialog {
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+						tearDown();
 						System.exit(0);
 					}
 				});
@@ -159,12 +168,63 @@ public class LoginDialog extends JDialog {
 				buttonPane.add(cancelButton, "cell 3 0,alignx left,aligny center");
 			}
 		}
-		setLocationRelativeTo(null);		
+	}
+
+	private void initializeLayout() {
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		GridBagLayout gbl_contentPanel = new GridBagLayout();
+		gbl_contentPanel.columnWidths = new int[] { 10, 76, 171, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 10, 14, 0, 13, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		contentPanel.setLayout(gbl_contentPanel);
 	}
 
 	public User getAuthorizedUser() {
-		dispose();
+		tearDown();
 		return authorizedUser;
 	}
 
+	private void loginButtonPressed() {
+		lockLoginButton();
+		try {
+			authorizedUser = Login.performLogin(txtFldLogin.getText(), passFld.getText());
+		} catch (ServiceException exc) {
+			exc.printStackTrace();
+			JOptionPane.showMessageDialog(LoginDialog.this, MSG_DATABASE_ERROR, "Error!", 2);
+			unlockLoginButton();
+			return;
+		}
+		if (authorizedUser == null)
+			JOptionPane.showMessageDialog(LoginDialog.this, MSG_LOGIN_DENIED, "Error!", 2);
+		else
+			tearDown();
+		unlockLoginButton();
+	}
+
+	private void lockLoginButton() {
+		okButton.setEnabled(false);
+		okButton.setText("Logging...");
+	}
+	
+	private void unlockLoginButton() {
+		okButton.setEnabled(true);
+		okButton.setText("Login");
+	}
+
+	private JLabel loadHeaderImageLabel() {
+		try {
+			BufferedImage image = ImageIO.read(new File(HEADER_IMAGE_PATH));
+			return new JLabel(new ImageIcon(image));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new JLabel(LBL_MSG_IMAGE_NOT_FOUND);
+		}
+	}
+
+	private void tearDown() {
+		setVisible(false);
+		dispose();
+	}
 }

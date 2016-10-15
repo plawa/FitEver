@@ -189,9 +189,7 @@ public class EditUserDialog extends JDialog {
 		gbc_formatTxtFldDate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_formatTxtFldDate.gridx = 2;
 		gbc_formatTxtFldDate.gridy = 6;
-		DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");		
-		String dateString = dateFormatter.format(userToEdit.getDateOfBirth());
-		formatTxtFldDate.setText(dateString);
+		formatTxtFldDate.setText("to delete");
 		getContentPane().add(formatTxtFldDate, gbc_formatTxtFldDate);
 		
 		JLabel lblHeight = new JLabel("Height:");
