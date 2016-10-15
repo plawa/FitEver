@@ -66,16 +66,16 @@ public class UserPanel extends JPanel {
 		btnEditUser.setIcon(new ImageIcon(UserPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/info.png")));
 		toolBar.add(btnEditUser);
 		
-		JButton btnUpdateStats = new JButton("Update Stats");
-		btnUpdateStats.addActionListener(new ActionListener() {
+		JButton btnUpdateWeight = new JButton("Update Weight");
+		btnUpdateWeight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateStats();
 			}
 		});
-		btnUpdateStats.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnUpdateStats.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnUpdateStats.setIcon(new ImageIcon(UserPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/question.png")));
-		toolBar.add(btnUpdateStats);
+		btnUpdateWeight.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnUpdateWeight.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnUpdateWeight.setIcon(new ImageIcon(UserPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/question.png")));
+		toolBar.add(btnUpdateWeight);
 		
 		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
 		btnGenerateDietPlan.addActionListener(new ActionListener() {
@@ -368,13 +368,12 @@ public class UserPanel extends JPanel {
 	}
 
 	protected void editUser() {
-		EditUserDialog editDialog = new EditUserDialog(userDisplaying);
-		editDialog.setVisible(true);
+		new MaintainUserDialog(userDisplaying).setVisible(true);;
 		refreshContent();
 	}
 
 	protected void updateStats() {
-		UpdateUserStatsDialog updateStatsDlg = new UpdateUserStatsDialog(userDisplaying);
+		UpdateUserWeightDialog updateStatsDlg = new UpdateUserWeightDialog(userDisplaying);
 		updateStatsDlg.setLocationRelativeTo(this);
 		updateStatsDlg.setVisible(true);
 		refreshContent();

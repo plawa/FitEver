@@ -56,11 +56,13 @@ public class MaintainUserDialog extends JDialog {
 	protected User userMaintained = null;
 	private JComboBox<String> comboBoxSomatotype;
 	private JTextArea textArea;
+	private JSlider sliderLifeStyle;
 
 	public MaintainUserDialog() {
 		initializeFrame();
 		initializeLayout();
 		initializeSwingComponents();
+		userMaintained = new User();
 	}
 
 	public MaintainUserDialog(User userToEdit) {
@@ -360,7 +362,7 @@ public class MaintainUserDialog extends JDialog {
 		gbc_textArea.gridy = 15;
 		getContentPane().add(textArea, gbc_textArea);
 
-		final JSlider sliderLifeStyle = new JSlider();
+		sliderLifeStyle = new JSlider();
 		sliderLifeStyle.setSnapToTicks(true);
 		sliderLifeStyle.setPaintTicks(true);
 		sliderLifeStyle.setPaintLabels(true);
@@ -447,17 +449,20 @@ public class MaintainUserDialog extends JDialog {
 		txtFldStartWeight.setText(Float.toString(userMaintained.getStartWeight()));
 		txtFldGoalWeight.setText(Float.toString(userMaintained.getGoalWeight()));
 		spinnerFatPercentage.setValue(userMaintained.getFatPercentage());
-		comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(userMaintained.getUserObjective()));
-		comboBoxSomatotype.setSelectedItem(Translator.parseSomatotypeIntegerToString(userMaintained.getSomatotype()));
+		comboBoxObjective.setSelectedItem(Translator
+				.parseObjectiveCharToString(userMaintained.getUserObjective()));
+		comboBoxSomatotype.setSelectedItem(Translator
+				.parseSomatotypeIntegerToString(userMaintained.getSomatotype()));
+		sliderLifeStyle.setValue(userMaintained.getLifeStyle());
 	}
 
 	protected void saveButtonPressed() {
 
 		setUserPropertiesFromEnteredValues();
 
-		if (userHasCredentialsAssigned()) {
+		if (!userHasCredentialsAssigned()) {
 			if (areEnteredPasswordsTheSame()) {
-				assignNewUserCredentials();
+				assignNewUserCredentialsToMaintainedUser();
 			} else {
 				JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, "Error!", 2);
 				return;
@@ -467,41 +472,6 @@ public class MaintainUserDialog extends JDialog {
 			tearDown();
 		else
 			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR, "Error!", 2);
-	}
-
-	private boolean userHasCredentialsAssigned() {
-		return userMaintained.getShadow() == null;
-	}
-
-	private void assignNewUserCredentials() {
-		Shadow userCredentials = createUserCredentialsFromEnteredValues();
-		userMaintained.setShadow(userCredentials);
-		userCredentials.setUser(userMaintained);
-	}
-
-	private boolean saveToDatabase() {
-		try {
-			new DatabaseController().saveEntityToDatabase(userMaintained);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	private Shadow createUserCredentialsFromEnteredValues() {
-		String login = textFieldLogin.getText();
-		String encryptedPass = null;
-		if (areEnteredPasswordsTheSame()) {
-			String enteredPassword = passwordField.getText();
-			encryptedPass = Encrypter.encryptWithMD5(enteredPassword);
-		} else {
-		}
-
-		Shadow userCredentials = new Shadow();
-		userCredentials.setLogin(login);
-		userCredentials.setEncryptedPass(encryptedPass);
-		return userCredentials;
 	}
 
 	private void setUserPropertiesFromEnteredValues() {
@@ -518,9 +488,41 @@ public class MaintainUserDialog extends JDialog {
 			userMaintained.setActualWeight(startWeight);
 		userMaintained.setGoalWeight(goalWeight);
 		userMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
-		userMaintained
-				.setUserObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
-		userMaintained.setSomatotype((Integer) comboBoxSomatotype.getSelectedItem());
+		userMaintained.setUserObjective(Translator
+				.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
+		userMaintained.setSomatotype(
+				Translator.parseSomatotypeStringToInteger((String) comboBoxSomatotype.getSelectedItem()));
+		userMaintained.setLifeStyle(sliderLifeStyle.getValue());
+	}
+
+	private boolean userHasCredentialsAssigned() {
+		return userMaintained.getShadow() != null;
+	}
+
+	private void assignNewUserCredentialsToMaintainedUser() {
+		Shadow userCredentials = createUserCredentialsFromEnteredValues();
+		userMaintained.setShadow(userCredentials);
+		userCredentials.setUser(userMaintained);
+	}
+
+	private Shadow createUserCredentialsFromEnteredValues() {
+		String login = textFieldLogin.getText();
+		String encryptedPass = Encrypter.encryptWithMD5(passwordField.getText());
+
+		Shadow userCredentials = new Shadow();
+		userCredentials.setLogin(login);
+		userCredentials.setEncryptedPass(encryptedPass);
+		return userCredentials;
+	}
+
+	private boolean saveToDatabase() {
+		try {
+			new DatabaseController().saveOrUpdateEntityToDatabase(userMaintained);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private boolean areEnteredPasswordsTheSame() {

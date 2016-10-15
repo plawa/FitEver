@@ -34,10 +34,10 @@ public class DatabaseController
     	mySessionFactory.getCurrentSession().getTransaction().commit();
     }
     
-    public <T extends Entity> void saveEntityToDatabase(T entity) throws RuntimeException{
+    public <T extends Entity> void saveOrUpdateEntityToDatabase(T entity) throws RuntimeException{
     	Session mySession = mySessionFactory.openSession();
     	Transaction myTransaction = mySession.beginTransaction();
-    	mySession.persist(entity);
+    	mySession.saveOrUpdate(entity);
     	myTransaction.commit();
     	mySession.close();
     }

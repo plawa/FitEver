@@ -187,30 +187,17 @@ public class LoginDialog extends JDialog {
 	}
 
 	private void loginButtonPressed() {
-		lockLoginButton();
 		try {
 			authorizedUser = Login.performLogin(txtFldLogin.getText(), passFld.getText());
 		} catch (ServiceException exc) {
 			exc.printStackTrace();
 			JOptionPane.showMessageDialog(LoginDialog.this, MSG_DATABASE_ERROR, "Error!", 2);
-			unlockLoginButton();
 			return;
 		}
 		if (authorizedUser == null)
 			JOptionPane.showMessageDialog(LoginDialog.this, MSG_LOGIN_DENIED, "Error!", 2);
 		else
 			tearDown();
-		unlockLoginButton();
-	}
-
-	private void lockLoginButton() {
-		okButton.setEnabled(false);
-		okButton.setText("Logging...");
-	}
-	
-	private void unlockLoginButton() {
-		okButton.setEnabled(true);
-		okButton.setText("Login");
 	}
 
 	private JLabel loadHeaderImageLabel() {

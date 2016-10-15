@@ -34,7 +34,7 @@ public class EditMealDialog extends AddMealDialog {
 	protected void proceedButtonPressed(){
 		setMealAttributesFromFields(mealToEdit);
 		try {
-			new DatabaseController().updateEntityToDatabase(mealToEdit);
+			new DatabaseController().saveOrUpdateEntityToDatabase(mealToEdit);
 			tearDown();
 		} catch (RuntimeException e){
 			e.printStackTrace();

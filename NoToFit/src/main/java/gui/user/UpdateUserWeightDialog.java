@@ -25,33 +25,24 @@ import javax.swing.event.ChangeListener;
 import database.controller.DatabaseController;
 import database.entities.User;
 
-public class UpdateUserStatsDialog extends JDialog {
+public class UpdateUserWeightDialog extends JDialog {
 
 	private static final long serialVersionUID = 2665625473604154239L;
 	private final JPanel contentPanel = new JPanel();
 	private User userToMaintain;
 	private JSlider slider;
-	private DatabaseController db;
 	private JLabel lblValueDifference;
 	private JLabel lblValueNewWeight;
 	private float newWeight;
 
-	public UpdateUserStatsDialog(User user) {
-		db = new DatabaseController();
+	public UpdateUserWeightDialog(User user) {
 		userToMaintain = user;
-		setModal(true);
-		setTitle("Update Actual User Weight");
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 224);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
-		contentPanel.setLayout(gbl_contentPanel);
+		initializeFrame();
+		initializeLayout();
+		initializeSwingComponents();
+	}
+
+	private void initializeSwingComponents() {
 		{
 			Component topStrut = Box.createVerticalStrut(20);
 			GridBagConstraints gbc_topStrut = new GridBagConstraints();
@@ -132,14 +123,10 @@ public class UpdateUserStatsDialog extends JDialog {
 			slider = new JSlider();
 			slider.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
-					newWeight = userToMaintain.getActualWeight() + slider.getValue() * 0.1f;
-					lblValueNewWeight.setText(String.format("%.1f kg", newWeight));
-					float differencePercentage = 100f * newWeight / userToMaintain.getActualWeight() - 100f;
-					lblValueDifference.setText(String.format("%.2f %%", differencePercentage));
+					updateDifferenceLabel();
 				}
 			});
 			slider.setPaintTicks(true);
-			slider.setMajorTickSpacing(1);
 
 			slider.setMinimum(-20);
 			slider.setMaximum(20);
@@ -184,7 +171,7 @@ public class UpdateUserStatsDialog extends JDialog {
 				JButton okButton = new JButton("Update");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						proceedUpdate();
+						updateButtonPressed();
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -204,15 +191,41 @@ public class UpdateUserStatsDialog extends JDialog {
 		}
 	}
 
-	protected void proceedUpdate() {
+	private void initializeLayout() {
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		GridBagLayout gbl_contentPanel = new GridBagLayout();
+		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		contentPanel.setLayout(gbl_contentPanel);
+	}
+
+	private void initializeFrame() {
+		setModal(true);
+		setTitle("Update Actual User Weight");
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 224);
+	}
+
+	protected void updateButtonPressed() {
 		userToMaintain.setActualWeight(newWeight);
-		db.updateEntityToDatabase(userToMaintain);
+		new DatabaseController().saveOrUpdateEntityToDatabase(userToMaintain);
 		tearDown();
 	}
 
 	private void tearDown() {
 		setVisible(false);
 		dispose();
+	}
+
+	private void updateDifferenceLabel() {
+		newWeight = userToMaintain.getActualWeight() + slider.getValue() * 0.1f;
+		lblValueNewWeight.setText(String.format("%.1f kg", newWeight));
+		float differencePercentage = 100f * newWeight / userToMaintain.getActualWeight() - 100f;
+		lblValueDifference.setText(String.format("%.2f %%", differencePercentage));
 	}
 
 }
