@@ -31,6 +31,7 @@ import javax.swing.event.ChangeListener;
 import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
+import gui.common.DialogMode;
 import gui.common.GuiTools;
 import gui.common.Translator;
 import logic.Encrypter;
@@ -40,6 +41,7 @@ public class MaintainUserDialog extends JDialog {
 	private static final String MSG_ERROR_PASSWORDS_INCONSISTENT = "Passwords are not the same.";
 	private static final long serialVersionUID = 9182720162758099907L;
 	private static final String MSG_SAVE_ERROR = "Error occured while saving data to database.";
+	private static final String TOOLTIP_WEIGHT_CHANGE = "You can change actual weight in Update Weight Dialog";
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
 	private JTextField textFieldHeight;
@@ -57,18 +59,28 @@ public class MaintainUserDialog extends JDialog {
 	private JComboBox<String> comboBoxSomatotype;
 	private JTextArea textArea;
 	private JSlider sliderLifeStyle;
+	private DialogMode mode;
 
 	public MaintainUserDialog() {
-		initializeFrame();
-		initializeLayout();
-		initializeSwingComponents();
+		mode = DialogMode.CREATE;
 		userMaintained = new User();
+		initializeView();
 	}
 
 	public MaintainUserDialog(User userToEdit) {
-		this();
+		mode = DialogMode.EDIT;
 		userMaintained = userToEdit;
-		fillSwingComponentsWithUserValues();
+		initializeView();
+	}
+
+	private void initializeView() {
+		initializeFrame();
+		initializeLayout();
+		initializeSwingComponents();
+		if (mode == DialogMode.EDIT) {
+			fillSwingComponentsWithUserValues();
+			lockImmutableFields();
+		}
 	}
 
 	private void initializeFrame() {
@@ -436,8 +448,6 @@ public class MaintainUserDialog extends JDialog {
 	}
 
 	protected void fillSwingComponentsWithUserValues() {
-		if (userMaintained == null)
-			return;
 		textFieldLogin.setText(userMaintained.getShadow().getLogin());
 		passwordField.setText("*********");
 		passwordFieldConfirm.setText("*********");
@@ -449,26 +459,39 @@ public class MaintainUserDialog extends JDialog {
 		txtFldStartWeight.setText(Float.toString(userMaintained.getStartWeight()));
 		txtFldGoalWeight.setText(Float.toString(userMaintained.getGoalWeight()));
 		spinnerFatPercentage.setValue(userMaintained.getFatPercentage());
-		comboBoxObjective.setSelectedItem(Translator
-				.parseObjectiveCharToString(userMaintained.getUserObjective()));
-		comboBoxSomatotype.setSelectedItem(Translator
-				.parseSomatotypeIntegerToString(userMaintained.getSomatotype()));
+		comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(userMaintained.getUserObjective()));
+		comboBoxSomatotype.setSelectedItem(Translator.parseSomatotypeIntegerToString(userMaintained.getSomatotype()));
 		sliderLifeStyle.setValue(userMaintained.getLifeStyle());
+	}
+
+	private void lockImmutableFields() {
+		textFieldLogin.setEnabled(false);
+		passwordField.setEnabled(false);
+		passwordFieldConfirm.setEnabled(false);
+		txtFldStartWeight.setEnabled(false);
+		txtFldStartWeight.setToolTipText(TOOLTIP_WEIGHT_CHANGE);
 	}
 
 	protected void saveButtonPressed() {
 
 		setUserPropertiesFromEnteredValues();
+		boolean operationSucceeded = false;
 
-		if (!userHasCredentialsAssigned()) {
+		switch (mode) {
+		case CREATE:
 			if (areEnteredPasswordsTheSame()) {
 				assignNewUserCredentialsToMaintainedUser();
+				operationSucceeded = saveNewUserToDatabase();
 			} else {
 				JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, "Error!", 2);
-				return;
 			}
+			break;
+
+		case EDIT:
+			operationSucceeded = updateUserToDatabase();
 		}
-		if (saveToDatabase())
+
+		if (operationSucceeded)
 			tearDown();
 		else
 			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR, "Error!", 2);
@@ -488,15 +511,11 @@ public class MaintainUserDialog extends JDialog {
 			userMaintained.setActualWeight(startWeight);
 		userMaintained.setGoalWeight(goalWeight);
 		userMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
-		userMaintained.setUserObjective(Translator
-				.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
+		userMaintained
+				.setUserObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
 		userMaintained.setSomatotype(
 				Translator.parseSomatotypeStringToInteger((String) comboBoxSomatotype.getSelectedItem()));
 		userMaintained.setLifeStyle(sliderLifeStyle.getValue());
-	}
-
-	private boolean userHasCredentialsAssigned() {
-		return userMaintained.getShadow() != null;
 	}
 
 	private void assignNewUserCredentialsToMaintainedUser() {
@@ -515,11 +534,21 @@ public class MaintainUserDialog extends JDialog {
 		return userCredentials;
 	}
 
-	private boolean saveToDatabase() {
+	private boolean saveNewUserToDatabase() {
 		try {
-			new DatabaseController().saveOrUpdateEntityToDatabase(userMaintained);
+			new DatabaseController().saveEntityToDatabase(userMaintained.getShadow());
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private boolean updateUserToDatabase() {
+		try {
+			new DatabaseController().updateEntityToDatabase(userMaintained);
+			return true;
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		return false;

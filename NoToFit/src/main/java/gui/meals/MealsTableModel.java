@@ -29,7 +29,7 @@ class MealsTableModel extends javax.swing.table.AbstractTableModel {
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Meal meal = meals.get(rowIndex);
+		Meal meal = getMealAt(rowIndex);
 		switch (columnIndex) {
 		case 0:
 			return meal.getName();

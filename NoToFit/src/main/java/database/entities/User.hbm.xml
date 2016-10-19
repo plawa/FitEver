@@ -58,7 +58,7 @@
             </key>
             <one-to-many class="database.entities.Diet" />
         </set>
-        <one-to-one name="shadow" class="database.entities.Shadow" cascade="all"></one-to-one>
+        <one-to-one name="shadow" class="database.entities.Shadow"></one-to-one>
         <set name="workouts" table="workout" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="UserID" not-null="true" />

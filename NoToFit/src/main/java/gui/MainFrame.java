@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
@@ -13,64 +12,56 @@ import gui.diets.DietsPanel;
 import gui.exercises.ExercisesPanel;
 import gui.user.UserPanel;
 
-public class MainFrame {
+public class MainFrame extends JFrame {
 
-	private JFrame frmNoToFit;
+	private static final long serialVersionUID = -3253794944742197441L;
 	private User userLogged;
 	private ImageIcon userIcon;
 	private ImageIcon mealIcon;
 	private ImageIcon exerciseIcon;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame window = new MainFrame();
-					window.frmNoToFit.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	public MainFrame(){
+	public MainFrame() {
 		this(new User());
 	}
-	
+
 	public MainFrame(User authorizedUser) {
 		this.userLogged = authorizedUser;
 		initializeInterface();
+		setVisible(true);
 	}
-	
+
 	private void initializeInterface() {
 		createFrame();
 		loadIcons();
 		prepareTabbedPane();
-		frmNoToFit.setVisible(true);
 	}
-	
-	private void createFrame(){
-		frmNoToFit = new JFrame();
-		frmNoToFit.setTitle("NoToFit 0.0.1");
-		frmNoToFit.setBounds(100, 100, 778, 550);
-		frmNoToFit.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	private void createFrame() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("NoToFit 0.0.1");
+		setBounds(100, 100, 778, 550);
 	}
-	private void loadIcons(){
-		userIcon = new ImageIcon("images\\user_icon.png");		
+
+	private void loadIcons() {
+		userIcon = new ImageIcon("images\\user_icon.png");
 		mealIcon = new ImageIcon("images\\meal_icon.png");
 		exerciseIcon = new ImageIcon("images\\exercise_icon.png");
 	}
-	
-	private void prepareTabbedPane(){
-		frmNoToFit.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
+
+	private void prepareTabbedPane() {
+		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		UserPanel usersPanel = new UserPanel(userLogged);
+		usersPanel.setToolTipText("Overview Panel");
 		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 42, 0};
-		tabbedPane.addTab("Overview", userIcon, usersPanel);
-		tabbedPane.addTab("Diet", mealIcon, new DietsPanel());
-		tabbedPane.addTab("Workout", exerciseIcon, new ExercisesPanel());
-		frmNoToFit.getContentPane().add(tabbedPane);
+		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 42, 0 };
+		tabbedPane.addTab("", userIcon, usersPanel);
+		DietsPanel dietsPanel = new DietsPanel();
+		dietsPanel.setToolTipText("Diet Panel");
+		tabbedPane.addTab("", mealIcon, dietsPanel);
+		ExercisesPanel exercisesPanel = new ExercisesPanel();
+		exercisesPanel.setToolTipText("Workout Panel");
+		tabbedPane.addTab("", exerciseIcon, exercisesPanel);
+		getContentPane().add(tabbedPane);
 	}
 }

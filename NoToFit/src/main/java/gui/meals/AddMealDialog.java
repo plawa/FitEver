@@ -227,7 +227,7 @@ public class AddMealDialog extends JDialog {
 		setMealAttributesFromFields(newMeal);
 		
 		try {
-			new DatabaseController().saveOrUpdateEntityToDatabase(newMeal);
+			new DatabaseController().saveEntityToDatabase(newMeal);
 			tearDown();
 		} catch (RuntimeException e){
 			e.printStackTrace();

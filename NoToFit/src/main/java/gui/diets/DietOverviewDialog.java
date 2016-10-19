@@ -8,12 +8,24 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import database.entities.Diet;
+
 public class DietOverviewDialog extends JDialog {
 
 	private static final long serialVersionUID = -6225856914630687435L;
 	private final JPanel contentPanel = new JPanel();
+	private final Diet dietDisplaying;
 
 
+	public DietOverviewDialog() {
+		this(new Diet());
+	}
+
+	public DietOverviewDialog(Diet dietToShow){
+		dietDisplaying = dietToShow;
+		initializeSwingComponents();
+	}
+	
 	public static void main(String[] args) {
 		try {
 			DietOverviewDialog dialog = new DietOverviewDialog();
@@ -24,7 +36,8 @@ public class DietOverviewDialog extends JDialog {
 		}
 	}
 
-	public DietOverviewDialog() {
+	private void initializeSwingComponents() {
+		setModal(true);
 		setBounds(100, 100, 586, 527);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
@@ -46,6 +59,8 @@ public class DietOverviewDialog extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		setVisible(true);
 	}
+	
 
 }

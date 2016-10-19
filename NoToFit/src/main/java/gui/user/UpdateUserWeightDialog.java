@@ -212,7 +212,7 @@ public class UpdateUserWeightDialog extends JDialog {
 
 	protected void updateButtonPressed() {
 		userToMaintain.setActualWeight(newWeight);
-		new DatabaseController().saveOrUpdateEntityToDatabase(userToMaintain);
+		new DatabaseController().updateEntityToDatabase(userToMaintain);
 		tearDown();
 	}
 
