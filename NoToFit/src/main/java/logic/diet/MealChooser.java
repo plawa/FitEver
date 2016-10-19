@@ -12,7 +12,7 @@ public class MealChooser {
 
 	private static List<Meal> mealsLibrary;
 
-	static{
+	static {
 		updateLibrary();
 	}
 
@@ -22,7 +22,7 @@ public class MealChooser {
 
 	public static Set<Meal> chooseDayMealSet(int caloriesPerDay, int mealsPerDay) {
 		// Set<Meal> mealsAvailable = new HashSet<>(mealsLibrary);
-		Set<Meal> dayMealSet = new HashSet<>();
+		Set<Meal> dayMealSet = new HashSet<Meal>();
 		int caloriesCount = 0;
 		for (Meal meal : mealsLibrary) {
 			caloriesCount += MealTools.countMealCalories(meal);

@@ -54,7 +54,7 @@ public class DietsPanel extends JPanel {
 	protected void refreshTable() {
 		if (dietsDisplaying == null)
 			return;
-		List<Diet> dietsList = new ArrayList<>(dietsDisplaying);
+		List<Diet> dietsList = new ArrayList<Diet>(dietsDisplaying);
 		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);
 	}

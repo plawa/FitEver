@@ -17,7 +17,7 @@ public class Exercise extends Entity {
 	private boolean requiresEquipment;
 	private Integer difficultyLevel;
 	private String musclesTargeted;
-	private Set<Workout> workouts = new HashSet<>(0);
+	private Set<Workout> workouts = new HashSet<Workout>(0);
 
 	public Exercise() {
 	}

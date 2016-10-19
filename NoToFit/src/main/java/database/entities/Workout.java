@@ -14,7 +14,7 @@ public class Workout implements java.io.Serializable {
 	private Integer id;
 	private User user;
 	private Date validFrom;
-	private Set<Exercise> exercises = new HashSet<>(0);
+	private Set<Exercise> exercises = new HashSet<Exercise>(0);
 
 	public Workout() {
 	}

@@ -25,8 +25,8 @@ public class User extends Entity {
 	private Integer lifeStyle;
 	private Integer somatotype;
 	private Shadow shadow;
-	private Set<Diet> diets = new HashSet<>(0);
-	private Set<Workout> workouts = new HashSet<>(0);
+	private Set<Diet> diets = new HashSet<Diet>(0);
+	private Set<Workout> workouts = new HashSet<Workout>(0);
 
 	
 	

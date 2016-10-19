@@ -35,7 +35,7 @@ public class Translator {
 		somatotypeTranslations.put(2, "Mesomorphic");
 		somatotypeTranslations.put(3, "Endomorphic");
 		
-		lifeStyleDescriptions = new HashMap<>();
+		lifeStyleDescriptions = new HashMap<Integer, String>();
 		lifeStyleDescriptions.put(1, DESC_LIFESTYLE_1);
 		lifeStyleDescriptions.put(2, DESC_LIFESTYLE_2);
 		lifeStyleDescriptions.put(3, DESC_LIFESTYLE_3);
