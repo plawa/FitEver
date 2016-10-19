@@ -32,8 +32,8 @@ public class MainFrame extends JFrame {
 
 	private void initializeInterface() {
 		createFrame();
-		loadIcons();
-		prepareTabbedPane();
+		loadTabbedPaneIcons();
+		buildTabbedPane();
 	}
 
 	private void createFrame() {
@@ -42,13 +42,13 @@ public class MainFrame extends JFrame {
 		setBounds(100, 100, 778, 550);
 	}
 
-	private void loadIcons() {
+	private void loadTabbedPaneIcons() {
 		userIcon = new ImageIcon("images\\user_icon.png");
 		mealIcon = new ImageIcon("images\\meal_icon.png");
 		exerciseIcon = new ImageIcon("images\\exercise_icon.png");
 	}
 
-	private void prepareTabbedPane() {
+	private void buildTabbedPane() {
 		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		UserPanel usersPanel = new UserPanel(userLogged);
@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
 		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 42, 0 };
 		tabbedPane.addTab("", userIcon, usersPanel);
-		DietsPanel dietsPanel = new DietsPanel();
+		DietsPanel dietsPanel = new DietsPanel(userLogged.getDiets());
 		dietsPanel.setToolTipText("Diet Panel");
 		tabbedPane.addTab("", mealIcon, dietsPanel);
 		ExercisesPanel exercisesPanel = new ExercisesPanel();

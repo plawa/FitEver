@@ -28,7 +28,6 @@ public class AllMealsDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
 	private MealsTableModel tableModel;
-	private DatabaseController db;
 
 	public static void main(String[] args) {
 		try {
@@ -41,7 +40,6 @@ public class AllMealsDialog extends JDialog {
 	}
 
 	public AllMealsDialog() {
-		db = new DatabaseController();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Meals Library");
 		setBounds(100, 100, 660, 478);
@@ -133,6 +131,7 @@ public class AllMealsDialog extends JDialog {
 				}
 			});
 		}
+		setVisible(true);
 	}
 
 	protected void deleteMeal() {
@@ -142,7 +141,7 @@ public class AllMealsDialog extends JDialog {
 					JOptionPane.YES_NO_OPTION);
 			if (confirmationInput == JOptionPane.YES_OPTION) {
 				Meal mealToDelete = tableModel.getMealAt(rowIndex);
-				db.deleteEntityFromDatabase(mealToDelete);
+				DatabaseController.deleteEntityFromDatabase(mealToDelete);
 				refreshTable();
 			}
 		} else {
@@ -171,7 +170,7 @@ public class AllMealsDialog extends JDialog {
 	}
 
 	protected void refreshTable() {
-		tableModel = new MealsTableModel(db.getAll(Meal.class));
+		tableModel = new MealsTableModel(DatabaseController.getAll(Meal.class));
 		table.setModel(tableModel);
 	}
 

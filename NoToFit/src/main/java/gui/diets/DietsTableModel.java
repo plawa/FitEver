@@ -10,7 +10,7 @@ class DietsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 7436925452072118635L;
 	private List<Diet> diets;
-	final private String[] columnNames = { "Diet Name", "Valid From", "Valid To" };
+	final private String[] columnNames = { "Diet Name", "kcals/day", "Valid From", "Valid To" };
 	
 	public DietsTableModel(List<Diet> diets) {
 		super();
@@ -36,8 +36,10 @@ class DietsTableModel extends AbstractTableModel {
 		case 0:
 			return diet.getName();
 		case 1:
-			return diet.getValidFrom().toString();
+			return "under constr.";
 		case 2:
+			return diet.getValidFrom().toString();
+		case 3:
 			return diet.getValidTo().toString();
 		default:
 			return "Error";

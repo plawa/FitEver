@@ -6,7 +6,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -18,7 +21,6 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import database.controller.DatabaseController;
 import database.entities.Diet;
 import gui.meals.AllMealsDialog;
 
@@ -27,10 +29,16 @@ public class DietsPanel extends JPanel {
 	private static final long serialVersionUID = -3015175045558720497L;
 	private JTable table;
 	private DietsTableModel tableModel;
+	private Set<Diet> dietsDisplaying;
 
 	public DietsPanel() {
+		this(new HashSet<Diet>());
+	}
+	
+	public DietsPanel(Set<Diet> userDiets) {
+		dietsDisplaying = userDiets;
 		initializeSwingComponents();
-
+		refreshTable();
 	}
 
 	protected void openSelectedDietPlan() {
@@ -41,12 +49,13 @@ public class DietsPanel extends JPanel {
 	protected void showAllMealsButtonPressed() {
 		AllMealsDialog showAllMealDlg = new AllMealsDialog();
 		showAllMealDlg.setLocationRelativeTo(this);
-		showAllMealDlg.setVisible(true);
 	}
 
 	protected void refreshTable() {
-		List<Diet> diets = new DatabaseController().getAll(Diet.class);
-		tableModel = new DietsTableModel(diets);
+		if (dietsDisplaying == null)
+			return;
+		List<Diet> dietsList = new ArrayList<>(dietsDisplaying);
+		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);
 	}
 
@@ -91,6 +100,14 @@ public class DietsPanel extends JPanel {
 		btnShowAllMeals.setIcon(
 				new ImageIcon(DietsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
 		toolBar.add(btnShowAllMeals);
+		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				refreshTable();
+			}
+		});
+		toolBar.add(btnRefresh);
 
 		Component leftStrut = Box.createHorizontalStrut(20);
 		GridBagConstraints gbc_leftStrut = new GridBagConstraints();
@@ -125,7 +142,6 @@ public class DietsPanel extends JPanel {
 		table = new JTable();
 		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
-		refreshTable();
 
 		Component bottomStrut = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();

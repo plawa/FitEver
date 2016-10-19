@@ -51,7 +51,7 @@ public class EnergyRequirementCalculator {
 	}
 	
 	public static void main(String[] args) {
-		User piotr = new DatabaseController().getEntityByID(User.class, 13);
+		User piotr = DatabaseController.getEntityByID(User.class, 13);
 		
 		piotr.setSomatotype(3);
 		System.out.print(performCalculation(piotr));

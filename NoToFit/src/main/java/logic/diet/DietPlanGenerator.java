@@ -7,8 +7,7 @@ import database.controller.DatabaseController;
 import database.entities.Diet;
 import database.entities.Meal;
 import database.entities.User;
-import logic.tools.DietGenerationPreferences;
-
+ 
 public class DietPlanGenerator {
 	
 	private final static int ONE_DAY_IN_MILISECONDS = 86400000;
@@ -40,10 +39,10 @@ public class DietPlanGenerator {
 	
 	
 	public static void main(String[] args) {
-		User ja = new DatabaseController().getEntityByID(User.class, 13);
+		User ja = DatabaseController.getEntityByID(User.class, 13);
 		
 		DietGenerationPreferences prefs = new DietGenerationPreferences();
-		prefs.setDierPeriodDays(2);
+		prefs.setDietPeriodDays(2);
 		prefs.setDietName("Dieta testowa");
 		prefs.setMealsPerDay(3);
 		prefs.setUser(ja);

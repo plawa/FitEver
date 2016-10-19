@@ -20,8 +20,12 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import database.controller.DatabaseController;
+import database.entities.Diet;
 import database.entities.User;
 import gui.common.Translator;
+import gui.diets.GenerateDietDialog;
+import logic.diet.DietGenerationPreferences;
+import logic.diet.DietPlanGenerator;
 import logic.entitytools.UserTools;
 
 public class UserPanel extends JPanel {
@@ -57,20 +61,22 @@ public class UserPanel extends JPanel {
 	}
 
 	protected void exit() {
-		new DatabaseController().tidyUp();
+		DatabaseController.tidyUp();
 		System.exit(0);
 	}
 
-	protected void generateWorkoutPlan() {
+	protected void generateWorkoutPlanButtonPressed() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 
 	}
 
-	protected void generateDietPlan() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-
+	protected void generateDietPlanButtonPressed() {
+		DietGenerationPreferences dietPreferences = new GenerateDietDialog().getNewDietPreferences();
+		dietPreferences.setUser(userDisplaying);
+		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
+		userDisplaying.getDiets().add(generatedDiet);
+		DatabaseController.saveEntityToDatabase(generatedDiet);
 	}
 
 	protected void editUser() {
@@ -86,7 +92,7 @@ public class UserPanel extends JPanel {
 	}
 
 	private void logout() {
-		getParent().disable();
+		throw new UnsupportedOperationException();
 	}
 
 	protected void refreshContent() {
@@ -114,7 +120,7 @@ public class UserPanel extends JPanel {
 		try {
 			editUserButtonIcon = new ImageIcon("images\\edit_user_button.png");
 			updateWeightButtonIcon = new ImageIcon("images\\update_weight_button.png");
-			generateDietButtonIcon = new ImageIcon("images\\meals_button.png");
+			generateDietButtonIcon = new ImageIcon("images\\meal_button.png");
 			generateWorkoutButtonIcon = new ImageIcon("images\\generate_workout_button.png");
 			logoutButtonIcon = new ImageIcon("images\\logout_button.png");
 			exitButtonIcon = new ImageIcon("images\\exit_button.png");
@@ -164,7 +170,7 @@ public class UserPanel extends JPanel {
 		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
 		btnGenerateDietPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				generateDietPlan();
+				generateDietPlanButtonPressed();
 			}
 		});
 		btnGenerateDietPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -175,7 +181,7 @@ public class UserPanel extends JPanel {
 		JButton btnGenerateWorkoutPlan = new JButton("Generate Workout Plan");
 		btnGenerateWorkoutPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				generateWorkoutPlan();
+				generateWorkoutPlanButtonPressed();
 			}
 		});
 		btnGenerateWorkoutPlan.setVerticalTextPosition(SwingConstants.BOTTOM);

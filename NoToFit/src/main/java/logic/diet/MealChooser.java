@@ -17,7 +17,7 @@ public class MealChooser {
 	}
 
 	private static void updateLibrary() {
-		mealsLibrary = new DatabaseController().getAll(Meal.class);
+		mealsLibrary = DatabaseController.getAll(Meal.class);
 	}
 
 	public static Set<Meal> chooseDayMealSet(int caloriesPerDay, int mealsPerDay) {

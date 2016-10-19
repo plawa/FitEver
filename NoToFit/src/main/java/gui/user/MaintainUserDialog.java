@@ -536,7 +536,7 @@ public class MaintainUserDialog extends JDialog {
 
 	private boolean saveNewUserToDatabase() {
 		try {
-			new DatabaseController().saveEntityToDatabase(userMaintained.getShadow());
+			DatabaseController.saveEntityToDatabase(userMaintained.getShadow());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -546,7 +546,7 @@ public class MaintainUserDialog extends JDialog {
 
 	private boolean updateUserToDatabase() {
 		try {
-			new DatabaseController().updateEntityToDatabase(userMaintained);
+			DatabaseController.updateEntityToDatabase(userMaintained);
 			return true;
 		} catch (RuntimeException e) {
 			e.printStackTrace();

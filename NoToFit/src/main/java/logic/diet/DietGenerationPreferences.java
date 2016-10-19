@@ -1,4 +1,4 @@
-package logic.tools;
+package logic.diet;
 
 import database.entities.User;
 
@@ -43,7 +43,7 @@ public class DietGenerationPreferences {
 		return dierPeriodDays;
 	}
 
-	public void setDierPeriodDays(int dierPeriodDays) {
-		this.dierPeriodDays = dierPeriodDays;
+	public void setDietPeriodDays(int dietPeriodDays) {
+		this.dierPeriodDays = dietPeriodDays;
 	}
 }

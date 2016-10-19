@@ -11,7 +11,7 @@ public class Login {
 	
 	public static User performLogin(String login, String passwordRaw) throws JDBCConnectionException {
 		
-		Shadow credentialsInDatabase = new DatabaseController().getShadowEntityByLogin(login);
+		Shadow credentialsInDatabase = DatabaseController.getShadowEntityByLogin(login);
 		
 		if (credentialsInDatabase != null) {
 			Shadow credentialsEntered = new Shadow();

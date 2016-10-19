@@ -21,7 +21,7 @@ public class MealTools {
 	}
 	
 	public static void main(String[] args) {
-		Meal testMeal = new DatabaseController().getEntityByID(Meal.class, 1);
+		Meal testMeal = DatabaseController.getEntityByID(Meal.class, 1);
 		System.out.print(MealTools.countMealCalories(testMeal));
 	}
 

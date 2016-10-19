@@ -52,7 +52,7 @@
                 <comment>from 1 (ectomorphic) to 3 (mezomorphic)</comment>
             </column>
         </property>
-        <set name="diets" table="diet" inverse="true" lazy="true" fetch="select">
+        <set name="diets" table="diet" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="UserID" not-null="true" />
             </key>

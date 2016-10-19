@@ -4,9 +4,8 @@ import javax.swing.JPanel;
 
 public class ExercisesPanel extends JPanel {
 
-	/**
-	 * Create the panel.
-	 */
+	private static final long serialVersionUID = -4659573390181954313L;
+
 	public ExercisesPanel() {
 
 	}
