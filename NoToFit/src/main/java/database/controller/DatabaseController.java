@@ -31,6 +31,16 @@ public class DatabaseController {
 	public static void commitTransaction() {
 		mySessionFactory.getCurrentSession().getTransaction().commit();
 	}
+	
+	
+	public static <T extends Entity> void initializeEntity(T entityToInitialize){
+		Session mySession = mySessionFactory.openSession();
+		Transaction myTransaction = mySession.beginTransaction();
+		mySession.refresh(entityToInitialize);
+		//Hibernate.initialize(entityToInitialize);
+		myTransaction.commit();
+		mySession.close();
+	}
 
 	public static <T extends Entity> void saveEntityToDatabase(T entity) throws RuntimeException {
 		Session mySession = mySessionFactory.openSession();
@@ -55,6 +65,7 @@ public class DatabaseController {
 		myTransaction.commit();
 		mySession.close();
 	}
+	
 
 	public static <T extends Entity> List<T> getAll(Class<T> entityType) throws RuntimeException {
 		Session mySession = mySessionFactory.openSession();
@@ -90,7 +101,6 @@ public class DatabaseController {
 	}
 
 	public static void main(String[] args) {
-
 	}
 
 }

@@ -72,7 +72,12 @@ public class UserPanel extends JPanel {
 	}
 
 	protected void generateDietPlanButtonPressed() {
-		DietGenerationPreferences dietPreferences = new GenerateDietDialog().getNewDietPreferences();
+		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog();
+		dietPropertiesDialog.setLocationRelativeTo(this);
+		dietPropertiesDialog.setVisible(true);
+		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();
+		if (dietPreferences == null)
+			return;
 		dietPreferences.setUser(userDisplaying);
 		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
 		userDisplaying.getDiets().add(generatedDiet);
@@ -80,7 +85,9 @@ public class UserPanel extends JPanel {
 	}
 
 	protected void editUser() {
-		new MaintainUserDialog(userDisplaying).setVisible(true);
+		MaintainUserDialog editUserDialog = new MaintainUserDialog(userDisplaying);
+		editUserDialog.setLocationRelativeTo(this);
+		editUserDialog.setVisible(true);
 		refreshContent();
 	}
 
@@ -117,16 +124,12 @@ public class UserPanel extends JPanel {
 	}
 
 	private void loadIcons() {
-		try {
 			editUserButtonIcon = new ImageIcon("images\\edit_user_button.png");
 			updateWeightButtonIcon = new ImageIcon("images\\update_weight_button.png");
-			generateDietButtonIcon = new ImageIcon("images\\meal_button.png");
+			generateDietButtonIcon = new ImageIcon("images\\generate_diet_button.png");
 			generateWorkoutButtonIcon = new ImageIcon("images\\generate_workout_button.png");
 			logoutButtonIcon = new ImageIcon("images\\logout_button.png");
 			exitButtonIcon = new ImageIcon("images\\exit_button.png");
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
 	}
 
 	private void initializeSwingComponents() {

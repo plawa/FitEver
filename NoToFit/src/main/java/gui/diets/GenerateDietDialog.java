@@ -28,7 +28,6 @@ public class GenerateDietDialog extends JDialog {
 	private DietGenerationPreferences newDietPreferences;
 
 	public GenerateDietDialog() {
-
 		initializeSwingComponents();
 	}
 	
@@ -156,7 +155,6 @@ public class GenerateDietDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Generate Diet - Diet Properties");
 		setModal(true);
-		setVisible(true);
 	}
 
 	protected void tearDown() {

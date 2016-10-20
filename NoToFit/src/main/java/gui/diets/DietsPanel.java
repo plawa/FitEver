@@ -7,9 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -21,7 +19,9 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
+import database.controller.DatabaseController;
 import database.entities.Diet;
+import database.entities.User;
 import gui.meals.AllMealsDialog;
 
 public class DietsPanel extends JPanel {
@@ -29,14 +29,14 @@ public class DietsPanel extends JPanel {
 	private static final long serialVersionUID = -3015175045558720497L;
 	private JTable table;
 	private DietsTableModel tableModel;
-	private Set<Diet> dietsDisplaying;
+	private User currentUser;
 
 	public DietsPanel() {
-		this(new HashSet<Diet>());
+		this(new User());
 	}
-	
-	public DietsPanel(Set<Diet> userDiets) {
-		dietsDisplaying = userDiets;
+
+	public DietsPanel(User userContainingDiets) {
+		currentUser = userContainingDiets;
 		initializeSwingComponents();
 		refreshTable();
 	}
@@ -52,9 +52,10 @@ public class DietsPanel extends JPanel {
 	}
 
 	protected void refreshTable() {
-		if (dietsDisplaying == null)
-			return;
-		List<Diet> dietsList = new ArrayList<Diet>(dietsDisplaying);
+		DatabaseController.initializeEntity(currentUser);
+		List<Diet> dietsList = new ArrayList<Diet>(currentUser.getDiets());
+		//if(dietsDisplaying != null)
+			//dietsList = new ArrayList<Diet>(dietsDisplaying);
 		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);
 	}
@@ -100,7 +101,7 @@ public class DietsPanel extends JPanel {
 		btnShowAllMeals.setIcon(
 				new ImageIcon(DietsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
 		toolBar.add(btnShowAllMeals);
-		
+
 		JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

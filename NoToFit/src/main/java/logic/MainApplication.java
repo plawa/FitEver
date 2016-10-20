@@ -1,7 +1,5 @@
 package logic;
 
-import javax.swing.JOptionPane;
-
 import database.entities.User;
 import gui.LoginDialog;
 import gui.MainFrame;
@@ -14,12 +12,10 @@ public class MainApplication {
 		
 		Class.forName(DATABASE_CONTROLLER_BIN_PATH); //force controller class initialization
 		// while (true) {
-		try{
+	
 		User loggedUser = new LoginDialog().getAuthorizedUser();
 		new MainFrame(loggedUser);
-		} catch (Exception e){
-			JOptionPane.showMessageDialog(null, e.toString());
-		}
+		
 		// }
 	}
 }

@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
 		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 42, 0 };
 		tabbedPane.addTab("", userIcon, usersPanel);
-		DietsPanel dietsPanel = new DietsPanel(userLogged.getDiets());
+		DietsPanel dietsPanel = new DietsPanel(userLogged);
 		dietsPanel.setToolTipText("Diet Panel");
 		tabbedPane.addTab("", mealIcon, dietsPanel);
 		ExercisesPanel exercisesPanel = new ExercisesPanel();
