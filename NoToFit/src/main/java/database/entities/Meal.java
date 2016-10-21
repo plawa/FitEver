@@ -13,6 +13,7 @@ public class Meal extends Entity {
 	private Integer id;
 	private String name;
 	private char objective;
+	private char type;
 	private int gramature;
 	private int carbohydratesPercentage;
 	private int proteinPercentage;
@@ -46,6 +47,14 @@ public class Meal extends Entity {
 		this.objective = objective;
 	}
 	
+	public char getType() {
+		return type;
+	}
+
+	public void setType(char type) {
+		this.type = type;
+	}
+
 	public int getGramature() {
 		return this.gramature;
 	}

@@ -57,7 +57,7 @@ public class UserPanel extends JPanel {
 		userDisplaying = userToMaintain;
 		loadIcons();
 		initializeSwingComponents();
-		refreshContent();
+		refreshUserDetails();
 	}
 
 	protected void exit() {
@@ -88,21 +88,21 @@ public class UserPanel extends JPanel {
 		MaintainUserDialog editUserDialog = new MaintainUserDialog(userDisplaying);
 		editUserDialog.setLocationRelativeTo(this);
 		editUserDialog.setVisible(true);
-		refreshContent();
+		refreshUserDetails();
 	}
 
 	protected void updateStats() {
 		UpdateUserWeightDialog updateStatsDlg = new UpdateUserWeightDialog(userDisplaying);
 		updateStatsDlg.setLocationRelativeTo(this);
 		updateStatsDlg.setVisible(true);
-		refreshContent();
+		refreshUserDetails();
 	}
 
 	private void logout() {
 		throw new UnsupportedOperationException();
 	}
 
-	protected void refreshContent() {
+	protected void refreshUserDetails() {
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
 		lblValueSex.setText(Translator.parseSexCharToString(userDisplaying.getSex()));
 		lblValueAge.setText(String.format("%d years", UserTools.calculateAge(userDisplaying)));

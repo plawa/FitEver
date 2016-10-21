@@ -1,66 +1,218 @@
 package gui.diets;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import database.entities.Diet;
+import database.entities.Meal;
+import database.entities.User;
+import gui.common.GuiTools;
+import gui.meals.MealsTableModel;
 
 public class DietOverviewDialog extends JDialog {
 
 	private static final long serialVersionUID = -6225856914630687435L;
 	private final JPanel contentPanel = new JPanel();
 	private final Diet dietDisplaying;
-
+	private JTable table;
+	private MealsTableModel tableModel;
+	private JLabel lblNameValue;
+	private JLabel lblUserValue;
+	private JLabel lblValidFromValue;
+	private JLabel lblValidToValue;
 
 	public DietOverviewDialog() {
 		this(new Diet());
 	}
 
-	public DietOverviewDialog(Diet dietToShow){
+	public DietOverviewDialog(Diet dietToShow) {
 		dietDisplaying = dietToShow;
 		initializeSwingComponents();
+		refreshDietDetails();
 	}
-	
-	public static void main(String[] args) {
-		try {
-			DietOverviewDialog dialog = new DietOverviewDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+	private void refreshDietDetails() {
+		User dietOwner = dietDisplaying.getUser();
+		lblNameValue.setText(dietDisplaying.getName());
+		lblUserValue.setText(String.format("%s %s", dietOwner.getName(), dietOwner.getSurname()));
+		lblValidFromValue.setText(GuiTools.parseDateToString(dietDisplaying.getValidFrom()));
+		lblValidToValue.setText(GuiTools.parseDateToString(dietDisplaying.getValidTo()));
+	}
+
+	protected void refreshTable() {
+		List<Meal> dietMealsList = new ArrayList<>(dietDisplaying.getMeals());
+		tableModel = new MealsTableModel(dietMealsList);
+		table.setModel(tableModel);
+	}
+
+	protected void tearDown() {
+		setVisible(false);
+		dispose();
 	}
 
 	private void initializeSwingComponents() {
 		setModal(true);
+		setTitle("Diet Overview");
 		setBounds(100, 100, 586, 527);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		GridBagLayout gbl_contentPanel = new GridBagLayout();
+		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		contentPanel.setLayout(gbl_contentPanel);
+		{
+			JLabel lblNameDescription = new JLabel("Diet Name: ");
+			lblNameDescription.setForeground(Color.GRAY);
+			GridBagConstraints gbc_lblNameDescription = new GridBagConstraints();
+			gbc_lblNameDescription.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNameDescription.anchor = GridBagConstraints.WEST;
+			gbc_lblNameDescription.gridx = 1;
+			gbc_lblNameDescription.gridy = 1;
+			contentPanel.add(lblNameDescription, gbc_lblNameDescription);
+		}
+		{
+			lblNameValue = new JLabel("example name");
+			lblNameValue.setFont(new Font("Tahoma", Font.BOLD, 11));
+			GridBagConstraints gbc_lblNameValue = new GridBagConstraints();
+			gbc_lblNameValue.anchor = GridBagConstraints.WEST;
+			gbc_lblNameValue.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNameValue.gridx = 2;
+			gbc_lblNameValue.gridy = 1;
+			contentPanel.add(lblNameValue, gbc_lblNameValue);
+		}
+		{
+			JLabel lblValidFrom = new JLabel("Valid From:");
+			lblValidFrom.setForeground(Color.GRAY);
+			GridBagConstraints gbc_lblValidFrom = new GridBagConstraints();
+			gbc_lblValidFrom.anchor = GridBagConstraints.WEST;
+			gbc_lblValidFrom.insets = new Insets(0, 0, 5, 5);
+			gbc_lblValidFrom.gridx = 4;
+			gbc_lblValidFrom.gridy = 1;
+			contentPanel.add(lblValidFrom, gbc_lblValidFrom);
+		}
+		{
+			lblValidFromValue = new JLabel("10.10.2016");
+			lblValidFromValue.setFont(new Font("Tahoma", Font.BOLD, 11));
+			GridBagConstraints gbc_lblValidFromValue = new GridBagConstraints();
+			gbc_lblValidFromValue.anchor = GridBagConstraints.WEST;
+			gbc_lblValidFromValue.insets = new Insets(0, 0, 5, 5);
+			gbc_lblValidFromValue.gridx = 5;
+			gbc_lblValidFromValue.gridy = 1;
+			contentPanel.add(lblValidFromValue, gbc_lblValidFromValue);
+		}
+		{
+			JLabel lblUserDescription = new JLabel("Owner:");
+			lblUserDescription.setForeground(Color.GRAY);
+			GridBagConstraints gbc_lblUserDescription = new GridBagConstraints();
+			gbc_lblUserDescription.anchor = GridBagConstraints.WEST;
+			gbc_lblUserDescription.insets = new Insets(0, 0, 5, 5);
+			gbc_lblUserDescription.gridx = 1;
+			gbc_lblUserDescription.gridy = 2;
+			contentPanel.add(lblUserDescription, gbc_lblUserDescription);
+		}
+		{
+			lblUserValue = new JLabel("example owner");
+			lblUserValue.setFont(new Font("Tahoma", Font.BOLD, 11));
+			GridBagConstraints gbc_lblUserValue = new GridBagConstraints();
+			gbc_lblUserValue.insets = new Insets(0, 0, 5, 5);
+			gbc_lblUserValue.gridx = 2;
+			gbc_lblUserValue.gridy = 2;
+			contentPanel.add(lblUserValue, gbc_lblUserValue);
+		}
+		{
+			JLabel lblValidTo = new JLabel("Valid To:");
+			lblValidTo.setForeground(Color.GRAY);
+			GridBagConstraints gbc_lblValidTo = new GridBagConstraints();
+			gbc_lblValidTo.anchor = GridBagConstraints.WEST;
+			gbc_lblValidTo.insets = new Insets(0, 0, 5, 5);
+			gbc_lblValidTo.gridx = 4;
+			gbc_lblValidTo.gridy = 2;
+			contentPanel.add(lblValidTo, gbc_lblValidTo);
+		}
+		{
+			lblValidToValue = new JLabel("15.10.2016");
+			lblValidToValue.setFont(new Font("Tahoma", Font.BOLD, 11));
+			GridBagConstraints gbc_lblValidToValue = new GridBagConstraints();
+			gbc_lblValidToValue.anchor = GridBagConstraints.WEST;
+			gbc_lblValidToValue.insets = new Insets(0, 0, 5, 5);
+			gbc_lblValidToValue.gridx = 5;
+			gbc_lblValidToValue.gridy = 2;
+			contentPanel.add(lblValidToValue, gbc_lblValidToValue);
+		}
+		{
+			JLabel lblAssignedMealsTableDescription = new JLabel("Assigned Meals");
+			lblAssignedMealsTableDescription.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			GridBagConstraints gbc_lblAssignedMealsTableDescription = new GridBagConstraints();
+			gbc_lblAssignedMealsTableDescription.gridwidth = 5;
+			gbc_lblAssignedMealsTableDescription.insets = new Insets(0, 0, 5, 5);
+			gbc_lblAssignedMealsTableDescription.gridx = 1;
+			gbc_lblAssignedMealsTableDescription.gridy = 3;
+			contentPanel.add(lblAssignedMealsTableDescription, gbc_lblAssignedMealsTableDescription);
+		}
+		{
+			JScrollPane scrollPane = new JScrollPane();
+			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+			gbc_scrollPane.gridheight = 3;
+			gbc_scrollPane.gridwidth = 5;
+			gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+			gbc_scrollPane.fill = GridBagConstraints.BOTH;
+			gbc_scrollPane.gridx = 1;
+			gbc_scrollPane.gridy = 4;
+			contentPanel.add(scrollPane, gbc_scrollPane);
+			{
+				table = new JTable();
+				scrollPane.setViewportView(table);
+				table.setFillsViewportHeight(true);
+			}
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						tearDown(); // TODO : Check if OK and Cancel buttons are
+									// necessary
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						tearDown();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
-		setVisible(true);
+		refreshTable();
 	}
-	
 
 }

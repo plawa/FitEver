@@ -8,16 +8,17 @@ public class DietGenerationPreferences {
 	private String dietName;
 	private int mealsPerDay;
 	private int dierPeriodDays;
-	
-	public DietGenerationPreferences(){
+
+	public DietGenerationPreferences() {
 	}
-	
-	
+
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
+		if (user == null)
+			throw new IllegalArgumentException("user must not be null!");
 		this.user = user;
 	}
 
@@ -26,7 +27,7 @@ public class DietGenerationPreferences {
 	}
 
 	public void setDietName(String dietName) {
-		if(dietName.length() > 30)
+		if (dietName.length() > 30)
 			throw new IllegalArgumentException("dietName String is too long!");
 		this.dietName = dietName;
 	}

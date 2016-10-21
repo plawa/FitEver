@@ -20,6 +20,17 @@ public class MealTools {
 		return carboCalories + proteinCalories + fatCalories;
 	}
 	
+	public static Meal copyMealShallow(Meal sourceMeal) {
+		Meal newMeal = new Meal();
+		newMeal.setName(sourceMeal.getName());
+		newMeal.setObjective(sourceMeal.getObjective());
+		newMeal.setGramature(sourceMeal.getGramature());
+		newMeal.setCarbohydratesPercentage(sourceMeal.getCarbohydratesPercentage());
+		newMeal.setProteinPercentage(sourceMeal.getProteinPercentage());
+		newMeal.setFatPercentage(sourceMeal.getFatPercentage());
+		return newMeal;
+	}
+	
 	public static void main(String[] args) {
 		Meal testMeal = DatabaseController.getEntityByID(Meal.class, 1);
 		System.out.print(MealTools.countMealCalories(testMeal));

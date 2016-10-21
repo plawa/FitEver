@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import database.entities.Entity;
+import database.entities.Meal;
 import database.entities.Shadow;
 
 public class DatabaseController {
@@ -20,26 +21,12 @@ public class DatabaseController {
 			mySessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
-	public static void tidyUp() {
-		mySessionFactory.close();
-	}
-
 	public static void startTransaction() {
 		mySessionFactory.openSession().beginTransaction();
 	}
 
 	public static void commitTransaction() {
 		mySessionFactory.getCurrentSession().getTransaction().commit();
-	}
-	
-	
-	public static <T extends Entity> void initializeEntity(T entityToInitialize){
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
-		mySession.refresh(entityToInitialize);
-		//Hibernate.initialize(entityToInitialize);
-		myTransaction.commit();
-		mySession.close();
 	}
 
 	public static <T extends Entity> void saveEntityToDatabase(T entity) throws RuntimeException {
@@ -65,7 +52,6 @@ public class DatabaseController {
 		myTransaction.commit();
 		mySession.close();
 	}
-	
 
 	public static <T extends Entity> List<T> getAll(Class<T> entityType) throws RuntimeException {
 		Session mySession = mySessionFactory.openSession();
@@ -100,7 +86,24 @@ public class DatabaseController {
 		return entityFound;
 	}
 
+	public static <T extends Entity> List<T> getEntityByParameter(Class<T> entityType, String paramName, String paramValue) {
+		Session mySession = mySessionFactory.openSession();
+		Transaction myTransaction = mySession.beginTransaction();
+		String q = String.format("SELECT e FROM %s e WHERE e.%s = '%s'", entityType.getSimpleName(), paramName, paramValue);
+		TypedQuery<T> query = mySession.createQuery(q);
+		List<T> resultList = query.getResultList();
+		myTransaction.commit();
+		mySession.close();
+		return resultList;
+	}
+
+	public static void tidyUp() {
+		mySessionFactory.close();
+	}
+
 	public static void main(String[] args) {
+		List<Meal> breakfasts = getEntityByParameter(Meal.class, "type", "b");
+		System.out.println(breakfasts.get(0).getName());
 	}
 
 }

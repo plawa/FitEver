@@ -24,6 +24,7 @@ public class EditMealDialog extends AddMealDialog {
 	
 	protected void initializeFields(){
 		this.textFieldName.setText(mealToEdit.getName());
+		this.comboBoxMealType.setSelectedItem(Translator.parseMealTypeCharToString(mealToEdit.getType()));
 		this.textFieldGrammage.setText(Integer.toString(mealToEdit.getGramature()));
 		this.spinnerCarbohydratesPercentage.setValue(mealToEdit.getCarbohydratesPercentage());
 		this.spinnerProteinPercentage.setValue(mealToEdit.getProteinPercentage());
@@ -32,7 +33,7 @@ public class EditMealDialog extends AddMealDialog {
 	}
 	 
 	protected void proceedButtonPressed(){
-		setMealAttributesFromFields(mealToEdit);
+		retrieveMealAttributesFromFields(mealToEdit);
 		try {
 			DatabaseController.updateEntityToDatabase(mealToEdit);
 			tearDown();

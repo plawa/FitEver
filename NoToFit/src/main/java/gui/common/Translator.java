@@ -11,6 +11,7 @@ public class Translator {
 	private static final BiMap<Character, String> objectiveTranslations;
 	private static final BiMap<Integer, String> somatotypeTranslations;
 	private static final HashMap<Integer, String> lifeStyleDescriptions;
+	private static final BiMap<Character, String> mealTypeTranslations;
 	
 	private static final String DESC_LIFESTYLE_1 = "Mostly you sit in front of your computer all day.";
 	private static final String DESC_LIFESTYLE_2 = "Your job is sitting in front of the computer,"
@@ -41,6 +42,11 @@ public class Translator {
 		lifeStyleDescriptions.put(3, DESC_LIFESTYLE_3);
 		lifeStyleDescriptions.put(4, DESC_LIFESTYLE_4);
 		lifeStyleDescriptions.put(5, DESC_LIFESTYLE_5);
+		
+		mealTypeTranslations = HashBiMap.create();
+		mealTypeTranslations.put('b', "Breakfast");
+		mealTypeTranslations.put('m', "Main Dish");
+		mealTypeTranslations.put('s', "Supper");
 	}
 
 	public static String parseSexCharToString(Character sexChar) {
@@ -69,6 +75,14 @@ public class Translator {
 	
 	public static String getLifeStyleDescription(Integer lifeStyleInt){
 		return lifeStyleDescriptions.getOrDefault(lifeStyleInt, "Error!");
+	}
+	
+	public static String parseMealTypeCharToString(Character mealType) {
+		return mealTypeTranslations.getOrDefault(mealType, "Error!");
+	}
+
+	public static Character parseMealTypeStringToChar(String mealType) {
+		return mealTypeTranslations.inverse().getOrDefault(mealType, 'e');
 	}
 	
 	

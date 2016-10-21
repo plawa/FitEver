@@ -5,16 +5,16 @@ import java.util.List;
 import database.entities.Meal;
 import gui.common.Translator;
 
-class MealsTableModel extends javax.swing.table.AbstractTableModel {
+public class MealsTableModel extends javax.swing.table.AbstractTableModel {
 
 	private static final long serialVersionUID = 7470997421970268078L;
 	private List<Meal> meals;
-	final String[] columnNames = { "Name", "Grammage (g)", "Carbohydrates (%)", "Protein (%)", "Fat (%)" };
-	
-    public String getColumnName(int columnIndex) {
-        return columnNames[columnIndex];
-    }
-	
+	final String[] columnNames = { "Name", "Meal Type", "Grammage (g)", "Carbohydrates (%)", "Protein (%)", "Fat (%)" };
+
+	public String getColumnName(int columnIndex) {
+		return columnNames[columnIndex];
+	}
+
 	public int getColumnCount() {
 		return columnNames.length;
 	}
@@ -34,14 +34,16 @@ class MealsTableModel extends javax.swing.table.AbstractTableModel {
 		case 0:
 			return meal.getName();
 		case 1:
-			return meal.getGramature();
+			return Translator.parseMealTypeCharToString(meal.getType());
 		case 2:
-			return meal.getCarbohydratesPercentage();
+			return meal.getGramature();
 		case 3:
-			return meal.getProteinPercentage();
+			return meal.getCarbohydratesPercentage();
 		case 4:
-			return meal.getFatPercentage();
+			return meal.getProteinPercentage();
 		case 5:
+			return meal.getFatPercentage();
+		case 6:
 			return Translator.parseObjectiveCharToString(meal.getObjective());
 		default:
 			return "Error";
@@ -51,10 +53,6 @@ class MealsTableModel extends javax.swing.table.AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
-		case 0:
-			return String.class;
-		case 1:
-			return Integer.class;
 		case 2:
 			return Integer.class;
 		case 3:
@@ -62,13 +60,13 @@ class MealsTableModel extends javax.swing.table.AbstractTableModel {
 		case 4:
 			return Integer.class;
 		case 5:
-			return String.class;
+			return Integer.class;
 		default:
 			return String.class;
 		}
 	}
-	
-	public Meal getMealAt(int rowIndex){
+
+	public Meal getMealAt(int rowIndex) {
 		return meals.get(rowIndex);
 	}
 

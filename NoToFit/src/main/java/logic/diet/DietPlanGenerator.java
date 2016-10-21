@@ -19,18 +19,21 @@ public class DietPlanGenerator {
 		User user = preferences.getUser();
 		String dietName = preferences.getDietName();
 		int dietPeriodDays = preferences.getDierPeriodDays();
+		int mealsPerDay = preferences.getMealsPerDay();
 		
 		Date now = new Date();
 		Date then = new Date(now.getTime() + dietPeriodDays*ONE_DAY_IN_MILISECONDS);
-	
+			
+		Integer caloriesDailyRequirement = EnergyRequirementCalculator.performCalculation(user);
+		
 		generatedDiet.setUser(user);
 		generatedDiet.setName(dietName);
-		generatedDiet.setValidFrom(now); //valid from now
+		generatedDiet.setValidFrom(now);
 		generatedDiet.setValidTo(then);
+		generatedDiet.setDailyRequirement(caloriesDailyRequirement);
 		
-		int caloriesDailyRequirement = EnergyRequirementCalculator.performCalculation(user);
 		for (int i = 0; i < dietPeriodDays; i++){
-			Set<Meal> dietDay = MealChooser.chooseDayMealSet(caloriesDailyRequirement, 3);
+			Set<Meal> dietDay = MealChooser.chooseDayMealSet(caloriesDailyRequirement, mealsPerDay);
 			generatedDiet.getMeals().addAll(dietDay);
 		}
 		
@@ -42,9 +45,9 @@ public class DietPlanGenerator {
 		User ja = DatabaseController.getEntityByID(User.class, 13);
 		
 		DietGenerationPreferences prefs = new DietGenerationPreferences();
-		prefs.setDietPeriodDays(2);
+		prefs.setDietPeriodDays(6);
 		prefs.setDietName("Dieta testowa");
-		prefs.setMealsPerDay(3);
+		prefs.setMealsPerDay(5);
 		prefs.setUser(ja);
 		
 		Diet mojaDieta = generateDiet(prefs);

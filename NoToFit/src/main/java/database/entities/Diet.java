@@ -12,22 +12,14 @@ public class Diet extends Entity {
 
 	private static final long serialVersionUID = -2334508004434775181L;
 	private Integer id;
-	private String name;
 	private User user;
-	private int mealIds;
+	private String name;
+	private Integer dailyRequirement;
 	private Date validFrom;
 	private Date validTo;
 	private Set<Meal> meals = new HashSet<Meal>(0);
 
 	public Diet(){
-	}
-	
-	public Diet(String name, User user, int mealIds, Date validFrom) {
-		this();
-		this.setName(name);
-		this.user = user;
-		this.mealIds = mealIds;
-		this.validFrom = validFrom;
 	}
 
 	public Integer getId() {
@@ -46,20 +38,20 @@ public class Diet extends Entity {
 		this.name = name;
 	}
 
+	public Integer getDailyRequirement() {
+		return dailyRequirement;
+	}
+
+	public void setDailyRequirement(Integer dailyRequirement) {
+		this.dailyRequirement = dailyRequirement;
+	}
+
 	public User getUser() {
 		return this.user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public int getMealIds() {
-		return this.mealIds;
-	}
-
-	public void setMealIds(int mealIds) {
-		this.mealIds = mealIds;
 	}
 
 	public Date getValidFrom() {
