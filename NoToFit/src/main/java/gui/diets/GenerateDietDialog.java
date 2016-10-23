@@ -19,23 +19,28 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
-import logic.diet.DayMealSetPreferences;
+import database.entities.User;
+import logic.diet.DietDayConfiguration;
 import logic.diet.DietGenerationPreferences;
+import logic.diet.EnergyRequirementCalculator;
 
 public class GenerateDietDialog extends JDialog {
 
 	private static final long serialVersionUID = 1865875837806092179L;
-	private static final String MSG_MEAL_COUNT_ERROR = "Meals count is not correct!";
+	private static final String MSG_MEAL_COUNT_ERROR = "You mustn't have more than 7 meals per day!";
+	private static final int MAX_MEALS_COUNT = 7;
+	
 	private final JPanel contentPanel = new JPanel();
 	private JSlider sliderDietPeriod;
-	private JSlider sliderMealsPerDay;
 	private JTextField textField;
 	private DietGenerationPreferences newDietPreferences;
 	private JSpinner spinnerSupperMealsCount;
 	private JSpinner spinnerMainDishesCount;
 	private JSpinner spinnerBreakfastMealsCount;
+	private final User user;
 
-	public GenerateDietDialog() {
+	public GenerateDietDialog(final User userToGenerateFor) {
+		user = userToGenerateFor;
 		initializeSwingComponents();
 	}
 
@@ -49,29 +54,30 @@ public class GenerateDietDialog extends JDialog {
 			return;
 		}
 		retrieveDietProperties();
-		tearDown();
+		tearDownDialog();
 	}
 
 	private void retrieveDietProperties() {
 		newDietPreferences = new DietGenerationPreferences();
 		newDietPreferences.setDietName(textField.getText());
-		newDietPreferences.setMealsPerDay(sliderMealsPerDay.getValue());
 		newDietPreferences.setDietPeriodDays(sliderDietPeriod.getValue());
 		
-		DayMealSetPreferences dayPreferences = new DayMealSetPreferences();
-		dayPreferences.setBreakfastMealsCount((int) spinnerBreakfastMealsCount.getValue());
-		dayPreferences.setMainDishMealsCount((int) spinnerMainDishesCount.getValue());
-		dayPreferences.setSupperMealsCount((int) spinnerSupperMealsCount.getValue());
-		dayPreferences.setCaloriesFactorsByDefault();
+		int dailyCaloriesReq = EnergyRequirementCalculator.performCalculation(user);
 		
-		newDietPreferences.setDayMealsPref(dayPreferences);
+		DietDayConfiguration dayConf = new DietDayConfiguration();
+		dayConf.setDailyCaloriesReq(dailyCaloriesReq);
+		dayConf.setBreakfastMealsCount((int) spinnerBreakfastMealsCount.getValue());
+		dayConf.setMainDishMealsCount((int) spinnerMainDishesCount.getValue());
+		dayConf.setSupperMealsCount((int) spinnerSupperMealsCount.getValue());
+		dayConf.setCaloriesWeightsByDefault();
+		
+		newDietPreferences.setDayMealsPref(dayConf);
 	}
 
 	private boolean isMealsCountOK() {
-		int mealsCount = sliderMealsPerDay.getValue();
 		int mealCountSum = (int) spinnerBreakfastMealsCount.getValue() + (int) spinnerMainDishesCount.getValue()
 				+ (int) spinnerSupperMealsCount.getValue();
-		return mealsCount == mealCountSum;
+		return mealCountSum <= MAX_MEALS_COUNT;
 	}
 
 	private void initializeSwingComponents() {
@@ -81,9 +87,9 @@ public class GenerateDietDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblDietName = new JLabel("Diet Name:");
@@ -105,36 +111,12 @@ public class GenerateDietDialog extends JDialog {
 			textField.setColumns(10);
 		}
 		{
-			JLabel lblMealsPerDay = new JLabel("Meals Per Day:");
-			GridBagConstraints gbc_lblMealsPerDay = new GridBagConstraints();
-			gbc_lblMealsPerDay.anchor = GridBagConstraints.WEST;
-			gbc_lblMealsPerDay.insets = new Insets(0, 0, 5, 5);
-			gbc_lblMealsPerDay.gridx = 1;
-			gbc_lblMealsPerDay.gridy = 2;
-			contentPanel.add(lblMealsPerDay, gbc_lblMealsPerDay);
-		}
-		{
-			sliderMealsPerDay = new JSlider();
-			sliderMealsPerDay.setMajorTickSpacing(1);
-			sliderMealsPerDay.setPaintLabels(true);
-			sliderMealsPerDay.setPaintTicks(true);
-			sliderMealsPerDay.setSnapToTicks(true);
-			sliderMealsPerDay.setMaximum(6);
-			sliderMealsPerDay.setMinimum(3);
-			GridBagConstraints gbc_sliderMealsPerDay = new GridBagConstraints();
-			gbc_sliderMealsPerDay.fill = GridBagConstraints.HORIZONTAL;
-			gbc_sliderMealsPerDay.insets = new Insets(0, 0, 5, 5);
-			gbc_sliderMealsPerDay.gridx = 2;
-			gbc_sliderMealsPerDay.gridy = 2;
-			contentPanel.add(sliderMealsPerDay, gbc_sliderMealsPerDay);
-		}
-		{
 			JLabel lblBreakfastsPerDay = new JLabel("Breakfasts Per Day:");
 			GridBagConstraints gbc_lblBreakfastsPerDay = new GridBagConstraints();
 			gbc_lblBreakfastsPerDay.anchor = GridBagConstraints.WEST;
 			gbc_lblBreakfastsPerDay.insets = new Insets(0, 0, 5, 5);
 			gbc_lblBreakfastsPerDay.gridx = 1;
-			gbc_lblBreakfastsPerDay.gridy = 3;
+			gbc_lblBreakfastsPerDay.gridy = 2;
 			contentPanel.add(lblBreakfastsPerDay, gbc_lblBreakfastsPerDay);
 		}
 		{
@@ -144,7 +126,7 @@ public class GenerateDietDialog extends JDialog {
 			gbc_spinnerBreakfastMealsCount.fill = GridBagConstraints.HORIZONTAL;
 			gbc_spinnerBreakfastMealsCount.insets = new Insets(0, 0, 5, 5);
 			gbc_spinnerBreakfastMealsCount.gridx = 2;
-			gbc_spinnerBreakfastMealsCount.gridy = 3;
+			gbc_spinnerBreakfastMealsCount.gridy = 2;
 			contentPanel.add(spinnerBreakfastMealsCount, gbc_spinnerBreakfastMealsCount);
 		}
 		{
@@ -153,7 +135,7 @@ public class GenerateDietDialog extends JDialog {
 			gbc_lblMainDishesPer.anchor = GridBagConstraints.WEST;
 			gbc_lblMainDishesPer.insets = new Insets(0, 0, 5, 5);
 			gbc_lblMainDishesPer.gridx = 1;
-			gbc_lblMainDishesPer.gridy = 4;
+			gbc_lblMainDishesPer.gridy = 3;
 			contentPanel.add(lblMainDishesPer, gbc_lblMainDishesPer);
 		}
 		{
@@ -163,7 +145,7 @@ public class GenerateDietDialog extends JDialog {
 			gbc_spinnerMainDishesCount.fill = GridBagConstraints.HORIZONTAL;
 			gbc_spinnerMainDishesCount.insets = new Insets(0, 0, 5, 5);
 			gbc_spinnerMainDishesCount.gridx = 2;
-			gbc_spinnerMainDishesCount.gridy = 4;
+			gbc_spinnerMainDishesCount.gridy = 3;
 			contentPanel.add(spinnerMainDishesCount, gbc_spinnerMainDishesCount);
 		}
 		{
@@ -172,7 +154,7 @@ public class GenerateDietDialog extends JDialog {
 			gbc_lblSuppersPerDay.anchor = GridBagConstraints.WEST;
 			gbc_lblSuppersPerDay.insets = new Insets(0, 0, 5, 5);
 			gbc_lblSuppersPerDay.gridx = 1;
-			gbc_lblSuppersPerDay.gridy = 5;
+			gbc_lblSuppersPerDay.gridy = 4;
 			contentPanel.add(lblSuppersPerDay, gbc_lblSuppersPerDay);
 		}
 		{
@@ -182,7 +164,7 @@ public class GenerateDietDialog extends JDialog {
 			gbc_spinnerSupperMealsCount.fill = GridBagConstraints.HORIZONTAL;
 			gbc_spinnerSupperMealsCount.insets = new Insets(0, 0, 5, 5);
 			gbc_spinnerSupperMealsCount.gridx = 2;
-			gbc_spinnerSupperMealsCount.gridy = 5;
+			gbc_spinnerSupperMealsCount.gridy = 4;
 			contentPanel.add(spinnerSupperMealsCount, gbc_spinnerSupperMealsCount);
 		}
 		{
@@ -191,7 +173,7 @@ public class GenerateDietDialog extends JDialog {
 			gbc_lblDietPeriod.anchor = GridBagConstraints.WEST;
 			gbc_lblDietPeriod.insets = new Insets(0, 0, 5, 5);
 			gbc_lblDietPeriod.gridx = 1;
-			gbc_lblDietPeriod.gridy = 6;
+			gbc_lblDietPeriod.gridy = 5;
 			contentPanel.add(lblDietPeriod, gbc_lblDietPeriod);
 		}
 		{
@@ -207,7 +189,7 @@ public class GenerateDietDialog extends JDialog {
 			gbc_sliderDietPeriod.fill = GridBagConstraints.HORIZONTAL;
 			gbc_sliderDietPeriod.insets = new Insets(0, 0, 5, 5);
 			gbc_sliderDietPeriod.gridx = 2;
-			gbc_sliderDietPeriod.gridy = 6;
+			gbc_sliderDietPeriod.gridy = 5;
 			contentPanel.add(sliderDietPeriod, gbc_sliderDietPeriod);
 		}
 		{
@@ -229,7 +211,7 @@ public class GenerateDietDialog extends JDialog {
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						tearDown();
+						tearDownDialog();
 					}
 				});
 				cancelButton.setActionCommand("Cancel");
@@ -241,7 +223,7 @@ public class GenerateDietDialog extends JDialog {
 		setModal(true);
 	}
 
-	protected void tearDown() {
+	protected void tearDownDialog() {
 		setVisible(false);
 		dispose();
 	}

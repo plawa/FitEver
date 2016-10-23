@@ -77,7 +77,7 @@ public class UserPanel extends JPanel {
 	}
 
 	protected void generateDietPlanButtonPressed() {
-		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog();
+		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog(userDisplaying);
 		dietPropertiesDialog.setLocationRelativeTo(this);
 		dietPropertiesDialog.setVisible(true);
 		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();

@@ -1,37 +1,24 @@
 package logic.diet;
 
-public class DayMealSetPreferences {
+public class DietDayConfiguration {
 
+	private int dailyCaloriesReq;
+	
 	private int breakfastMealsCount;
 	private int mainDishMealsCount;
 	private int supperMealsCount;
-	
-	private int dailyCaloriesReq;
 
-	private float breakfastCaloriesFactor;
-	private float mainDishCaloriesFactor;
-	private float supperCaloriesFactor;
+	private float breakfastCaloriesWeight;
+	private float mainDishCaloriesWeight;
+	private float supperCaloriesWeight;
 
-	public DayMealSetPreferences() {
-		
-	}
 
-	public void initializeWithDefaultValues() {
-		setDailyCaloriesReq(2500);
-		
-		breakfastMealsCount = 1;
-		mainDishMealsCount = 1;
-		supperMealsCount = 1;
+	public void setCaloriesWeightsByDefault() {
+		float allMealsCount = breakfastMealsCount + mainDishMealsCount + supperMealsCount; //should be float due to calculations below
 
-		setCaloriesFactorsByDefault();
-	}
-
-	public void setCaloriesFactorsByDefault() {
-		float allMealsCount = breakfastMealsCount + mainDishMealsCount + supperMealsCount;
-
-		breakfastCaloriesFactor = breakfastMealsCount / allMealsCount;
-		mainDishCaloriesFactor = mainDishMealsCount / allMealsCount;
-		supperCaloriesFactor = supperMealsCount / allMealsCount;
+		breakfastCaloriesWeight = breakfastMealsCount / allMealsCount;
+		mainDishCaloriesWeight = mainDishMealsCount / allMealsCount;
+		supperCaloriesWeight = supperMealsCount / allMealsCount;
 	}
 
 	public int getDailyCaloriesReq() {
@@ -67,27 +54,27 @@ public class DayMealSetPreferences {
 	}
 
 	public float getBreakfastCaloriesFactor() {
-		return breakfastCaloriesFactor;
+		return breakfastCaloriesWeight;
 	}
 
 	public void setBreakfastCaloriesFactor(float breakfastCaloriesFactor) {
-		this.breakfastCaloriesFactor = breakfastCaloriesFactor;
+		this.breakfastCaloriesWeight = breakfastCaloriesFactor;
 	}
 
 	public float getMainDishCaloriesFactor() {
-		return mainDishCaloriesFactor;
+		return mainDishCaloriesWeight;
 	}
 
 	public void setMainDishCaloriesFactor(float mainDishCaloriesFactor) {
-		this.mainDishCaloriesFactor = mainDishCaloriesFactor;
+		this.mainDishCaloriesWeight = mainDishCaloriesFactor;
 	}
 
 	public float getSupperCaloriesFactor() {
-		return supperCaloriesFactor;
+		return supperCaloriesWeight;
 	}
 
 	public void setSupperCaloriesFactor(float supperCaloriesFactor) {
-		this.supperCaloriesFactor = supperCaloriesFactor;
+		this.supperCaloriesWeight = supperCaloriesFactor;
 	}
 
 }

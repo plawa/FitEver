@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
+import database.controller.DatabaseController;
 import database.entities.Diet;
 import database.entities.User;
 import gui.meals.AllMealsDialog;
@@ -57,6 +58,7 @@ public class DietsPanel extends JPanel {
 	}
 
 	protected void refreshTable() {
+		DatabaseController.refreshObject(currentUser);
 		List<Diet> dietsList = new ArrayList<Diet>(currentUser.getDiets());
 		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);

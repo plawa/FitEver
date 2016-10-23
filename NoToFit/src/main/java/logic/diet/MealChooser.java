@@ -23,13 +23,13 @@ public class MealChooser {
 	}
 
 	private static void updateLibraries() {
-		breakfastsLibrary = DatabaseController.getEntityByParameter(Meal.class, "type", "b");
-		mainMealsLibrary = DatabaseController.getEntityByParameter(Meal.class, "type", "m");
-		suppersLibrary = DatabaseController.getEntityByParameter(Meal.class, "type", "s");
+		breakfastsLibrary = DatabaseController.getEntitiesByParameter(Meal.class, "type", "b");
+		mainMealsLibrary = DatabaseController.getEntitiesByParameter(Meal.class, "type", "m");
+		suppersLibrary = DatabaseController.getEntitiesByParameter(Meal.class, "type", "s");
 	}
 
 	
-	public static Set<Meal> chooseDayMealSet(DayMealSetPreferences preferences){
+	public static Set<Meal> chooseDayMealSet(DietDayConfiguration preferences){
 		int breakfastMealsCount = preferences.getBreakfastMealsCount();
 		int mainMealsCount = preferences.getMainDishMealsCount();
 		int supperMealsCount = preferences.getSupperMealsCount();

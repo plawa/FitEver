@@ -6,11 +6,9 @@ import javax.persistence.TypedQuery;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import database.entities.Entity;
-import database.entities.Meal;
 import database.entities.Shadow;
 
 public class DatabaseController {
@@ -21,89 +19,71 @@ public class DatabaseController {
 			mySessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
-	public static void startTransaction() {
-		mySessionFactory.openSession().beginTransaction();
-	}
-
-	public static void commitTransaction() {
-		mySessionFactory.getCurrentSession().getTransaction().commit();
-	}
 
 	public static <T extends Entity> void saveEntityToDatabase(T entity) throws RuntimeException {
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
-		mySession.persist(entity);
-		myTransaction.commit();
-		mySession.close();
+		openSessionWithTransaction().persist(entity);
+		finalizeTransactionAndSession();
 	}
 
 	public static <T extends Entity> void updateEntityToDatabase(T entity) throws RuntimeException {
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
-		mySession.update(entity);
-		myTransaction.commit();
-		mySession.close();
+		openSessionWithTransaction().update(entity);
+		finalizeTransactionAndSession();
 	}
 
 	public static <T extends Entity> void deleteEntityFromDatabase(T entity) throws RuntimeException {
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
-		mySession.delete(entity);
-		myTransaction.commit();
-		mySession.close();
+		openSessionWithTransaction().delete(entity);
+		finalizeTransactionAndSession();
 	}
 
 	public static <T extends Entity> List<T> getAll(Class<T> entityType) throws RuntimeException {
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
-		List<T> resultList = mySession.createCriteria(entityType).list();
-		myTransaction.commit();
-		mySession.close();
+		List<T> resultList = openSessionWithTransaction().createCriteria(entityType).list();
+		finalizeTransactionAndSession();
 		return resultList;
 	}
 
 	public static Shadow getShadowEntityByLogin(String login) throws RuntimeException {
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
 		String queryText = "SELECT s FROM Shadow s JOIN FETCH s.user WHERE s.login = :login";
-		TypedQuery<Shadow> queryForShadow = mySession.createQuery(queryText);
+		TypedQuery<Shadow> queryForShadow = openSessionWithTransaction().createQuery(queryText);
 		queryForShadow.setParameter("login", login);
-		List<Shadow> resultList = queryForShadow.getResultList();// list();
+		
+		List<Shadow> resultList = queryForShadow.getResultList();
+		finalizeTransactionAndSession();
 		if (resultList.isEmpty())
 			return null;
-		Shadow result = resultList.get(0);
-		myTransaction.commit();
-		mySession.close();
-		return result;
+		return resultList.get(0);
 	}
 
 	public static <T extends Entity> T getEntityByID(Class<T> entityType, int ID) {
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
-		T entityFound = mySession.get(entityType, ID);
-		myTransaction.commit();
-		mySession.close();
-		return entityFound;
+		T resultEntity = openSessionWithTransaction().get(entityType, ID);
+		finalizeTransactionAndSession();
+		return resultEntity;
+	}
+	
+	public static void refreshObject(Object objectToRefresh){
+		openSessionWithTransaction().refresh(objectToRefresh);
+		finalizeTransactionAndSession();
 	}
 
-	public static <T extends Entity> List<T> getEntityByParameter(Class<T> entityType, String paramName, String paramValue) {
-		Session mySession = mySessionFactory.openSession();
-		Transaction myTransaction = mySession.beginTransaction();
+	public static <T extends Entity> List<T> getEntitiesByParameter(Class<T> entityType, String paramName, String paramValue) {
 		String q = String.format("SELECT e FROM %s e WHERE e.%s = '%s'", entityType.getSimpleName(), paramName, paramValue);
-		TypedQuery<T> query = mySession.createQuery(q);
-		List<T> resultList = query.getResultList();
-		myTransaction.commit();
-		mySession.close();
+		List<T> resultList = openSessionWithTransaction().createQuery(q).getResultList();
+		finalizeTransactionAndSession();
 		return resultList;
 	}
 
+	private static Session openSessionWithTransaction(){
+		Session mySession = mySessionFactory.getCurrentSession();
+		mySession.beginTransaction();
+		return mySession;
+	}
+	
+	private static void finalizeTransactionAndSession(){
+		mySessionFactory.getCurrentSession().getTransaction().commit();
+		mySessionFactory.getCurrentSession().close();
+	}
+	
 	public static void tidyUp() {
+		mySessionFactory.getCurrentSession().close();
 		mySessionFactory.close();
 	}
-
-	public static void main(String[] args) {
-		List<Meal> breakfasts = getEntityByParameter(Meal.class, "type", "b");
-		System.out.println(breakfasts.get(0).getName());
-	}
-
 }

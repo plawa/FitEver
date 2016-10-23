@@ -11,12 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
@@ -60,9 +62,71 @@ public class DietOverviewDialog extends JDialog {
 		table.setModel(tableModel);
 	}
 
-	protected void tearDown() {
-		setVisible(false);
-		dispose();
+	private JTabbedPane initializeDietDaysTabbedPane() {
+
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+
+
+		Stack<Meal> breakfasts = new Stack<>();
+		Stack<Meal> mainDishes = new Stack<>();
+		Stack<Meal> suppers = new Stack<>();
+		for (Meal meal : dietDisplaying.getMeals()) {
+			if (meal.getType() == 'b')
+				breakfasts.add(meal);
+			else if (meal.getType() == 'm')
+				mainDishes.add(meal);
+			else if (meal.getType() == 's')
+				suppers.add(meal);
+		}
+
+		for (int i = 0; i < countDietDays(); i++) {
+			List<Meal> dayOfDiet = new ArrayList<>();
+			int b = dietDisplaying.getBreakfastCount();
+			while (b > 0) {
+				dayOfDiet.add(breakfasts.pop());
+				b--;
+			}
+
+			int m = dietDisplaying.getMainDishCount();
+			while (m > 0) {
+				dayOfDiet.add(mainDishes.pop());
+				m--;
+			}
+
+			int s = dietDisplaying.getBreakfastCount();
+			while (s > 0) {
+				dayOfDiet.add(suppers.pop());
+				s--;
+			}
+
+			tabbedPane.add("Day " + Integer.toString(i), createDietDayPanel(dayOfDiet));
+		}
+		return tabbedPane;
+	}
+
+	private JScrollPane createDietDayPanel(List<Meal> dietDayMeals) {
+		JPanel newPanel = new JPanel();
+		newPanel.setLayout(new BorderLayout());
+		JScrollPane newScrollPane = new JScrollPane();
+		newScrollPane.setViewportView(newPanel);
+
+		newScrollPane.add(createDietDayTable(dietDayMeals));
+
+		return newScrollPane;
+	}
+
+	private JTable createDietDayTable(List<Meal> dietDayMeals) {
+		JTable dietDayTable = new JTable();
+		dietDayTable.setFillsViewportHeight(true);
+		dietDayTable.setModel(new MealsTableModel(dietDayMeals));
+		return dietDayTable;
+	}
+
+	private int countDietDays() {
+		int mealsDayCount = dietDisplaying.getBreakfastCount() + dietDisplaying.getMainDishCount()
+				+ dietDisplaying.getSupperCount();
+		int allMealsCount = dietDisplaying.getMeals().size();
+		return allMealsCount / mealsDayCount;
 	}
 
 	private void initializeSwingComponents() {
@@ -74,9 +138,10 @@ public class DietOverviewDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+				Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblNameDescription = new JLabel("Diet Name: ");
@@ -158,41 +223,41 @@ public class DietOverviewDialog extends JDialog {
 			gbc_lblValidToValue.gridy = 2;
 			contentPanel.add(lblValidToValue, gbc_lblValidToValue);
 		}
+
+		JTabbedPane tabbed = initializeDietDaysTabbedPane();
+		
+		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
+		gbc_tabbedPane.gridwidth = 5;
+		gbc_tabbedPane.insets = new Insets(0, 0, 5, 5);
+		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
+		gbc_tabbedPane.gridx = 1;
+		gbc_tabbedPane.gridy = 4;
+		contentPanel.add(tabbed, gbc_tabbedPane);
 		{
-			JLabel lblAssignedMealsTableDescription = new JLabel("Assigned Meals");
+			JLabel lblAssignedMealsTableDescription = new JLabel("All Assigned Meals");
 			lblAssignedMealsTableDescription.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			GridBagConstraints gbc_lblAssignedMealsTableDescription = new GridBagConstraints();
 			gbc_lblAssignedMealsTableDescription.gridwidth = 5;
 			gbc_lblAssignedMealsTableDescription.insets = new Insets(0, 0, 5, 5);
 			gbc_lblAssignedMealsTableDescription.gridx = 1;
-			gbc_lblAssignedMealsTableDescription.gridy = 3;
+			gbc_lblAssignedMealsTableDescription.gridy = 6;
 			contentPanel.add(lblAssignedMealsTableDescription, gbc_lblAssignedMealsTableDescription);
 		}
 		{
 			JScrollPane scrollPane = new JScrollPane();
 			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-			gbc_scrollPane.gridheight = 3;
+			gbc_scrollPane.gridheight = 2;
 			gbc_scrollPane.gridwidth = 5;
 			gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
 			gbc_scrollPane.fill = GridBagConstraints.BOTH;
 			gbc_scrollPane.gridx = 1;
-			gbc_scrollPane.gridy = 4;
+			gbc_scrollPane.gridy = 7;
 			contentPanel.add(scrollPane, gbc_scrollPane);
 			{
 				table = new JTable();
 				scrollPane.setViewportView(table);
 				table.setFillsViewportHeight(true);
 			}
-		}
-		{
-
-			
-			JLabel lblDd = new JLabel("dd");
-			GridBagConstraints gbc_lblDd = new GridBagConstraints();
-			gbc_lblDd.insets = new Insets(0, 0, 0, 5);
-			gbc_lblDd.gridx = 1;
-			gbc_lblDd.gridy = 7;
-			contentPanel.add(lblDd, gbc_lblDd);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -224,4 +289,8 @@ public class DietOverviewDialog extends JDialog {
 		refreshTable();
 	}
 
+	protected void tearDown() {
+		setVisible(false);
+		dispose();
+	}
 }
