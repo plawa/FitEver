@@ -11,17 +11,16 @@ class DietsTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 7436925452072118635L;
 	private List<Diet> diets;
 	final private String[] columnNames = { "Diet Name", "kcals/day", "Valid From", "Valid To" };
-	
+
 	public DietsTableModel(List<Diet> diets) {
 		super();
 		this.diets = diets;
-	}	
-	
-	
-    public String getColumnName(int columnIndex) {
-        return columnNames[columnIndex];
-    }
-	
+	}
+
+	public String getColumnName(int columnIndex) {
+		return columnNames[columnIndex];
+	}
+
 	public int getColumnCount() {
 		return columnNames.length;
 	}
@@ -36,7 +35,7 @@ class DietsTableModel extends AbstractTableModel {
 		case 0:
 			return diet.getName();
 		case 1:
-			return "under constr.";
+			return diet.getDailyRequirement();
 		case 2:
 			return diet.getValidFrom().toString();
 		case 3:
@@ -48,11 +47,13 @@ class DietsTableModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		return String.class; //this is only String-type table
+		if (columnIndex == 1)
+			return Integer.class;
+		return String.class; 
 	}
-	
-	public Diet getDietAt(int rowNumber){
-		return diets.get(rowNumber);		
+
+	public Diet getDietAt(int rowNumber) {
+		return diets.get(rowNumber);
 	}
 
 }

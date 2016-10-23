@@ -7,11 +7,10 @@ public class DietGenerationPreferences {
 	private User user;
 	private String dietName;
 	private int mealsPerDay;
-	private int dierPeriodDays;
+	private int dietPeriodDays;
+	private DayMealSetPreferences dayMealsPref;
 
-	public DietGenerationPreferences() {
-	}
-
+	
 	public User getUser() {
 		return user;
 	}
@@ -40,11 +39,19 @@ public class DietGenerationPreferences {
 		this.mealsPerDay = mealsPerDay;
 	}
 
-	public int getDierPeriodDays() {
-		return dierPeriodDays;
+	public int getDietPeriodDays() {
+		return dietPeriodDays;
 	}
 
 	public void setDietPeriodDays(int dietPeriodDays) {
-		this.dierPeriodDays = dietPeriodDays;
+		this.dietPeriodDays = dietPeriodDays;
+	}
+
+	public DayMealSetPreferences getDayMealsPref() {
+		return dayMealsPref;
+	}
+
+	public void setDayMealsPref(DayMealSetPreferences dayMealsPref) {
+		this.dayMealsPref = dayMealsPref;
 	}
 }

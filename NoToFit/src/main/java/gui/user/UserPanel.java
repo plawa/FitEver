@@ -48,6 +48,11 @@ public class UserPanel extends JPanel {
 	private ImageIcon generateWorkoutButtonIcon;
 	private ImageIcon logoutButtonIcon;
 	private ImageIcon exitButtonIcon;
+	private final static Color COLOR_GREEN = new Color(0, 120, 0);
+	private final static String MSG_BMI_OK = "Good";
+	private final static String MSG_BMI_TOO_LOW = "Underweight";
+	private final static String MSG_BMI_TOO_HIGH = "Overweight";
+	private JLabel lblValueBmiState;
 
 	public UserPanel() {
 		this(new User());
@@ -111,25 +116,34 @@ public class UserPanel extends JPanel {
 		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
 		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
 		lblValueUserObjective.setText(Translator.parseObjectiveCharToString(userDisplaying.getUserObjective()));
-		setBmiLabelFormatted(UserTools.calculateBMI(userDisplaying));
+		setBmiLabelsFormatted(UserTools.calculateBMI(userDisplaying));
 		lblValueActualWeight.setText(String.format("%.1f kg", userDisplaying.getActualWeight()));
 	}
 
-	private void setBmiLabelFormatted(float bmi) {
+	private void setBmiLabelsFormatted(float bmi) {
+		Color bmiLabelColor = COLOR_GREEN;
+		String bmiStateLabelMsg = MSG_BMI_OK;
+		
+		if (bmi >= 25.0f) {
+			bmiLabelColor = Color.RED;
+			bmiStateLabelMsg = MSG_BMI_TOO_HIGH;
+		} else if (bmi < 18.5f) {
+			bmiLabelColor = Color.RED;
+			bmiStateLabelMsg = MSG_BMI_TOO_LOW;
+		}
+		
+		lblValueBmi.setForeground(bmiLabelColor);
 		lblValueBmi.setText(String.format("%.2f", bmi));
-		if (bmi >= 25.0f || bmi < 18.5f)
-			lblValueBmi.setForeground(Color.RED);
-		else
-			lblValueBmi.setForeground(new Color(0, 120, 0));
+		lblValueBmiState.setText(bmiStateLabelMsg);
 	}
 
 	private void loadIcons() {
-			editUserButtonIcon = new ImageIcon("images\\edit_user_button.png");
-			updateWeightButtonIcon = new ImageIcon("images\\update_weight_button.png");
-			generateDietButtonIcon = new ImageIcon("images\\generate_diet_button.png");
-			generateWorkoutButtonIcon = new ImageIcon("images\\generate_workout_button.png");
-			logoutButtonIcon = new ImageIcon("images\\logout_button.png");
-			exitButtonIcon = new ImageIcon("images\\exit_button.png");
+		editUserButtonIcon = new ImageIcon("images\\edit_user_button.png");
+		updateWeightButtonIcon = new ImageIcon("images\\update_weight_button.png");
+		generateDietButtonIcon = new ImageIcon("images\\generate_diet_button.png");
+		generateWorkoutButtonIcon = new ImageIcon("images\\generate_workout_button.png");
+		logoutButtonIcon = new ImageIcon("images\\logout_button.png");
+		exitButtonIcon = new ImageIcon("images\\exit_button.png");
 	}
 
 	private void initializeSwingComponents() {
@@ -311,6 +325,15 @@ public class UserPanel extends JPanel {
 		gbc_lblBmiState.gridy = 3;
 		add(lblBmiState, gbc_lblBmiState);
 
+		lblValueBmiState = new JLabel("state");
+		lblValueBmiState.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblValueBmiState = new GridBagConstraints();
+		gbc_lblValueBmiState.anchor = GridBagConstraints.WEST;
+		gbc_lblValueBmiState.insets = new Insets(0, 0, 5, 5);
+		gbc_lblValueBmiState.gridx = 5;
+		gbc_lblValueBmiState.gridy = 3;
+		add(lblValueBmiState, gbc_lblValueBmiState);
+
 		JLabel lblDescriptionAge = new JLabel("Age:");
 		lblDescriptionAge.setForeground(Color.GRAY);
 		lblDescriptionAge.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -367,43 +390,44 @@ public class UserPanel extends JPanel {
 		gbc_lblValueFatPercentage.gridx = 2;
 		gbc_lblValueFatPercentage.gridy = 6;
 		add(lblValueFatPercentage, gbc_lblValueFatPercentage);
-
-		JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
-		lblDescriptionStartWeight.setForeground(Color.GRAY);
-		lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
-		gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescriptionStartWeight.gridx = 1;
-		gbc_lblDescriptionStartWeight.gridy = 7;
-		add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
-
-		lblValueStartWeight = new JLabel();
-		lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
-		gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblValueStartWeight.gridx = 2;
-		gbc_lblValueStartWeight.gridy = 7;
-		add(lblValueStartWeight, gbc_lblValueStartWeight);
-
-		JLabel lblDescriptionActualWeight = new JLabel("Actual Weight:");
-		lblDescriptionActualWeight.setForeground(Color.GRAY);
-		lblDescriptionActualWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		GridBagConstraints gbc_lblDescriptionActualWeight = new GridBagConstraints();
-		gbc_lblDescriptionActualWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblDescriptionActualWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescriptionActualWeight.gridx = 4;
-		gbc_lblDescriptionActualWeight.gridy = 7;
-		add(lblDescriptionActualWeight, gbc_lblDescriptionActualWeight);
-
-		lblValueActualWeight = new JLabel("");
-		lblValueActualWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblValueActualWeight = new GridBagConstraints();
-		gbc_lblValueActualWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblValueActualWeight.gridx = 5;
-		gbc_lblValueActualWeight.gridy = 7;
-		add(lblValueActualWeight, gbc_lblValueActualWeight);
+		
+				JLabel lblDescriptionActualWeight = new JLabel("Actual Weight:");
+				lblDescriptionActualWeight.setForeground(Color.GRAY);
+				lblDescriptionActualWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
+				GridBagConstraints gbc_lblDescriptionActualWeight = new GridBagConstraints();
+				gbc_lblDescriptionActualWeight.anchor = GridBagConstraints.WEST;
+				gbc_lblDescriptionActualWeight.insets = new Insets(0, 0, 5, 5);
+				gbc_lblDescriptionActualWeight.gridx = 1;
+				gbc_lblDescriptionActualWeight.gridy = 7;
+				add(lblDescriptionActualWeight, gbc_lblDescriptionActualWeight);
+		
+				lblValueActualWeight = new JLabel("");
+				lblValueActualWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
+				GridBagConstraints gbc_lblValueActualWeight = new GridBagConstraints();
+				gbc_lblValueActualWeight.anchor = GridBagConstraints.WEST;
+				gbc_lblValueActualWeight.insets = new Insets(0, 0, 5, 5);
+				gbc_lblValueActualWeight.gridx = 2;
+				gbc_lblValueActualWeight.gridy = 7;
+				add(lblValueActualWeight, gbc_lblValueActualWeight);
+		
+				JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
+				lblDescriptionStartWeight.setForeground(Color.GRAY);
+				lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
+				GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
+				gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
+				gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
+				gbc_lblDescriptionStartWeight.gridx = 4;
+				gbc_lblDescriptionStartWeight.gridy = 7;
+				add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
+		
+				lblValueStartWeight = new JLabel();
+				lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
+				GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
+				gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
+				gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
+				gbc_lblValueStartWeight.gridx = 5;
+				gbc_lblValueStartWeight.gridy = 7;
+				add(lblValueStartWeight, gbc_lblValueStartWeight);
 
 		JLabel lblDescriptionGoalWeight = new JLabel("Goal Weight:");
 		lblDescriptionGoalWeight.setForeground(Color.GRAY);

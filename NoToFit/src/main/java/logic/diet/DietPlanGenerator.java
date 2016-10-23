@@ -18,22 +18,23 @@ public class DietPlanGenerator {
 		//retrieve data
 		User user = preferences.getUser();
 		String dietName = preferences.getDietName();
-		int dietPeriodDays = preferences.getDierPeriodDays();
-		int mealsPerDay = preferences.getMealsPerDay();
+		int dietPeriodDays = preferences.getDietPeriodDays();
+		DayMealSetPreferences dayPrefs = preferences.getDayMealsPref();
 		
 		Date now = new Date();
 		Date then = new Date(now.getTime() + dietPeriodDays*ONE_DAY_IN_MILISECONDS);
 			
-		Integer caloriesDailyRequirement = EnergyRequirementCalculator.performCalculation(user);
+		int dailyCaloriesRequired = EnergyRequirementCalculator.performCalculation(user);
+		dayPrefs.setDailyCaloriesReq(dailyCaloriesRequired);
 		
 		generatedDiet.setUser(user);
 		generatedDiet.setName(dietName);
 		generatedDiet.setValidFrom(now);
 		generatedDiet.setValidTo(then);
-		generatedDiet.setDailyRequirement(caloriesDailyRequirement);
+		generatedDiet.setDailyRequirement(dailyCaloriesRequired);
 		
 		for (int i = 0; i < dietPeriodDays; i++){
-			Set<Meal> dietDay = MealChooser.chooseDayMealSet(caloriesDailyRequirement, mealsPerDay);
+			Set<Meal> dietDay = MealChooser.chooseDayMealSet(dayPrefs);
 			generatedDiet.getMeals().addAll(dietDay);
 		}
 		

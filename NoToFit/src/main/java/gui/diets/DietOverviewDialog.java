@@ -22,7 +22,6 @@ import javax.swing.border.EmptyBorder;
 
 import database.entities.Diet;
 import database.entities.Meal;
-import database.entities.User;
 import gui.common.GuiTools;
 import gui.meals.MealsTableModel;
 
@@ -34,7 +33,7 @@ public class DietOverviewDialog extends JDialog {
 	private JTable table;
 	private MealsTableModel tableModel;
 	private JLabel lblNameValue;
-	private JLabel lblUserValue;
+	private JLabel lblCaloriesValue;
 	private JLabel lblValidFromValue;
 	private JLabel lblValidToValue;
 
@@ -49,9 +48,8 @@ public class DietOverviewDialog extends JDialog {
 	}
 
 	private void refreshDietDetails() {
-		User dietOwner = dietDisplaying.getUser();
 		lblNameValue.setText(dietDisplaying.getName());
-		lblUserValue.setText(String.format("%s %s", dietOwner.getName(), dietOwner.getSurname()));
+		lblCaloriesValue.setText(String.format("%d", dietDisplaying.getDailyRequirement()));
 		lblValidFromValue.setText(GuiTools.parseDateToString(dietDisplaying.getValidFrom()));
 		lblValidToValue.setText(GuiTools.parseDateToString(dietDisplaying.getValidTo()));
 	}
@@ -121,23 +119,24 @@ public class DietOverviewDialog extends JDialog {
 			contentPanel.add(lblValidFromValue, gbc_lblValidFromValue);
 		}
 		{
-			JLabel lblUserDescription = new JLabel("Owner:");
-			lblUserDescription.setForeground(Color.GRAY);
-			GridBagConstraints gbc_lblUserDescription = new GridBagConstraints();
-			gbc_lblUserDescription.anchor = GridBagConstraints.WEST;
-			gbc_lblUserDescription.insets = new Insets(0, 0, 5, 5);
-			gbc_lblUserDescription.gridx = 1;
-			gbc_lblUserDescription.gridy = 2;
-			contentPanel.add(lblUserDescription, gbc_lblUserDescription);
+			JLabel lblCaloriesDescription = new JLabel("Calories Per Day:");
+			lblCaloriesDescription.setForeground(Color.GRAY);
+			GridBagConstraints gbc_lblCaloriesDescription = new GridBagConstraints();
+			gbc_lblCaloriesDescription.anchor = GridBagConstraints.WEST;
+			gbc_lblCaloriesDescription.insets = new Insets(0, 0, 5, 5);
+			gbc_lblCaloriesDescription.gridx = 1;
+			gbc_lblCaloriesDescription.gridy = 2;
+			contentPanel.add(lblCaloriesDescription, gbc_lblCaloriesDescription);
 		}
 		{
-			lblUserValue = new JLabel("example owner");
-			lblUserValue.setFont(new Font("Tahoma", Font.BOLD, 11));
-			GridBagConstraints gbc_lblUserValue = new GridBagConstraints();
-			gbc_lblUserValue.insets = new Insets(0, 0, 5, 5);
-			gbc_lblUserValue.gridx = 2;
-			gbc_lblUserValue.gridy = 2;
-			contentPanel.add(lblUserValue, gbc_lblUserValue);
+			lblCaloriesValue = new JLabel("example owner");
+			lblCaloriesValue.setFont(new Font("Tahoma", Font.BOLD, 11));
+			GridBagConstraints gbc_lblCaloriesValue = new GridBagConstraints();
+			gbc_lblCaloriesValue.anchor = GridBagConstraints.WEST;
+			gbc_lblCaloriesValue.insets = new Insets(0, 0, 5, 5);
+			gbc_lblCaloriesValue.gridx = 2;
+			gbc_lblCaloriesValue.gridy = 2;
+			contentPanel.add(lblCaloriesValue, gbc_lblCaloriesValue);
 		}
 		{
 			JLabel lblValidTo = new JLabel("Valid To:");
