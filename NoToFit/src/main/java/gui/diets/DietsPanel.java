@@ -29,6 +29,9 @@ public class DietsPanel extends JPanel {
 	private JTable table;
 	private DietsTableModel tableModel;
 	private User currentUser;
+	private ImageIcon openButtonIcon;
+	private ImageIcon showMealsButtonIcon;
+	private ImageIcon refreshButtonIcon;
 
 	public DietsPanel() {
 		this(new User());
@@ -36,6 +39,7 @@ public class DietsPanel extends JPanel {
 
 	public DietsPanel(User userContainingDiets) {
 		currentUser = userContainingDiets;
+		loadIcons();
 		initializeSwingComponents();
 		refreshTable();
 	}
@@ -56,6 +60,12 @@ public class DietsPanel extends JPanel {
 		List<Diet> dietsList = new ArrayList<Diet>(currentUser.getDiets());
 		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);
+	}
+
+	private void loadIcons() {
+		openButtonIcon = new ImageIcon("images\\open_icon.png");
+		showMealsButtonIcon = new ImageIcon("images\\generate_diet_button.png");
+		refreshButtonIcon = new ImageIcon("images\\refresh_icon.png");
 	}
 
 	private void initializeSwingComponents() {
@@ -84,8 +94,7 @@ public class DietsPanel extends JPanel {
 		});
 		btnOpenSelectedDiet.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnOpenSelectedDiet.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnOpenSelectedDiet
-				.setIcon(new ImageIcon(DietsPanel.class.getResource("/javax/swing/plaf/metal/icons/ocean/info.png")));
+		btnOpenSelectedDiet.setIcon(openButtonIcon);
 		toolBar.add(btnOpenSelectedDiet);
 
 		JButton btnShowAllMeals = new JButton("Show All Meals");
@@ -96,11 +105,14 @@ public class DietsPanel extends JPanel {
 		});
 		btnShowAllMeals.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnShowAllMeals.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnShowAllMeals.setIcon(
-				new ImageIcon(DietsPanel.class.getResource("/com/sun/java/swing/plaf/windows/icons/JavaCup32.png")));
+		btnShowAllMeals.setIcon(showMealsButtonIcon);
 		toolBar.add(btnShowAllMeals);
 
 		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnRefresh.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnRefresh.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnRefresh.setIcon(refreshButtonIcon);
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				refreshTable();

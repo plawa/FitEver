@@ -15,6 +15,9 @@ public class Diet extends Entity {
 	private User user;
 	private String name;
 	private Integer dailyRequirement;
+	private Integer breakfastCount;
+	private Integer mainDishCount;
+	private Integer supperCount;
 	private Date validFrom;
 	private Date validTo;
 	private Set<Meal> meals = new HashSet<Meal>(0);
@@ -44,6 +47,30 @@ public class Diet extends Entity {
 
 	public void setDailyRequirement(Integer dailyRequirement) {
 		this.dailyRequirement = dailyRequirement;
+	}
+
+	public Integer getBreakfastCount() {
+		return breakfastCount;
+	}
+
+	public void setBreakfastCount(Integer breakfastCount) {
+		this.breakfastCount = breakfastCount;
+	}
+
+	public Integer getMainDishCount() {
+		return mainDishCount;
+	}
+
+	public void setMainDishCount(Integer mainDishCount) {
+		this.mainDishCount = mainDishCount;
+	}
+
+	public Integer getSupperCount() {
+		return supperCount;
+	}
+
+	public void setSupperCount(Integer supperCount) {
+		this.supperCount = supperCount;
 	}
 
 	public User getUser() {

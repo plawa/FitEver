@@ -185,6 +185,16 @@ public class DietOverviewDialog extends JDialog {
 			}
 		}
 		{
+
+			
+			JLabel lblDd = new JLabel("dd");
+			GridBagConstraints gbc_lblDd = new GridBagConstraints();
+			gbc_lblDd.insets = new Insets(0, 0, 0, 5);
+			gbc_lblDd.gridx = 1;
+			gbc_lblDd.gridy = 7;
+			contentPanel.add(lblDd, gbc_lblDd);
+		}
+		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
