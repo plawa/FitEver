@@ -35,7 +35,7 @@
 			<column name="validTo" length="10" not-null="true" />
 		</property>
 		<set name="meals" table="diet_meal" inverse="false" lazy="false"
-			fetch="select" cascade="save-update">
+			fetch="select">
 			<key>
 				<column name="DietID" not-null="true" />
 			</key>

@@ -38,7 +38,7 @@
 		<property name="fatPercentage" type="int">
 			<column name="fatPercentage" not-null="true" />
 		</property>
-		<set name="diets" table="diet_meal" inverse="false" lazy="true"
+		<set name="diets" table="diet_meal" inverse="true" lazy="true"
 			fetch="select">
 			<key>
 				<column name="MealID" not-null="true" />

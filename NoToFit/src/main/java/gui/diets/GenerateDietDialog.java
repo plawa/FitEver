@@ -38,6 +38,7 @@ public class GenerateDietDialog extends JDialog {
 	private JSpinner spinnerMainDishesCount;
 	private JSpinner spinnerBreakfastMealsCount;
 	private final User user;
+	private int mealsCount;
 
 	public GenerateDietDialog(final User userToGenerateFor) {
 		user = userToGenerateFor;
@@ -46,6 +47,10 @@ public class GenerateDietDialog extends JDialog {
 
 	public DietGenerationPreferences getNewDietPreferences() {
 		return newDietPreferences;
+	}
+
+	public int getMealsCount() {
+		return mealsCount;
 	}
 
 	protected void okButtonPressed() {
@@ -75,9 +80,9 @@ public class GenerateDietDialog extends JDialog {
 	}
 
 	private boolean isMealsCountOK() {
-		int mealCountSum = (int) spinnerBreakfastMealsCount.getValue() + (int) spinnerMainDishesCount.getValue()
+		mealsCount = (int) spinnerBreakfastMealsCount.getValue() + (int) spinnerMainDishesCount.getValue()
 				+ (int) spinnerSupperMealsCount.getValue();
-		return mealCountSum <= MAX_MEALS_COUNT;
+		return mealsCount <= MAX_MEALS_COUNT;
 	}
 
 	private void initializeSwingComponents() {

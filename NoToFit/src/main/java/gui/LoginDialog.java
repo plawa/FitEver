@@ -52,7 +52,6 @@ public class LoginDialog extends JDialog {
 
 	public LoginDialog() {
 		super((Frame) null, true);
-		setAlwaysOnTop(true);
 		setType(Type.POPUP);
 		setResizable(false);
 		initializeFrame();

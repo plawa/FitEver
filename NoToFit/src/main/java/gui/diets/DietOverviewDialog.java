@@ -32,7 +32,6 @@ public class DietOverviewDialog extends JDialog {
 	private static final long serialVersionUID = -6225856914630687435L;
 	private final JPanel contentPanel = new JPanel();
 	private final Diet dietDisplaying;
-	private JTable table;
 	private MealsTableModel tableModel;
 	private JLabel lblNameValue;
 	private JLabel lblCaloriesValue;
@@ -59,14 +58,11 @@ public class DietOverviewDialog extends JDialog {
 	protected void refreshTable() {
 		List<Meal> dietMealsList = new ArrayList<>(dietDisplaying.getMeals());
 		tableModel = new MealsTableModel(dietMealsList);
-		table.setModel(tableModel);
 	}
 
 	private JTabbedPane initializeDietDaysTabbedPane() {
-
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-
-
+		
 		Stack<Meal> breakfasts = new Stack<>();
 		Stack<Meal> mainDishes = new Stack<>();
 		Stack<Meal> suppers = new Stack<>();
@@ -79,7 +75,9 @@ public class DietOverviewDialog extends JDialog {
 				suppers.add(meal);
 		}
 
-		for (int i = 0; i < countDietDays(); i++) {
+		int dietDays = countDietDays();
+		
+		for (int i = 1; i <= dietDays; i++) {
 			List<Meal> dayOfDiet = new ArrayList<>();
 			int b = dietDisplaying.getBreakfastCount();
 			while (b > 0) {
@@ -104,15 +102,16 @@ public class DietOverviewDialog extends JDialog {
 		return tabbedPane;
 	}
 
-	private JScrollPane createDietDayPanel(List<Meal> dietDayMeals) {
+	private JPanel createDietDayPanel(List<Meal> dietDayMeals) {
 		JPanel newPanel = new JPanel();
 		newPanel.setLayout(new BorderLayout());
+		
 		JScrollPane newScrollPane = new JScrollPane();
-		newScrollPane.setViewportView(newPanel);
+		newScrollPane.setViewportView(createDietDayTable(dietDayMeals));
 
-		newScrollPane.add(createDietDayTable(dietDayMeals));
-
-		return newScrollPane;
+		newPanel.add(newScrollPane);
+		
+		return newPanel;
 	}
 
 	private JTable createDietDayTable(List<Meal> dietDayMeals) {
@@ -132,15 +131,15 @@ public class DietOverviewDialog extends JDialog {
 	private void initializeSwingComponents() {
 		setModal(true);
 		setTitle("Diet Overview");
-		setBounds(100, 100, 586, 527);
+		setBounds(100, 100, 675, 368);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
 				Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
@@ -233,32 +232,6 @@ public class DietOverviewDialog extends JDialog {
 		gbc_tabbedPane.gridx = 1;
 		gbc_tabbedPane.gridy = 4;
 		contentPanel.add(tabbed, gbc_tabbedPane);
-		{
-			JLabel lblAssignedMealsTableDescription = new JLabel("All Assigned Meals");
-			lblAssignedMealsTableDescription.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			GridBagConstraints gbc_lblAssignedMealsTableDescription = new GridBagConstraints();
-			gbc_lblAssignedMealsTableDescription.gridwidth = 5;
-			gbc_lblAssignedMealsTableDescription.insets = new Insets(0, 0, 5, 5);
-			gbc_lblAssignedMealsTableDescription.gridx = 1;
-			gbc_lblAssignedMealsTableDescription.gridy = 6;
-			contentPanel.add(lblAssignedMealsTableDescription, gbc_lblAssignedMealsTableDescription);
-		}
-		{
-			JScrollPane scrollPane = new JScrollPane();
-			GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-			gbc_scrollPane.gridheight = 2;
-			gbc_scrollPane.gridwidth = 5;
-			gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
-			gbc_scrollPane.fill = GridBagConstraints.BOTH;
-			gbc_scrollPane.gridx = 1;
-			gbc_scrollPane.gridy = 7;
-			contentPanel.add(scrollPane, gbc_scrollPane);
-			{
-				table = new JTable();
-				scrollPane.setViewportView(table);
-				table.setFillsViewportHeight(true);
-			}
-		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

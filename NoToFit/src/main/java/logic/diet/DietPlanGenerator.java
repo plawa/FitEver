@@ -17,9 +17,10 @@ public class DietPlanGenerator {
 		Set<Meal> dietMeals = new HashSet<>();
 		DietDayConfiguration dietDayConf = preferences.getDayMealsPref();
 		
+		MealChooser mealChooser = new MealChooser();
 		int dietDays = preferences.getDietPeriodDays();
 		for (int i = 0; i < dietDays; i++) {
-			Set<Meal> dietDay = MealChooser.chooseDayMealSet(dietDayConf);
+			Set<Meal> dietDay = mealChooser.chooseDayMealSet(dietDayConf);
 			dietMeals.addAll(dietDay);
 		}
 		generatedDiet.setMeals(dietMeals);

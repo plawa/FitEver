@@ -14,6 +14,7 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -30,6 +31,7 @@ import logic.entitytools.UserTools;
 
 public class UserPanel extends JPanel {
 
+	private static final String MSG_GENERATION_ERROR = "Diet Generation Error! Database consists of too less meals to generate desired diet. Try using shorter period.";
 	private static final long serialVersionUID = -8424451595957894544L;
 	private JLabel lblValueNameAndSurname;
 	private JLabel lblValueStartWeight;
@@ -80,11 +82,18 @@ public class UserPanel extends JPanel {
 		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog(userDisplaying);
 		dietPropertiesDialog.setLocationRelativeTo(this);
 		dietPropertiesDialog.setVisible(true);
+		
 		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();
 		if (dietPreferences == null)
 			return;
+
+		int expectedMealsCount = dietPropertiesDialog.getMealsCount() * dietPreferences.getDietPeriodDays();
 		dietPreferences.setUser(userDisplaying);
 		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
+		if (expectedMealsCount != generatedDiet.getMeals().size()){
+			JOptionPane.showMessageDialog(this, MSG_GENERATION_ERROR);
+			return;
+		}
 		userDisplaying.getDiets().add(generatedDiet);
 		DatabaseController.saveEntityToDatabase(generatedDiet);
 	}
