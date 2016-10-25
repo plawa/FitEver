@@ -19,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import database.entities.Diet;
@@ -32,7 +31,6 @@ public class DietOverviewDialog extends JDialog {
 	private static final long serialVersionUID = -6225856914630687435L;
 	private final JPanel contentPanel = new JPanel();
 	private final Diet dietDisplaying;
-	private MealsTableModel tableModel;
 	private JLabel lblNameValue;
 	private JLabel lblCaloriesValue;
 	private JLabel lblValidFromValue;
@@ -57,7 +55,7 @@ public class DietOverviewDialog extends JDialog {
 
 	protected void refreshTable() {
 		List<Meal> dietMealsList = new ArrayList<>(dietDisplaying.getMeals());
-		tableModel = new MealsTableModel(dietMealsList);
+		new MealsTableModel(dietMealsList);
 	}
 
 	private JTabbedPane initializeDietDaysTabbedPane() {
@@ -114,11 +112,20 @@ public class DietOverviewDialog extends JDialog {
 		return newPanel;
 	}
 
-	private JTable createDietDayTable(List<Meal> dietDayMeals) {
-		JTable dietDayTable = new JTable();
+	private DietDayTable createDietDayTable(List<Meal> dietDayMeals) {
+		/*JTable dietDayTable = new JTable();
 		dietDayTable.setFillsViewportHeight(true);
-		dietDayTable.setModel(new MealsTableModel(dietDayMeals));
-		return dietDayTable;
+		MealsTableModel mealModel = new MealsTableModel(dietDayMeals)
+		dietDayTable.setModel(mealModel);
+		dietDayTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if (me.getClickCount() == 2)
+					mealModel.getMealAt(dietDayTable.getSelectedRow());
+			}
+		});*/
+		
+		return new DietDayTable(dietDayMeals);
 	}
 
 	private int countDietDays() {

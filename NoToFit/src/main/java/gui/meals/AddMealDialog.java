@@ -33,6 +33,7 @@ public class AddMealDialog extends JDialog {
 	protected JSpinner spinnerProteinPercentage;
 	protected JSpinner spinnerCarbohydratesPercentage;
 	protected JComboBox<String> comboBoxMealType;
+	protected JButton okButton;
 
 	public static void main(String[] args) {
 		try {
@@ -198,7 +199,7 @@ public class AddMealDialog extends JDialog {
 		gbc_horizontalStrutLeft.gridy = 9;
 		getContentPane().add(horizontalStrutLeft, gbc_horizontalStrutLeft);
 		{
-			JButton okButton = new JButton("Save");
+			okButton = new JButton("Save");
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					proceedButtonPressed();

@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -46,10 +49,14 @@ public class DietsPanel extends JPanel {
 	}
 
 	protected void openSelectedDietPlan() {
-		Diet selectedDiet = tableModel.getDietAt(table.getSelectedRow());
-		DietOverviewDialog dietDetailsDlg = new DietOverviewDialog(selectedDiet);
-		dietDetailsDlg.setLocationRelativeTo(this);
-		dietDetailsDlg.setVisible(true);
+		if (table.getSelectedRow() != -1) {
+			Diet selectedDiet = tableModel.getDietAt(table.getSelectedRow());
+			DietOverviewDialog dietDetailsDlg = new DietOverviewDialog(selectedDiet);
+			dietDetailsDlg.setLocationRelativeTo(this);
+			dietDetailsDlg.setVisible(true);
+		} else {
+			JOptionPane.showMessageDialog(this, "No row selected!", "Error", 0);
+		}
 	}
 
 	protected void showAllMealsButtonPressed() {
@@ -65,9 +72,9 @@ public class DietsPanel extends JPanel {
 	}
 
 	private void loadIcons() {
-		openButtonIcon = new ImageIcon("images\\open_icon.png");
-		showMealsButtonIcon = new ImageIcon("images\\generate_diet_button.png");
-		refreshButtonIcon = new ImageIcon("images\\refresh_icon.png");
+		openButtonIcon = new ImageIcon(getClass().getResource("/images/open_icon.png"));
+		showMealsButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
+		refreshButtonIcon = new ImageIcon(getClass().getResource("/images/refresh_icon.png"));
 	}
 
 	private void initializeSwingComponents() {
@@ -153,6 +160,13 @@ public class DietsPanel extends JPanel {
 		add(scrollPane, gbc_scrollPane);
 
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if (me.getClickCount() == 2)
+					openSelectedDietPlan();
+			}
+		});
 		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
 

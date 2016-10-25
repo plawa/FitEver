@@ -8,12 +8,13 @@
 		<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
 		<property name="hibernate.connection.characterEncoding">utf8</property>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.password">root</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/notofit</property>
-		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+		<property name="hibernate.connection.password">aaaa</property>
+		<property name="hibernate.connection.url">jdbc:mysql://136.243.64.71:3306/stuntman_notofit</property>
+		<property name="hibernate.connection.username">stuntman_a</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.search.autoregister_listeners">true</property>
 		<property name="hibernate.show_sql">true</property>
+		<!-- property name="hibernate.hbm2ddl.auto">update </property> -->
 		<property name="hibernate.validator.apply_to_ddl">false</property>
 		<mapping resource="database/entities/User.hbm.xml" />
 		<mapping resource="database/entities/Diet.hbm.xml" />

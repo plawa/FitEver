@@ -144,12 +144,12 @@ public class UserPanel extends JPanel {
 	}
 
 	private void loadIcons() {
-		editUserButtonIcon = new ImageIcon("images\\edit_user_button.png");
-		updateWeightButtonIcon = new ImageIcon("images\\update_weight_button.png");
-		generateDietButtonIcon = new ImageIcon("images\\generate_diet_button.png");
-		generateWorkoutButtonIcon = new ImageIcon("images\\generate_workout_button.png");
-		logoutButtonIcon = new ImageIcon("images\\logout_button.png");
-		exitButtonIcon = new ImageIcon("images\\exit_button.png");
+		editUserButtonIcon = new ImageIcon(getClass().getResource("/images/edit_user_button.png"));
+		updateWeightButtonIcon = new ImageIcon(getClass().getResource("/images/update_weight_button.png"));
+		generateDietButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
+		generateWorkoutButtonIcon = new ImageIcon(getClass().getResource("/images/generate_workout_button.png"));
+		logoutButtonIcon = new ImageIcon(getClass().getResource("/images/logout_button.png"));
+		exitButtonIcon = new ImageIcon(getClass().getResource("/images/exit_button.png"));
 	}
 
 	private void initializeSwingComponents() {

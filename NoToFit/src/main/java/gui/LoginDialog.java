@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -38,7 +37,7 @@ public class LoginDialog extends JDialog {
 
 	private static final long serialVersionUID = 8472433868284888754L;
 	private static final String LBL_MSG_IMAGE_NOT_FOUND = "Error! Image not found.";
-	private static final String HEADER_IMAGE_PATH = "images\\login_image.png";
+	private static final String HEADER_IMAGE_PATH = "/images/login_image.png";
 	private static final String MSG_LOGIN_DENIED = "Username or password incorrect.";
 	private static final String MSG_DATABASE_ERROR = "Unable to reach database.";
 
@@ -202,7 +201,7 @@ public class LoginDialog extends JDialog {
 
 	private JLabel loadHeaderImageLabel() {
 		try {
-			BufferedImage image = ImageIO.read(new File(HEADER_IMAGE_PATH));
+			BufferedImage image = ImageIO.read(getClass().getResource(HEADER_IMAGE_PATH));
 			return new JLabel(new ImageIcon(image));
 		} catch (IOException e) {
 			e.printStackTrace();

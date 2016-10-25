@@ -3,7 +3,7 @@
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2016-10-12 20:49:43 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping default-lazy="false">
- <class catalog="notofit" name="database.entities.Shadow" table="shadow">
+ <class name="database.entities.Shadow" table="shadow">
   <id name="userId" type="int">
    <column name="UserID" unique="true"/>
    <generator class="foreign">

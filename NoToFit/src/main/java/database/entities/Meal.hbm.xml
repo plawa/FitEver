@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2016-10-12 20:49:43 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
-	<class name="database.entities.Meal" table="meal" catalog="notofit"
+	<class name="database.entities.Meal" table="meal"
 		optimistic-lock="version">
 		<id name="id" type="java.lang.Integer">
 			<column name="ID" />

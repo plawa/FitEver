@@ -43,9 +43,9 @@ public class MainFrame extends JFrame {
 	}
 
 	private void loadTabbedPaneIcons() {
-		userIcon = new ImageIcon("images\\user_icon.png");
-		mealIcon = new ImageIcon("images\\meal_icon.png");
-		exerciseIcon = new ImageIcon("images\\exercise_icon.png");
+		userIcon = new ImageIcon(getClass().getResource("/images/user_icon.png"));
+		mealIcon = new ImageIcon(getClass().getResource("/images/meal_icon.png"));
+		exerciseIcon = new ImageIcon(getClass().getResource("/images/exercise_icon.png"));
 	}
 
 	private void buildTabbedPane() {
