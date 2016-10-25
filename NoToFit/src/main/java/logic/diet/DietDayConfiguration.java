@@ -21,6 +21,10 @@ public class DietDayConfiguration {
 		supperCaloriesWeight = supperMealsCount / allMealsCount;
 	}
 
+	public int getDayMealsCount(){
+		return breakfastMealsCount + mainDishMealsCount + supperMealsCount;
+	}
+	
 	public int getDailyCaloriesReq() {
 		return dailyCaloriesReq;
 	}

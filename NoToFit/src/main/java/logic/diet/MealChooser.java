@@ -15,10 +15,15 @@ public class MealChooser {
 	private List<Meal> breakfastsLibrary;
 	private List<Meal> mainMealsLibrary;
 	private List<Meal> suppersLibrary;
-	private final float caloriesDifferenceToleranceFactor = 0.3f;
+	private final float caloriesDifferenceToleranceFactor;
 
 
 	public MealChooser() {
+		this(0.1f);
+	}
+	
+	public MealChooser(final float caloriesDifferenceToleranceFactor){
+		this.caloriesDifferenceToleranceFactor = caloriesDifferenceToleranceFactor;
 		initializeCleanLibraries();
 	}
 	

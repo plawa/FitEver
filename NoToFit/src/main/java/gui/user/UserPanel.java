@@ -14,7 +14,6 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -31,7 +30,6 @@ import logic.entitytools.UserTools;
 
 public class UserPanel extends JPanel {
 
-	private static final String MSG_GENERATION_ERROR = "Diet Generation Error! Database consists of too less meals to generate desired diet. Try using shorter period.";
 	private static final long serialVersionUID = -8424451595957894544L;
 	private JLabel lblValueNameAndSurname;
 	private JLabel lblValueStartWeight;
@@ -79,26 +77,25 @@ public class UserPanel extends JPanel {
 	}
 
 	protected void generateDietPlanButtonPressed() {
+		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
+		if (dietPreferences == null)
+			return;
+		dietPreferences.setUser(userDisplaying);
+		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
+		userDisplaying.getDiets().add(generatedDiet);
+		DatabaseController.saveEntityToDatabase(generatedDiet);
+	}
+
+	private DietGenerationPreferences extractDietPreferencesFromInputDialog() {
 		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog(userDisplaying);
 		dietPropertiesDialog.setLocationRelativeTo(this);
 		dietPropertiesDialog.setVisible(true);
 		
 		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();
-		if (dietPreferences == null)
-			return;
-
-		int expectedMealsCount = dietPropertiesDialog.getMealsCount() * dietPreferences.getDietPeriodDays();
-		dietPreferences.setUser(userDisplaying);
-		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
-		if (expectedMealsCount != generatedDiet.getMeals().size()){
-			JOptionPane.showMessageDialog(this, MSG_GENERATION_ERROR);
-			return;
-		}
-		userDisplaying.getDiets().add(generatedDiet);
-		DatabaseController.saveEntityToDatabase(generatedDiet);
+		return dietPreferences;
 	}
 
-	protected void editUser() {
+	protected void editUserToolbarButtonPressed() {
 		MaintainUserDialog editUserDialog = new MaintainUserDialog(userDisplaying);
 		editUserDialog.setLocationRelativeTo(this);
 		editUserDialog.setVisible(true);
@@ -241,7 +238,7 @@ public class UserPanel extends JPanel {
 		toolBar.add(btnExit);
 		btnEditUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				editUser();
+				editUserToolbarButtonPressed();
 
 			}
 		});
