@@ -26,24 +26,15 @@ import database.entities.Meal;
 
 public class AllMealsDialog extends JDialog {
 
+	protected static final String DLG_TITLE = "Meals Library";
 	private static final long serialVersionUID = 8721491617478602101L;
 	private final JPanel contentPanel = new JPanel();
-	private JTable table;
-	private MealsTableModel tableModel;
+	protected JTable table;
+	protected MealsTableModel tableModel;
 
-	public static void main(String[] args) {
-		try {
-			AllMealsDialog dialog = new AllMealsDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public AllMealsDialog() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setTitle("Meals Library");
 		setBounds(100, 100, 660, 478);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -70,7 +61,7 @@ public class AllMealsDialog extends JDialog {
 				JButton btnAdd = new JButton("Add");
 				btnAdd.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						addMeal();
+						addButtonPressed();
 					}
 				});
 				btnAdd.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -83,7 +74,7 @@ public class AllMealsDialog extends JDialog {
 				JButton btnEdit = new JButton("Edit");
 				btnEdit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						editMeal();
+						editButtonPressed();
 					}
 				});
 				btnEdit.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -96,7 +87,7 @@ public class AllMealsDialog extends JDialog {
 				JButton btnDelete = new JButton("Delete");
 				btnDelete.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						deleteMeal();
+						deleteButtonPressed();
 					}
 				});
 				btnDelete.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -120,7 +111,7 @@ public class AllMealsDialog extends JDialog {
 					@Override
 					public void mouseClicked(MouseEvent me) {
 						if(me.getClickCount() == 2)
-							editMeal();
+							editButtonPressed();
 					}
 				});
 				refreshTable();
@@ -140,10 +131,11 @@ public class AllMealsDialog extends JDialog {
 				}
 			});
 		}
+		setTitle(this.DLG_TITLE);
 		setVisible(true);
 	}
 
-	protected void deleteMeal() {
+	protected void deleteButtonPressed() {
 		int rowIndex = table.getSelectedRow();
 		if (rowIndex != -1) {
 			int confirmationInput = JOptionPane.showConfirmDialog(contentPanel, "Are you sure to delete?", "Confirm",
@@ -154,11 +146,11 @@ public class AllMealsDialog extends JDialog {
 				refreshTable();
 			}
 		} else {
-			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error", 0);
+			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error!", 0);
 		}
 	}
 
-	protected void editMeal() {
+	protected void editButtonPressed() {
 		int rowIndex = table.getSelectedRow();
 		if (rowIndex != -1) {
 			Meal mealToEdit = tableModel.getMealAt(rowIndex);
@@ -167,11 +159,11 @@ public class AllMealsDialog extends JDialog {
 			editMealDlg.setVisible(true);
 			refreshTable();
 		} else {
-			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error", 0);
+			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error!", 0);
 		}
 	}
 
-	protected void addMeal() {
+	protected void addButtonPressed() {
 		AddMealDialog addMealDlg = new AddMealDialog();
 		addMealDlg.setLocationRelativeTo(this);
 		addMealDlg.setVisible(true);

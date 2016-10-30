@@ -19,7 +19,7 @@
                 <comment>One char: 'm' stands for mass gain 'r' stands for reduction 'p' stands for power &#160; &#160;</comment>
             </column>
         </property>
-        <property name="requiresEquipment" type="boolean">
+        <property name="equipmentRequired" type="boolean">
             <column name="requiresEquipment" not-null="true" />
         </property>
         <property name="difficultyLevel" type="java.lang.Integer">

@@ -46,7 +46,7 @@ public class WorkoutsPanel extends JPanel {
 	}
 	
 	protected void generateWorkoutPlanButtonPressed() {
-		
+		//TODO
 	}
 
 	protected void refreshTable() {
@@ -57,11 +57,14 @@ public class WorkoutsPanel extends JPanel {
 	}
 
 	protected void showAllExercisesButtonPressed() {
-		new AllExercisesDialog().setVisible(true);
+		new AllExercisesDialog().setLocationRelativeTo(this);
 	}
 
 	protected void openSelectedWorkoutPlan() {
-		Workout selectedWorkout = tableModel.getWorkoutAt(table.getSelectedRow());
+		int selectedRowNumber = table.getSelectedRow();
+		if (selectedRowNumber == -1)
+			return;
+		Workout selectedWorkout = tableModel.getWorkoutAt(selectedRowNumber);
 		//TODO
 	}
 

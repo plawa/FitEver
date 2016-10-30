@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
@@ -51,17 +50,11 @@ public class MainFrame extends JFrame {
 	private void buildTabbedPane() {
 		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-		UserPanel usersPanel = new UserPanel(userLogged);
-		usersPanel.setToolTipText("Overview Panel");
-		GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 42, 0 };
-		tabbedPane.addTab("", userIcon, usersPanel);
-		DietsPanel dietsPanel = new DietsPanel(userLogged);
-		dietsPanel.setToolTipText("Diet Panel");
-		tabbedPane.addTab("", mealIcon, dietsPanel);
-		WorkoutsPanel exercisesPanel = new WorkoutsPanel();
-		exercisesPanel.setToolTipText("Workout Panel");
-		tabbedPane.addTab("", exerciseIcon, exercisesPanel);
+	//	GridBagLayout gridBagLayout = (GridBagLayout) usersPanel.getLayout();
+		//gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 42, 0 };
+		tabbedPane.addTab("", userIcon, new UserPanel(userLogged));
+		tabbedPane.addTab("", mealIcon, new DietsPanel(userLogged));
+		tabbedPane.addTab("", exerciseIcon, new WorkoutsPanel(userLogged));
 		getContentPane().add(tabbedPane);
 	}
 }

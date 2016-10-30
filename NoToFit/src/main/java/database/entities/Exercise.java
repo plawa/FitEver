@@ -9,31 +9,16 @@ import java.util.Set;
  */
 public class Exercise extends Entity {
 
+	private static final long serialVersionUID = 4990654152232158468L;
 	private Integer id;
 	private String name;
 	private String description;
 	private char objective;
-	private boolean requiresEquipment;
+	private boolean equipmentRequired;
 	private Integer difficultyLevel;
 	private Set<Workoutday> workoutdays = new HashSet<Workoutday>(0);
 
 	public Exercise() {
-	}
-
-	public Exercise(String name, char objective, boolean requiresEquipment) {
-		this.name = name;
-		this.objective = objective;
-		this.requiresEquipment = requiresEquipment;
-	}
-
-	public Exercise(String name, String description, char objective, boolean requiresEquipment, Integer difficultyLevel,
-			Set<Workoutday> workoutdays) {
-		this.name = name;
-		this.description = description;
-		this.objective = objective;
-		this.requiresEquipment = requiresEquipment;
-		this.difficultyLevel = difficultyLevel;
-		this.workoutdays = workoutdays;
 	}
 
 	public Integer getId() {
@@ -68,12 +53,12 @@ public class Exercise extends Entity {
 		this.objective = objective;
 	}
 
-	public boolean isRequiresEquipment() {
-		return this.requiresEquipment;
+	public boolean isEquipmentRequired() {
+		return this.equipmentRequired;
 	}
 
-	public void setRequiresEquipment(boolean requiresEquipment) {
-		this.requiresEquipment = requiresEquipment;
+	public void setEquipmentRequired(boolean requiresEquipment) {
+		this.equipmentRequired = requiresEquipment;
 	}
 
 	public Integer getDifficultyLevel() {

@@ -11,6 +11,11 @@ public class MealsTableModel extends javax.swing.table.AbstractTableModel {
 	private List<Meal> meals;
 	final String[] columnNames = { "Name", "Meal Type", "Grammage (g)", "Carbo (%)", "Protein (%)", "Fat (%)" };
 
+	public MealsTableModel(List<Meal> meals) {
+		super();
+		this.meals = meals;
+	}
+
 	public String getColumnName(int columnIndex) {
 		return columnNames[columnIndex];
 	}
@@ -21,11 +26,6 @@ public class MealsTableModel extends javax.swing.table.AbstractTableModel {
 
 	public int getRowCount() {
 		return meals.size();
-	}
-
-	public MealsTableModel(List<Meal> meals) {
-		super();
-		this.meals = meals;
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
@@ -70,5 +70,4 @@ public class MealsTableModel extends javax.swing.table.AbstractTableModel {
 		return meals.get(rowIndex);
 	}
 
-	
 }
