@@ -9,8 +9,8 @@ import javax.swing.JTabbedPane;
 
 import database.entities.User;
 import gui.diets.DietsPanel;
-import gui.exercises.ExercisesPanel;
 import gui.user.UserPanel;
+import gui.workouts.WorkoutsPanel;
 
 public class MainFrame extends JFrame {
 
@@ -59,7 +59,7 @@ public class MainFrame extends JFrame {
 		DietsPanel dietsPanel = new DietsPanel(userLogged);
 		dietsPanel.setToolTipText("Diet Panel");
 		tabbedPane.addTab("", mealIcon, dietsPanel);
-		ExercisesPanel exercisesPanel = new ExercisesPanel();
+		WorkoutsPanel exercisesPanel = new WorkoutsPanel();
 		exercisesPanel.setToolTipText("Workout Panel");
 		tabbedPane.addTab("", exerciseIcon, exercisesPanel);
 		getContentPane().add(tabbedPane);

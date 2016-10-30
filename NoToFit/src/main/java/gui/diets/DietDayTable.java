@@ -20,8 +20,8 @@ public class DietDayTable extends JTable {
 		setFillsViewportHeight(true);
 		model = new MealsTableModel(dayMeals);
 		setModel(model);
+		getColumnModel().getColumn(0).setPreferredWidth(220);
 		addCustomListener();
-
 	}
 
 	private void addCustomListener() {

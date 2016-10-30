@@ -11,11 +11,10 @@ public class MainApplication {
 	public static void main(String[] args) throws ClassNotFoundException {
 		
 		Class.forName(DATABASE_CONTROLLER_BIN_PATH); //force controller class initialization
-		// while (true) {
-	
+
+		
 		User loggedUser = new LoginDialog().getAuthorizedUser();
 		new MainFrame(loggedUser);
 		
-		// }
 	}
 }

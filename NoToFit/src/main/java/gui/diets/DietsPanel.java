@@ -26,6 +26,8 @@ import database.controller.DatabaseController;
 import database.entities.Diet;
 import database.entities.User;
 import gui.meals.AllMealsDialog;
+import logic.diet.DietGenerationPreferences;
+import logic.diet.DietPlanGenerator;
 
 public class DietsPanel extends JPanel {
 
@@ -36,6 +38,7 @@ public class DietsPanel extends JPanel {
 	private ImageIcon openButtonIcon;
 	private ImageIcon showMealsButtonIcon;
 	private ImageIcon refreshButtonIcon;
+	private ImageIcon generateDietButtonIcon;
 
 	public DietsPanel() {
 		this(new User());
@@ -47,7 +50,28 @@ public class DietsPanel extends JPanel {
 		initializeSwingComponents();
 		refreshTable();
 	}
+	
+	protected void generateDietPlanButtonPressed() {
+		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
+		if (dietPreferences == null)
+			return;
+		dietPreferences.setUser(currentUser);
+		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
+		currentUser.getDiets().add(generatedDiet);
+		DatabaseController.saveEntityToDatabase(generatedDiet);
+		refreshTable();
+	}	
 
+
+	private DietGenerationPreferences extractDietPreferencesFromInputDialog() {
+		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog(currentUser);
+		dietPropertiesDialog.setLocationRelativeTo(this);
+		dietPropertiesDialog.setVisible(true);
+		
+		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();
+		return dietPreferences;
+	}
+	
 	protected void openSelectedDietPlan() {
 		if (table.getSelectedRow() != -1) {
 			Diet selectedDiet = tableModel.getDietAt(table.getSelectedRow());
@@ -65,18 +89,20 @@ public class DietsPanel extends JPanel {
 	}
 
 	protected void refreshTable() {
-		DatabaseController.refreshObject(currentUser);
+		DatabaseController.refreshObject(currentUser);	//IMPROVE
 		List<Diet> dietsList = new ArrayList<Diet>(currentUser.getDiets());
 		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);
+		table.getColumnModel().getColumn(0).setPreferredWidth(200);
 	}
 
 	private void loadIcons() {
 		openButtonIcon = new ImageIcon(getClass().getResource("/images/open_icon.png"));
 		showMealsButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
 		refreshButtonIcon = new ImageIcon(getClass().getResource("/images/refresh_icon.png"));
+		generateDietButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
 	}
-
+	
 	private void initializeSwingComponents() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 430, 0, 0 };
@@ -128,6 +154,18 @@ public class DietsPanel extends JPanel {
 			}
 		});
 		toolBar.add(btnRefresh);
+		
+		
+		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
+		btnGenerateDietPlan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generateDietPlanButtonPressed();
+			}
+		});
+		btnGenerateDietPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnGenerateDietPlan.setIcon(generateDietButtonIcon);
+		toolBar.add(btnGenerateDietPlan);
 
 		Component leftStrut = Box.createHorizontalStrut(20);
 		GridBagConstraints gbc_leftStrut = new GridBagConstraints();

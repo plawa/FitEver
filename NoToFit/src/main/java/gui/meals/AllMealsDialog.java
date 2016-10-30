@@ -181,6 +181,7 @@ public class AllMealsDialog extends JDialog {
 	protected void refreshTable() {
 		tableModel = new MealsTableModel(DatabaseController.getAll(Meal.class));
 		table.setModel(tableModel);
+		table.getColumnModel().getColumn(0).setPreferredWidth(250);
 	}
 
 	protected void tearDown() {

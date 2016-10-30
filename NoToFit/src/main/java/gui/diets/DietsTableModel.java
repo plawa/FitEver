@@ -10,7 +10,7 @@ class DietsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 7436925452072118635L;
 	private List<Diet> diets;
-	final private String[] columnNames = { "Diet Name", "kcals/day", "Valid From", "Valid To" };
+	final private String[] columnNames = { "Diet Name", "kCals/day", "Valid From", "Valid To" };
 
 	public DietsTableModel(List<Diet> diets) {
 		super();
@@ -47,7 +47,7 @@ class DietsTableModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex == 1)
+		if (columnIndex >= 1)
 			return Integer.class;
 		return String.class; 
 	}

@@ -20,12 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import database.controller.DatabaseController;
-import database.entities.Diet;
 import database.entities.User;
 import gui.common.Translator;
-import gui.diets.GenerateDietDialog;
-import logic.diet.DietGenerationPreferences;
-import logic.diet.DietPlanGenerator;
 import logic.entitytools.UserTools;
 
 public class UserPanel extends JPanel {
@@ -44,7 +40,6 @@ public class UserPanel extends JPanel {
 	private JLabel lblValueActualWeight;
 	private ImageIcon editUserButtonIcon;
 	private ImageIcon updateWeightButtonIcon;
-	private ImageIcon generateDietButtonIcon;
 	private ImageIcon generateWorkoutButtonIcon;
 	private ImageIcon logoutButtonIcon;
 	private ImageIcon exitButtonIcon;
@@ -76,24 +71,8 @@ public class UserPanel extends JPanel {
 
 	}
 
-	protected void generateDietPlanButtonPressed() {
-		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
-		if (dietPreferences == null)
-			return;
-		dietPreferences.setUser(userDisplaying);
-		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
-		userDisplaying.getDiets().add(generatedDiet);
-		DatabaseController.saveEntityToDatabase(generatedDiet);
-	}
 
-	private DietGenerationPreferences extractDietPreferencesFromInputDialog() {
-		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog(userDisplaying);
-		dietPropertiesDialog.setLocationRelativeTo(this);
-		dietPropertiesDialog.setVisible(true);
-		
-		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();
-		return dietPreferences;
-	}
+
 
 	protected void editUserToolbarButtonPressed() {
 		MaintainUserDialog editUserDialog = new MaintainUserDialog(userDisplaying);
@@ -146,7 +125,6 @@ public class UserPanel extends JPanel {
 	private void loadIcons() {
 		editUserButtonIcon = new ImageIcon(getClass().getResource("/images/edit_user_button.png"));
 		updateWeightButtonIcon = new ImageIcon(getClass().getResource("/images/update_weight_button.png"));
-		generateDietButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
 		generateWorkoutButtonIcon = new ImageIcon(getClass().getResource("/images/generate_workout_button.png"));
 		logoutButtonIcon = new ImageIcon(getClass().getResource("/images/logout_button.png"));
 		exitButtonIcon = new ImageIcon(getClass().getResource("/images/exit_button.png"));
@@ -190,16 +168,7 @@ public class UserPanel extends JPanel {
 		btnUpdateWeight.setIcon(updateWeightButtonIcon);
 		toolBar.add(btnUpdateWeight);
 
-		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
-		btnGenerateDietPlan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				generateDietPlanButtonPressed();
-			}
-		});
-		btnGenerateDietPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnGenerateDietPlan.setIcon(generateDietButtonIcon);
-		toolBar.add(btnGenerateDietPlan);
+
 
 		JButton btnGenerateWorkoutPlan = new JButton("Generate Workout Plan");
 		btnGenerateWorkoutPlan.addActionListener(new ActionListener() {

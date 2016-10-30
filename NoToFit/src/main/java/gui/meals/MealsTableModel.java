@@ -9,7 +9,7 @@ public class MealsTableModel extends javax.swing.table.AbstractTableModel {
 
 	private static final long serialVersionUID = 7470997421970268078L;
 	private List<Meal> meals;
-	final String[] columnNames = { "Name", "Meal Type", "Grammage (g)", "Carbohydrates (%)", "Protein (%)", "Fat (%)" };
+	final String[] columnNames = { "Name", "Meal Type", "Grammage (g)", "Carbo (%)", "Protein (%)", "Fat (%)" };
 
 	public String getColumnName(int columnIndex) {
 		return columnNames[columnIndex];
@@ -70,4 +70,5 @@ public class MealsTableModel extends javax.swing.table.AbstractTableModel {
 		return meals.get(rowIndex);
 	}
 
+	
 }
