@@ -27,7 +27,7 @@
                 <comment>Scale from 1 (easy) to 3 (hard).</comment>
             </column>
         </property>
-        <set name="workoutdays" table="workoutday_exercise" inverse="false" lazy="true" fetch="select">
+        <set name="workoutdays" table="workoutday_exercise" inverse="false" lazy="true" fetch="select" cascade="all">
             <key>
                 <column name="ExerciseID" not-null="true" />
             </key>

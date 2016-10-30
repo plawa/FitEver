@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import database.entities.Diet;
+import gui.common.GuiTools;
 
 class DietsTableModel extends AbstractTableModel {
 
@@ -37,9 +38,9 @@ class DietsTableModel extends AbstractTableModel {
 		case 1:
 			return diet.getDailyRequirement();
 		case 2:
-			return diet.getValidFrom().toString();
+			return GuiTools.parseDateToString(diet.getValidFrom());
 		case 3:
-			return diet.getValidTo().toString();
+			return GuiTools.parseDateToString(diet.getValidTo());
 		default:
 			return "Error";
 		}

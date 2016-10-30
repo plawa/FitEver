@@ -89,7 +89,6 @@ public class DietsPanel extends JPanel {
 	}
 
 	protected void refreshTable() {
-		DatabaseController.refreshObject(currentUser);	//IMPROVE
 		List<Diet> dietsList = new ArrayList<Diet>(currentUser.getDiets());
 		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);

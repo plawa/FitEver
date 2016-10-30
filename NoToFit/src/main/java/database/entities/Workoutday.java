@@ -4,7 +4,7 @@ package database.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Workoutday implements java.io.Serializable {
+public class Workoutday extends Entity {
 
 	private static final long serialVersionUID = 1275169139490146634L;
 	private Integer id;
@@ -12,6 +12,9 @@ public class Workoutday implements java.io.Serializable {
 	private Set<Exercise> exercises = new HashSet<Exercise>(0);
 
 
+	public Workoutday() {
+	}
+	
 	public Workoutday(Workout workout) {
 		this.workout = workout;
 	}

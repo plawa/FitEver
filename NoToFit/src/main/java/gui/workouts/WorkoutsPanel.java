@@ -19,7 +19,6 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
-import database.controller.DatabaseController;
 import database.entities.User;
 import database.entities.Workout;
 
@@ -47,32 +46,30 @@ public class WorkoutsPanel extends JPanel {
 	}
 	
 	protected void generateWorkoutPlanButtonPressed() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	protected void refreshTable() {
-		DatabaseController.refreshObject(currentUser);
 		List<Workout> workouts = new ArrayList<>(currentUser.getWorkouts());
 		tableModel = new WorkoutsTableModel(workouts);
 		table.setModel(tableModel);
-		table.getColumnModel().getColumn(0).setPreferredWidth(220);
+		table.getColumnModel().getColumn(0).setPreferredWidth(200);
 	}
 
 	protected void showAllExercisesButtonPressed() {
-		// TODO Auto-generated method stub
-		
+		new AllExercisesDialog().setVisible(true);
 	}
 
 	protected void openSelectedWorkoutPlan() {
-		// TODO Auto-generated method stub
-		
+		Workout selectedWorkout = tableModel.getWorkoutAt(table.getSelectedRow());
+		//TODO
 	}
 
 	private void initializeSwingComponents() {
 		initializeLayout();
 		loadIcons();
 		initializeToolbar();
+		refreshTable();
 	}
 
 	private void initializeLayout() {
@@ -82,6 +79,39 @@ public class WorkoutsPanel extends JPanel {
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
+		
+		Component leftStrut = Box.createHorizontalStrut(20);
+		GridBagConstraints gbc_leftStrut = new GridBagConstraints();
+		gbc_leftStrut.insets = new Insets(0, 0, 5, 5);
+		gbc_leftStrut.gridx = 0;
+		gbc_leftStrut.gridy = 1;
+		add(leftStrut, gbc_leftStrut);
+		
+		Component bottomStrut = Box.createVerticalStrut(20);
+		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
+		gbc_bottomStrut.insets = new Insets(0, 0, 0, 5);
+		gbc_bottomStrut.gridx = 1;
+		gbc_bottomStrut.gridy = 3;
+		add(bottomStrut, gbc_bottomStrut);
+		
+		JLabel lblYourWorkoutPlans = new JLabel("Your Workout Plans");
+		GridBagConstraints gbc_lblYourWorkoutPlans = new GridBagConstraints();
+		gbc_lblYourWorkoutPlans.insets = new Insets(0, 0, 5, 5);
+		gbc_lblYourWorkoutPlans.gridx = 1;
+		gbc_lblYourWorkoutPlans.gridy = 1;
+		add(lblYourWorkoutPlans, gbc_lblYourWorkoutPlans);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 1;
+		gbc_scrollPane.gridy = 2;
+		add(scrollPane, gbc_scrollPane);
+		
+		table = new JTable();
+		table.setFillsViewportHeight(true);
+		scrollPane.setViewportView(table);
 	}
 	
 	private void loadIcons() {
@@ -136,7 +166,6 @@ public class WorkoutsPanel extends JPanel {
 		});
 		toolBar.add(btnRefresh);
 		
-		
 		JButton btnGenerateDietPlan = new JButton("Generate Workout Plan");
 		btnGenerateDietPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -147,39 +176,6 @@ public class WorkoutsPanel extends JPanel {
 		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnGenerateDietPlan.setIcon(generateWorkoutButtonIcon);
 		toolBar.add(btnGenerateDietPlan);
-		
-		Component leftStrut = Box.createHorizontalStrut(20);
-		GridBagConstraints gbc_leftStrut = new GridBagConstraints();
-		gbc_leftStrut.insets = new Insets(0, 0, 5, 5);
-		gbc_leftStrut.gridx = 0;
-		gbc_leftStrut.gridy = 1;
-		add(leftStrut, gbc_leftStrut);
-		
-		JLabel lblYourWorkoutPlans = new JLabel("Your Workout Plans");
-		GridBagConstraints gbc_lblYourWorkoutPlans = new GridBagConstraints();
-		gbc_lblYourWorkoutPlans.insets = new Insets(0, 0, 5, 5);
-		gbc_lblYourWorkoutPlans.gridx = 1;
-		gbc_lblYourWorkoutPlans.gridy = 1;
-		add(lblYourWorkoutPlans, gbc_lblYourWorkoutPlans);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.gridx = 1;
-		gbc_scrollPane.gridy = 2;
-		add(scrollPane, gbc_scrollPane);
-		
-		table = new JTable();
-		table.setFillsViewportHeight(true);
-		scrollPane.setColumnHeaderView(table);
-		
-		Component bottomStrut = Box.createVerticalStrut(20);
-		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
-		gbc_bottomStrut.insets = new Insets(0, 0, 0, 5);
-		gbc_bottomStrut.gridx = 1;
-		gbc_bottomStrut.gridy = 3;
-		add(bottomStrut, gbc_bottomStrut);
 	}
 
 

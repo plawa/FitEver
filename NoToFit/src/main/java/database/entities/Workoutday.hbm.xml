@@ -11,7 +11,7 @@
         <many-to-one name="workout" class="database.entities.Workout" fetch="select">
             <column name="WorkoutID" not-null="true" />
         </many-to-one>
-        <set name="exercises" table="workoutday_exercise" inverse="false" lazy="true" fetch="select">
+        <set name="exercises" table="workoutday_exercise" inverse="false" lazy="false" fetch="select" cascade="merge">
             <key>
                 <column name="WorkoutDayID" not-null="true" />
             </key>

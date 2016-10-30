@@ -23,7 +23,7 @@
         <property name="objective" type="java.lang.Character">
             <column name="objective" length="1" />
         </property>
-        <set name="workoutdays" table="workoutday" inverse="true" lazy="true" fetch="select">
+        <set name="workoutdays" table="workoutday" inverse="true" lazy="false" fetch="select" cascade="all">
             <key>
                 <column name="WorkoutID" not-null="true" />
             </key>
