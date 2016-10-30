@@ -19,6 +19,7 @@
 		<mapping resource="database/entities/User.hbm.xml" />
 		<mapping resource="database/entities/Diet.hbm.xml" />
 		<mapping resource="database/entities/Workout.hbm.xml" />
+		<mapping resource="database/entities/Workoutday.hbm.xml" />
 		<mapping resource="database/entities/Exercise.hbm.xml" />
 		<mapping resource="database/entities/Shadow.hbm.xml" />
 		<mapping resource="database/entities/Meal.hbm.xml" />

@@ -65,12 +65,6 @@ public class UserPanel extends JPanel {
 		System.exit(0);
 	}
 
-	protected void generateWorkoutPlanButtonPressed() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-
-	}
-
 
 
 
@@ -167,19 +161,6 @@ public class UserPanel extends JPanel {
 		btnUpdateWeight.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnUpdateWeight.setIcon(updateWeightButtonIcon);
 		toolBar.add(btnUpdateWeight);
-
-
-
-		JButton btnGenerateWorkoutPlan = new JButton("Generate Workout Plan");
-		btnGenerateWorkoutPlan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				generateWorkoutPlanButtonPressed();
-			}
-		});
-		btnGenerateWorkoutPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnGenerateWorkoutPlan.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnGenerateWorkoutPlan.setIcon(generateWorkoutButtonIcon);
-		toolBar.add(btnGenerateWorkoutPlan);
 
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.setPreferredSize(new Dimension(100, 23));

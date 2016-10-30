@@ -1,5 +1,5 @@
 package database.entities;
-// Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1
+// Generated 2016-10-30 15:10:58 by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -10,13 +10,31 @@ import java.util.Set;
  */
 public class Workout implements java.io.Serializable {
 
-	private static final long serialVersionUID = 9209194375975264761L;
-	private Integer id;
-	private User user;
-	private Date validFrom;
-	private Set<Exercise> exercises = new HashSet<Exercise>(0);
 
-	public Workout() {
+	private static final long serialVersionUID = 5479860479872562447L;
+	private Integer id;
+	private int userId;
+	private String name;
+	private Date validFrom;
+	private Date validTo;
+	private Character objective;
+	private Set<Workoutday> workoutdays = new HashSet<>(0);
+
+	public Workout(int userId, String name, Date validFrom, Date validTo) {
+		this.userId = userId;
+		this.name = name;
+		this.validFrom = validFrom;
+		this.validTo = validTo;
+	}
+
+	public Workout(int userId, String name, Date validFrom, Date validTo, Character objective,
+			Set<Workoutday> workoutdays) {
+		this.userId = userId;
+		this.name = name;
+		this.validFrom = validFrom;
+		this.validTo = validTo;
+		this.objective = objective;
+		this.workoutdays = workoutdays;
 	}
 
 	public Integer getId() {
@@ -27,12 +45,20 @@ public class Workout implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return this.user;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Date getValidFrom() {
@@ -43,12 +69,28 @@ public class Workout implements java.io.Serializable {
 		this.validFrom = validFrom;
 	}
 
-	public Set<Exercise> getExercises() {
-		return this.exercises;
+	public Date getValidTo() {
+		return this.validTo;
 	}
 
-	public void setExercises(Set<Exercise> workoutExercises) {
-		this.exercises = workoutExercises;
+	public void setValidTo(Date validTo) {
+		this.validTo = validTo;
+	}
+
+	public Character getObjective() {
+		return this.objective;
+	}
+
+	public void setObjective(Character objective) {
+		this.objective = objective;
+	}
+
+	public Set<Workoutday> getWorkoutdays() {
+		return this.workoutdays;
+	}
+
+	public void setWorkoutdays(Set<Workoutday> workoutdays) {
+		this.workoutdays = workoutdays;
 	}
 
 }
