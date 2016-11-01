@@ -32,10 +32,22 @@ public class GenerateWorkoutDialog extends JDialog {
 		initializeSwingComponents();
 	}
 
-	public WorkoutGenerationPreferences getWorkoutGenerationPreferences(){
+	public WorkoutGenerationPreferences getWorkoutGenerationPreferences() {
 		return preferences;
 	}
-	
+
+	protected void okButtonPressed() {
+		retrieveWorkoutGenerationConfigurationFromFields();
+		tearDown();
+	}
+
+	private void retrieveWorkoutGenerationConfigurationFromFields() {
+		preferences = new WorkoutGenerationPreferences();
+		preferences.setName(textFieldName.getText());
+		preferences.setTrainingDaysPerWeek(sliderDaysPerWeek.getValue());
+		preferences.setWorkoutPeriodInDays(sliderWorkoutPeriodInDays.getValue());
+	}
+
 	private void initializeSwingComponents() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
@@ -45,10 +57,10 @@ public class GenerateWorkoutDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblName = new JLabel("Name:");
@@ -118,7 +130,7 @@ public class GenerateWorkoutDialog extends JDialog {
 			gbc_slider.gridx = 2;
 			gbc_slider.gridy = 3;
 			contentPanel.add(sliderWorkoutPeriodInDays, gbc_slider);
-			
+
 			Hashtable<Integer, JLabel> sliderLabels = new Hashtable<Integer, JLabel>();
 			sliderLabels.put(15, new JLabel("2 weeks"));
 			sliderLabels.put(30, new JLabel("month"));
@@ -152,18 +164,6 @@ public class GenerateWorkoutDialog extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-	}
-
-	protected void okButtonPressed() {
-		retrieveWorkoutGenerationConfigurationFromFields();
-		tearDown();
-	}
-
-	private void retrieveWorkoutGenerationConfigurationFromFields() {
-		preferences = new WorkoutGenerationPreferences();
-		preferences.setName(textFieldName.getText());
-		preferences.setTrainingDaysPerWeek(sliderDaysPerWeek.getValue());
-		preferences.setWorkoutPeriodInDays(sliderWorkoutPeriodInDays.getValue());
 	}
 
 	protected void tearDown() {

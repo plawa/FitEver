@@ -1,5 +1,6 @@
 package gui.user;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -56,9 +58,11 @@ public class MaintainUserDialog extends JDialog {
 	private JComboBox<String> comboBoxSomatotype;
 	private JSlider sliderLifeStyle;
 	private DialogMode mode;
+	private JTextArea txtrExampleMessageDescribing;
 
 	
 	public MaintainUserDialog() {
+		getContentPane().setFocusable(false);
 		mode = DialogMode.CREATE;
 		userMaintained = new User();
 		initializeView();
@@ -84,16 +88,16 @@ public class MaintainUserDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle(mode + " User");
 		setModal(true);
-		setBounds(100, 100, 471, 524);
+		setBounds(100, 100, 471, 553);
 	}
 
 	private void initializeLayout() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 49, 59, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+				0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 	}
 
@@ -355,6 +359,23 @@ public class MaintainUserDialog extends JDialog {
 		gbc_lblLifeStyle.gridx = 1;
 		gbc_lblLifeStyle.gridy = 14;
 		getContentPane().add(lblLifeStyle, gbc_lblLifeStyle);
+		
+		txtrExampleMessageDescribing = new JTextArea();
+		txtrExampleMessageDescribing.setDisabledTextColor(Color.BLACK);
+		txtrExampleMessageDescribing.setText("EXAMPLE MESSAGE DESCRIBING LIFESTYLE");
+		txtrExampleMessageDescribing.setOpaque(false);
+		txtrExampleMessageDescribing.setFont(new Font("Arial", Font.PLAIN, 12));
+		txtrExampleMessageDescribing.setForeground(Color.WHITE);
+		txtrExampleMessageDescribing.setEditable(false);
+		txtrExampleMessageDescribing.setEnabled(false);
+		txtrExampleMessageDescribing.setLineWrap(true);
+		GridBagConstraints gbc_txtrExampleMessageDescribing = new GridBagConstraints();
+		gbc_txtrExampleMessageDescribing.gridwidth = 3;
+		gbc_txtrExampleMessageDescribing.insets = new Insets(0, 0, 5, 5);
+		gbc_txtrExampleMessageDescribing.fill = GridBagConstraints.BOTH;
+		gbc_txtrExampleMessageDescribing.gridx = 2;
+		gbc_txtrExampleMessageDescribing.gridy = 15;
+		getContentPane().add(txtrExampleMessageDescribing, gbc_txtrExampleMessageDescribing);
 
 		sliderLifeStyle = new JSlider();
 		sliderLifeStyle.setSnapToTicks(true);
@@ -366,7 +387,7 @@ public class MaintainUserDialog extends JDialog {
 		sliderLifeStyle.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				int choice = sliderLifeStyle.getValue();
-				textArea.setText(Translator.getLifeStyleDescription(choice));
+				txtrExampleMessageDescribing.setText(Translator.getLifeStyleDescription(choice));
 			}
 		});
 		sliderLifeStyle.setValue(3);
@@ -377,12 +398,13 @@ public class MaintainUserDialog extends JDialog {
 		gbc_sliderLifeStyle.gridx = 2;
 		gbc_sliderLifeStyle.gridy = 14;
 		getContentPane().add(sliderLifeStyle, gbc_sliderLifeStyle);
+		
 
 		Component horizontalStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
 		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut.gridx = 0;
-		gbc_horizontalStrut.gridy = 16;
+		gbc_horizontalStrut.gridy = 17;
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 		{
 			JButton okButton = new JButton("Save");
@@ -394,7 +416,7 @@ public class MaintainUserDialog extends JDialog {
 			GridBagConstraints gbc_okButton = new GridBagConstraints();
 			gbc_okButton.insets = new Insets(0, 0, 5, 5);
 			gbc_okButton.gridx = 3;
-			gbc_okButton.gridy = 16;
+			gbc_okButton.gridy = 17;
 			getContentPane().add(okButton, gbc_okButton);
 			okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(okButton);
@@ -404,7 +426,7 @@ public class MaintainUserDialog extends JDialog {
 			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
 			gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
 			gbc_cancelButton.gridx = 4;
-			gbc_cancelButton.gridy = 16;
+			gbc_cancelButton.gridy = 17;
 			getContentPane().add(cancelButton, gbc_cancelButton);
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -418,14 +440,14 @@ public class MaintainUserDialog extends JDialog {
 		GridBagConstraints gbc_horizontalStrut1 = new GridBagConstraints();
 		gbc_horizontalStrut1.insets = new Insets(0, 0, 5, 0);
 		gbc_horizontalStrut1.gridx = 5;
-		gbc_horizontalStrut1.gridy = 16;
+		gbc_horizontalStrut1.gridy = 17;
 		getContentPane().add(horizontalStrut1, gbc_horizontalStrut1);
 
 		Component verticalStrut_1 = Box.createVerticalStrut(10);
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();
 		gbc_verticalStrut_1.insets = new Insets(0, 0, 0, 5);
 		gbc_verticalStrut_1.gridx = 2;
-		gbc_verticalStrut_1.gridy = 17;
+		gbc_verticalStrut_1.gridy = 18;
 		getContentPane().add(verticalStrut_1, gbc_verticalStrut_1);
 	}
 
@@ -455,7 +477,6 @@ public class MaintainUserDialog extends JDialog {
 	}
 
 	protected void saveButtonPressed() {
-
 		setUserPropertiesFromEnteredValues();
 		boolean operationSucceeded = false;
 

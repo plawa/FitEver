@@ -51,6 +51,7 @@ public class WorkoutsPanel extends JPanel {
 		generateWorkoutDlg.setLocationRelativeTo(this);
 		generateWorkoutDlg.setVisible(true);
 		WorkoutGenerationPreferences preferences = generateWorkoutDlg.getWorkoutGenerationPreferences();
+		preferences.setUser(currentUser);
 		
 	}
 
