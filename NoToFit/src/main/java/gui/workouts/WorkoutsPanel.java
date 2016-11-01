@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import database.entities.User;
 import database.entities.Workout;
 import gui.exercises.AllExercisesDialog;
+import logic.workout.WorkoutGenerationPreferences;
 
 public class WorkoutsPanel extends JPanel {
 
@@ -46,7 +47,11 @@ public class WorkoutsPanel extends JPanel {
 	}
 	
 	protected void generateWorkoutPlanButtonPressed() {
-		//TODO
+		GenerateWorkoutDialog generateWorkoutDlg = new GenerateWorkoutDialog();
+		generateWorkoutDlg.setLocationRelativeTo(this);
+		generateWorkoutDlg.setVisible(true);
+		WorkoutGenerationPreferences preferences = generateWorkoutDlg.getWorkoutGenerationPreferences();
+		
 	}
 
 	protected void refreshTable() {

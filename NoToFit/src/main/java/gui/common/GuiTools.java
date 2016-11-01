@@ -12,6 +12,7 @@ import javax.swing.text.MaskFormatter;
 
 public class GuiTools {
 	
+	private final static String DATE_MASK_PATTERN = "##-##-####";
 	private final static String DATE_FORMAT = "dd-MM-yyyy";
 	private final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);	
 	
@@ -33,17 +34,25 @@ public class GuiTools {
 		return Float.parseFloat(floatCommaOrDotSeparated.replace(',', '.'));
 	}
 
-	public static MaskFormatter createFormatterFromPattern(String s) {
+	public static MaskFormatter getDefaultDateMaskFormatter(){
+		return createDateMaskFormatterFromPattern(DATE_MASK_PATTERN);
+	}
+	
+	public static MaskFormatter createDateMaskFormatterFromPattern(String pattern) {
 		MaskFormatter formatter = null;
 		try {
-			formatter = new MaskFormatter(s);
+			formatter = new MaskFormatter(pattern);
 		} catch (java.text.ParseException exc) {
 			System.err.println("formatter is bad: " + exc.getMessage());
 		}
 		return formatter;
 	}
 	
-	public static InputVerifier createInputVerifier(final DateFormat dateFormatter) {
+	public static InputVerifier getDefaultDateInputVerifier(){
+		return createDateInputVerifier(dateFormatter);
+	}
+	
+	public static InputVerifier createDateInputVerifier(final DateFormat dateFormatter) {
 		return new InputVerifier() {
 
 			@Override

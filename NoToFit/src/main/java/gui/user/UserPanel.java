@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 
 import database.controller.DatabaseController;
 import database.entities.User;
+import gui.LoginDialog;
 import gui.common.Translator;
 import logic.entitytools.UserTools;
 
@@ -59,11 +60,6 @@ public class UserPanel extends JPanel {
 		refreshUserDetails();
 	}
 
-	protected void exit() {
-		DatabaseController.tidyUp();
-		System.exit(0);
-	}
-
 	protected void editUserToolbarButtonPressed() {
 		MaintainUserDialog editUserDialog = new MaintainUserDialog(userDisplaying);
 		editUserDialog.setLocationRelativeTo(this);
@@ -78,8 +74,13 @@ public class UserPanel extends JPanel {
 		refreshUserDetails();
 	}
 
-	private void logout() {
-		throw new UnsupportedOperationException();
+	private void switchUser() {
+		LoginDialog loginDlg = new LoginDialog();
+		User newLoggedUser = loginDlg.getAuthorizedUser();
+		if (newLoggedUser != null) {
+			userDisplaying = newLoggedUser;
+			refreshUserDetails();
+		}
 	}
 
 	protected void refreshUserDetails() {
@@ -129,6 +130,7 @@ public class UserPanel extends JPanel {
 		setLayout(gridBagLayout);
 
 		JToolBar toolBar = new JToolBar();
+		toolBar.setRollover(true);
 		toolBar.setBorder(UIManager.getBorder("ToolBar.border"));
 		toolBar.setFloatable(false);
 		GridBagConstraints gbc_toolBar = new GridBagConstraints();
@@ -157,21 +159,19 @@ public class UserPanel extends JPanel {
 		btnUpdateWeight.setIcon(updateWeightButtonIcon);
 		toolBar.add(btnUpdateWeight);
 
-		JButton btnLogout = new JButton("Logout");
-		btnLogout.setPreferredSize(new Dimension(100, 23));
-		btnLogout.addActionListener(new ActionListener() {
+		JButton btnSwitchUser = new JButton("Switch User");
+		btnSwitchUser.setPreferredSize(new Dimension(100, 23));
+		btnSwitchUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				logout();
+				switchUser();
 			}
 		});
-		btnLogout.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnLogout.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnLogout.setIcon(logoutButtonIcon);
-		toolBar.add(btnLogout);
+		btnSwitchUser.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnSwitchUser.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnSwitchUser.setIcon(logoutButtonIcon);
+		toolBar.add(btnSwitchUser);
 
 		JButton btnExit = new JButton("Exit");
-		btnExit.setPreferredSize(new Dimension(100, 23));
-		btnExit.setMinimumSize(new Dimension(80, 23));
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				exit();
@@ -418,5 +418,9 @@ public class UserPanel extends JPanel {
 		gbc_lblValueUserObjective.gridy = 9;
 		add(lblValueUserObjective, gbc_lblValueUserObjective);
 	}
-
+	
+	protected void exit() {
+		DatabaseController.tidyUp();
+		System.exit(0);
+	}
 }

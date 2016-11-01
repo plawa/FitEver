@@ -58,6 +58,7 @@ public class ExercisesTableModel extends AbstractTableModel {
 		return String.class;
 	}
 	
+	
 	public Exercise getExerciseAt(int selectedRow){
 		return exercises.get(selectedRow);
 	}

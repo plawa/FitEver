@@ -21,11 +21,17 @@ import javax.swing.SwingConstants;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
+import gui.common.DialogMode;
 import gui.common.Translator;
 
-public class AddMealDialog extends JDialog {
+public class MaintainMealDialog extends JDialog {
 
 	private static final long serialVersionUID = 7513700313890891626L;
+	private static final String MSG_CONNECTION_LOST = "You have probably lost connection to database.";
+
+	private Meal mealMaintained;
+	protected DialogMode mode;
+
 	protected JTextField textFieldName;
 	protected JTextField textFieldGrammage;
 	protected JComboBox<String> comboBoxObjective;
@@ -35,19 +41,66 @@ public class AddMealDialog extends JDialog {
 	protected JComboBox<String> comboBoxMealType;
 	protected JButton okButton;
 
-	public static void main(String[] args) {
+	public MaintainMealDialog() {
+		mode = DialogMode.CREATE;
+		mealMaintained = new Meal();
+		initializeSwingComponents();
+	}
+
+	MaintainMealDialog(Meal mealToEdit) {
+		mode = DialogMode.EDIT;
+		mealMaintained = mealToEdit;
+		initializeSwingComponents();
+	}
+
+	protected void proceedButtonPressed() {
+		setMealAttributesFromFields();
 		try {
-			AddMealDialog dialog = new AddMealDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
+			performSave();
+			tearDown();
+		} catch (RuntimeException e) {
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, MSG_CONNECTION_LOST, "Error!", 0);
 		}
 	}
 
-	public AddMealDialog() {
+	private void performSave() throws RuntimeException {
+		switch (mode) {
+		case CREATE:
+			DatabaseController.saveEntityToDatabase(mealMaintained);
+			break;
+		case EDIT:
+			DatabaseController.updateEntityToDatabase(mealMaintained);
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+	}
+
+	protected void setMealAttributesFromFields() {
+		mealMaintained.setName(textFieldName.getText());
+		mealMaintained.setType(Translator.parseMealTypeStringToChar((String) comboBoxMealType.getSelectedItem()));
+		mealMaintained.setGramature(Integer.parseInt(textFieldGrammage.getText()));
+		mealMaintained.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
+		mealMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
+		mealMaintained.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
+		mealMaintained
+				.setObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
+	}
+
+	protected void initializeFields() {
+		textFieldName.setText(mealMaintained.getName());
+		comboBoxMealType.setSelectedItem(Translator.parseMealTypeCharToString(mealMaintained.getType()));
+		textFieldGrammage.setText(Integer.toString(mealMaintained.getGramature()));
+		spinnerCarbohydratesPercentage.setValue(mealMaintained.getCarbohydratesPercentage());
+		spinnerProteinPercentage.setValue(mealMaintained.getProteinPercentage());
+		spinnerFatPercentage.setValue(mealMaintained.getFatPercentage());
+		comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(mealMaintained.getObjective()));
+	}
+
+	private void initializeSwingComponents() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setTitle("Add New Meal");
+		setTitle(mode + " Meal");
 		setModal(true);
 		setBounds(100, 100, 397, 364);
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -93,7 +146,8 @@ public class AddMealDialog extends JDialog {
 		getContentPane().add(lblMealType, gbc_lblMealType);
 
 		comboBoxMealType = new JComboBox<String>();
-		comboBoxMealType.setModel(new DefaultComboBoxModel<String>(new String[] { "Breakfast", "Main Dish", "Supper" }));
+		comboBoxMealType
+				.setModel(new DefaultComboBoxModel<String>(new String[] { "Breakfast", "Main Dish", "Supper" }));
 		GridBagConstraints gbc_comboBoxmealType = new GridBagConstraints();
 		gbc_comboBoxmealType.gridwidth = 3;
 		gbc_comboBoxmealType.insets = new Insets(0, 0, 5, 5);
@@ -241,28 +295,9 @@ public class AddMealDialog extends JDialog {
 		gbc_verticalStrutBottom.gridx = 2;
 		gbc_verticalStrutBottom.gridy = 10;
 		getContentPane().add(verticalStrutBottom, gbc_verticalStrutBottom);
-	}
-
-	protected void proceedButtonPressed() {
-		Meal newMeal = new Meal();
-		retrieveMealAttributesFromFields(newMeal);
-		try {
-			DatabaseController.saveEntityToDatabase(newMeal);
-			tearDown();
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, "You have probably lost connection to database.", "Error!", 0);
+		if (mode == DialogMode.EDIT) {
+			initializeFields();
 		}
-	}
-
-	protected void retrieveMealAttributesFromFields(Meal mealMaintained) {
-		mealMaintained.setName(textFieldName.getText());
-		mealMaintained.setType(Translator.parseMealTypeStringToChar((String) comboBoxMealType.getSelectedItem()));
-		mealMaintained.setGramature(Integer.parseInt(textFieldGrammage.getText()));
-		mealMaintained.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
-		mealMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
-		mealMaintained.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
-		mealMaintained.setObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
 	}
 
 	protected void tearDown() {

@@ -62,7 +62,7 @@ public class AllMealsDialog extends JDialog {
 		int rowIndex = table.getSelectedRow();
 		if (rowIndex != -1) {
 			Meal mealToEdit = tableModel.getMealAt(rowIndex);
-			EditMealDialog editMealDlg = new EditMealDialog(mealToEdit);
+			MaintainMealDialog editMealDlg = new MaintainMealDialog(mealToEdit);
 			editMealDlg.setLocationRelativeTo(this);
 			editMealDlg.setVisible(true);
 			refreshTable();
@@ -72,7 +72,7 @@ public class AllMealsDialog extends JDialog {
 	}
 
 	protected void addButtonPressed() {
-		AddMealDialog addMealDlg = new AddMealDialog();
+		MaintainMealDialog addMealDlg = new MaintainMealDialog();
 		addMealDlg.setLocationRelativeTo(this);
 		addMealDlg.setVisible(true);
 		refreshTable();

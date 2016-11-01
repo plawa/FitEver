@@ -2,7 +2,7 @@ package gui.meals;
 
 import database.entities.Meal;
 
-public class ShowMealDialog extends EditMealDialog {
+public class ShowMealDialog extends MaintainMealDialog {
 
 	private static final long serialVersionUID = 2192525211247612573L;
 

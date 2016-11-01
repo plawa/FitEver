@@ -8,13 +8,14 @@ import gui.meals.AllMealsDialog;
 
 public class AllExercisesDialog extends AllMealsDialog {
 
+	private static final String TABLE_TOOLTIP = "Open to see more details";
 	protected static final String DLG_TITLE = "Exercises Library";
 	private static final long serialVersionUID = -6051480256970284306L;
 	private ExercisesTableModel tableModel;
 
 	public AllExercisesDialog() {
 		super();
-		setTitle(DLG_TITLE);
+		setSwingProperties();
 	}
 
 	@Override
@@ -22,8 +23,6 @@ public class AllExercisesDialog extends AllMealsDialog {
 		tableModel = new ExercisesTableModel(DatabaseController.getAll(Exercise.class));
 		table.setModel(tableModel);
 		table.getColumnModel().getColumn(0).setPreferredWidth(130);
-		table.getColumnModel().getColumn(2).setPreferredWidth(70);
-		table.getColumnModel().getColumn(3).setPreferredWidth(50);
 	}
 
 	@Override
@@ -59,6 +58,11 @@ public class AllExercisesDialog extends AllMealsDialog {
 			return null;
 		}
 		return tableModel.getExerciseAt(selectedRowIndex);
+	}
+
+	private void setSwingProperties() {
+		setTitle(DLG_TITLE);
+		table.setToolTipText(TABLE_TOOLTIP);
 	}
 
 }

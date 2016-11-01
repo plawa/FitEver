@@ -7,8 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -21,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -42,6 +39,8 @@ public class MaintainUserDialog extends JDialog {
 	private static final long serialVersionUID = 9182720162758099907L;
 	private static final String MSG_SAVE_ERROR = "Error occured while saving data to database.";
 	private static final String TOOLTIP_WEIGHT_CHANGE = "You can change actual weight in Update Weight Dialog";
+	
+	protected User userMaintained;
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
 	private JTextField textFieldHeight;
@@ -51,16 +50,14 @@ public class MaintainUserDialog extends JDialog {
 	private JComboBox<String> comboBoxObjective;
 	private JFormattedTextField formatTxtFldDateOfBirth;
 	private JSpinner spinnerFatPercentage;
-	private DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 	private JTextField textFieldLogin;
 	private JPasswordField passwordField;
 	private JPasswordField passwordFieldConfirm;
-	protected User userMaintained = null;
 	private JComboBox<String> comboBoxSomatotype;
-	private JTextArea textArea;
 	private JSlider sliderLifeStyle;
 	private DialogMode mode;
 
+	
 	public MaintainUserDialog() {
 		mode = DialogMode.CREATE;
 		userMaintained = new User();
@@ -85,18 +82,18 @@ public class MaintainUserDialog extends JDialog {
 
 	private void initializeFrame() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setTitle("Add New User");
+		setTitle(mode + " User");
 		setModal(true);
-		setBounds(100, 100, 471, 540);
+		setBounds(100, 100, 471, 524);
 	}
 
 	private void initializeLayout() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 49, 59, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 33, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 	}
 
@@ -231,8 +228,8 @@ public class MaintainUserDialog extends JDialog {
 		gbc_lblDateOfBirth.gridy = 7;
 		getContentPane().add(lblDateOfBirth, gbc_lblDateOfBirth);
 
-		formatTxtFldDateOfBirth = new JFormattedTextField(GuiTools.createFormatterFromPattern("##-##-####"));
-		formatTxtFldDateOfBirth.setInputVerifier(GuiTools.createInputVerifier(dateFormatter));
+		formatTxtFldDateOfBirth = new JFormattedTextField(GuiTools.getDefaultDateMaskFormatter());
+		formatTxtFldDateOfBirth.setInputVerifier(GuiTools.getDefaultDateInputVerifier());
 		GridBagConstraints gbc_formatTxtFldDate = new GridBagConstraints();
 		gbc_formatTxtFldDate.gridwidth = 3;
 		gbc_formatTxtFldDate.insets = new Insets(0, 0, 5, 5);
@@ -359,21 +356,6 @@ public class MaintainUserDialog extends JDialog {
 		gbc_lblLifeStyle.gridy = 14;
 		getContentPane().add(lblLifeStyle, gbc_lblLifeStyle);
 
-		textArea = new JTextArea();
-		textArea.setOpaque(false);
-		textArea.setVerifyInputWhenFocusTarget(false);
-		textArea.setRows(2);
-		textArea.setEditable(false);
-		textArea.setWrapStyleWord(true);
-		textArea.setLineWrap(true);
-		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.gridwidth = 3;
-		gbc_textArea.insets = new Insets(0, 0, 5, 5);
-		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 2;
-		gbc_textArea.gridy = 15;
-		getContentPane().add(textArea, gbc_textArea);
-
 		sliderLifeStyle = new JSlider();
 		sliderLifeStyle.setSnapToTicks(true);
 		sliderLifeStyle.setPaintTicks(true);
@@ -400,7 +382,7 @@ public class MaintainUserDialog extends JDialog {
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
 		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut.gridx = 0;
-		gbc_horizontalStrut.gridy = 17;
+		gbc_horizontalStrut.gridy = 16;
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 		{
 			JButton okButton = new JButton("Save");
@@ -412,7 +394,7 @@ public class MaintainUserDialog extends JDialog {
 			GridBagConstraints gbc_okButton = new GridBagConstraints();
 			gbc_okButton.insets = new Insets(0, 0, 5, 5);
 			gbc_okButton.gridx = 3;
-			gbc_okButton.gridy = 17;
+			gbc_okButton.gridy = 16;
 			getContentPane().add(okButton, gbc_okButton);
 			okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(okButton);
@@ -422,7 +404,7 @@ public class MaintainUserDialog extends JDialog {
 			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
 			gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
 			gbc_cancelButton.gridx = 4;
-			gbc_cancelButton.gridy = 17;
+			gbc_cancelButton.gridy = 16;
 			getContentPane().add(cancelButton, gbc_cancelButton);
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -436,14 +418,14 @@ public class MaintainUserDialog extends JDialog {
 		GridBagConstraints gbc_horizontalStrut1 = new GridBagConstraints();
 		gbc_horizontalStrut1.insets = new Insets(0, 0, 5, 0);
 		gbc_horizontalStrut1.gridx = 5;
-		gbc_horizontalStrut1.gridy = 17;
+		gbc_horizontalStrut1.gridy = 16;
 		getContentPane().add(horizontalStrut1, gbc_horizontalStrut1);
 
 		Component verticalStrut_1 = Box.createVerticalStrut(10);
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();
 		gbc_verticalStrut_1.insets = new Insets(0, 0, 0, 5);
 		gbc_verticalStrut_1.gridx = 2;
-		gbc_verticalStrut_1.gridy = 18;
+		gbc_verticalStrut_1.gridy = 17;
 		getContentPane().add(verticalStrut_1, gbc_verticalStrut_1);
 	}
 

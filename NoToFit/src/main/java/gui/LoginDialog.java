@@ -36,8 +36,9 @@ import net.miginfocom.swing.MigLayout;
 public class LoginDialog extends JDialog {
 
 	private static final long serialVersionUID = 8472433868284888754L;
-	private static final String LBL_MSG_IMAGE_NOT_FOUND = "Error! Image not found.";
 	private static final String HEADER_IMAGE_PATH = "/images/login_image.png";
+	
+	private static final String LBL_MSG_IMAGE_NOT_FOUND = "Error! Image not found.";
 	private static final String MSG_LOGIN_DENIED = "Username or password incorrect.";
 	private static final String MSG_DATABASE_ERROR = "Unable to reach database.";
 
@@ -51,8 +52,6 @@ public class LoginDialog extends JDialog {
 
 	public LoginDialog() {
 		super((Frame) null, true);
-		setType(Type.POPUP);
-		setResizable(false);
 		initializeFrame();
 		initializeLayout();
 		initializeSwingComponents();
@@ -61,6 +60,8 @@ public class LoginDialog extends JDialog {
 	}
 
 	private void initializeFrame() {
+		setType(Type.NORMAL);
+		setResizable(false);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
@@ -160,7 +161,6 @@ public class LoginDialog extends JDialog {
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						tearDown();
-						System.exit(0);
 					}
 				});
 				cancelButton.setActionCommand("Cancel");

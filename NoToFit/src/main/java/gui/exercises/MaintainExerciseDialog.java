@@ -85,7 +85,7 @@ public class MaintainExerciseDialog extends JDialog {
 	}
 
 	private void initializeSwingComponents() {
-		setTitle("Edit Exercise");
+		setTitle(mode + " Exercise");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setBounds(100, 100, 394, 387);
