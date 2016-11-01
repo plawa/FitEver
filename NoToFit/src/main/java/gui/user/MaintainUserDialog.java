@@ -486,7 +486,6 @@ public class MaintainUserDialog extends JDialog {
 				JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, "Error!", 2);
 			}
 			break;
-
 		case EDIT:
 			operationSucceeded = updateUserToDatabase();
 		}

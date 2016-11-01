@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 
 import database.entities.User;
 import database.entities.Workout;
+import gui.exercises.AllExercisesDialog;
 
 public class WorkoutsPanel extends JPanel {
 
@@ -35,7 +36,6 @@ public class WorkoutsPanel extends JPanel {
 	private ImageIcon generateWorkoutButtonIcon;
 	
 
-	
 	public WorkoutsPanel() {
 		this(new User());
 	}
@@ -57,7 +57,9 @@ public class WorkoutsPanel extends JPanel {
 	}
 
 	protected void showAllExercisesButtonPressed() {
-		new AllExercisesDialog().setLocationRelativeTo(this);
+		AllExercisesDialog exercisesLibDlg = new AllExercisesDialog();
+		exercisesLibDlg.setLocationRelativeTo(this);
+		exercisesLibDlg.setVisible(true);
 	}
 
 	protected void openSelectedWorkoutPlan() {
@@ -65,7 +67,6 @@ public class WorkoutsPanel extends JPanel {
 		if (selectedRowNumber == -1)
 			return;
 		Workout selectedWorkout = tableModel.getWorkoutAt(selectedRowNumber);
-		//TODO
 	}
 
 	private void initializeSwingComponents() {
@@ -89,6 +90,13 @@ public class WorkoutsPanel extends JPanel {
 		gbc_leftStrut.gridx = 0;
 		gbc_leftStrut.gridy = 1;
 		add(leftStrut, gbc_leftStrut);
+		
+		Component rightStrut = Box.createHorizontalStrut(20);
+		GridBagConstraints gbc_rightStrut = new GridBagConstraints();
+		gbc_rightStrut.insets = new Insets(0, 0, 5, 0);
+		gbc_rightStrut.gridx = 2;
+		gbc_rightStrut.gridy = 2;
+		add(rightStrut, gbc_rightStrut);
 		
 		Component bottomStrut = Box.createVerticalStrut(20);
 		GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
@@ -180,7 +188,5 @@ public class WorkoutsPanel extends JPanel {
 		btnGenerateDietPlan.setIcon(generateWorkoutButtonIcon);
 		toolBar.add(btnGenerateDietPlan);
 	}
-
-
 
 }

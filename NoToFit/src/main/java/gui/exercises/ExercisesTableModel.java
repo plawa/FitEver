@@ -1,10 +1,11 @@
-package gui.workouts;
+package gui.exercises;
 
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import database.entities.Exercise;
+import gui.common.Objective;
 
 public class ExercisesTableModel extends AbstractTableModel {
 
@@ -38,9 +39,9 @@ public class ExercisesTableModel extends AbstractTableModel {
 		case 0:
 			return exercise.getName();
 		case 1:
-			return exercise.getObjective();
+			return Objective.get(exercise.getObjective());
 		case 2:
-			return exercise.getDifficultyLevel();
+			return DifficultyLevel.get(exercise.getDifficultyLevel());
 		case 3:
 			return exercise.isEquipmentRequired();
 		case 4:
@@ -55,6 +56,10 @@ public class ExercisesTableModel extends AbstractTableModel {
 		if (columnIndex == 3)
 			return Boolean.class;
 		return String.class;
+	}
+	
+	public Exercise getExerciseAt(int selectedRow){
+		return exercises.get(selectedRow);
 	}
 
 }

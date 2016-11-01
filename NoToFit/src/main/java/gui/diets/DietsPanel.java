@@ -84,7 +84,9 @@ public class DietsPanel extends JPanel {
 	}
 
 	protected void showAllMealsButtonPressed() {
-		new AllMealsDialog().setLocationRelativeTo(this);
+		AllMealsDialog mealsLibDialog = new AllMealsDialog();
+		mealsLibDialog.setLocationRelativeTo(this);
+		mealsLibDialog.setVisible(true);
 	}
 
 	protected void refreshTable() {
