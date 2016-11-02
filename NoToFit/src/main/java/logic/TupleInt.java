@@ -19,5 +19,4 @@ public class TupleInt implements Comparable<TupleInt> {
 		return 0;
 	}
 
-
 }

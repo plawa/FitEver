@@ -15,6 +15,8 @@ import logic.TupleInt;
 
 public class ExerciseChooser {
 
+	private static final int POINTS_FOR_EQUIPMENT_MATCH = 2;
+	private static final int POINTS_FOR_OBJECTIVE_MATCH = 4;
 	private int exercisesPerDayCount;
 	private DifficultyLevel difficulty;
 	private Objective objective;
@@ -55,15 +57,16 @@ public class ExerciseChooser {
 	}
 
 	private List<Exercise> chooseBestMatchedExercises() {
-		PriorityQueue<TupleInt> bestItems = new PriorityQueue<>();
+		PriorityQueue<TupleInt> bestMatchedExercises = new PriorityQueue<>();
 		for (int libIndex = 0; libIndex < exercisesLib.size(); libIndex++) {
 			Exercise currentExercise = exercisesLib.get(libIndex);
 			Integer exerciseRate = rateExercise(currentExercise);
-			bestItems.add(new TupleInt(exerciseRate, libIndex));
+			bestMatchedExercises.add(new TupleInt(exerciseRate, libIndex));
+			System.out.println(String.format("%s: %d", exercisesLib.get(libIndex).getName(), exerciseRate));
 		}
 		List<Exercise> exercisesChosen = new ArrayList<>();
-		for (int i = 0; i < exercisesPerDayCount; i++){
-			Exercise ex = exercisesLib.get(bestItems.poll().b);
+		for (int i = 0; i < exercisesPerDayCount; i++) {
+			Exercise ex = exercisesLib.get(bestMatchedExercises.poll().b);
 			exercisesChosen.add(ex);
 		}
 		return exercisesChosen;
@@ -72,11 +75,13 @@ public class ExerciseChooser {
 	private int rateExercise(Exercise exercise) {
 		int points = 0;
 		boolean isAbleToExercise = hasUserEquipment || !exercise.isEquipmentRequired();
-		boolean doesObjectiveMatch = objective.getObjectiveChar() == exercise.getObjective();
+		boolean objectiveMatches = objective.getObjectiveChar() == exercise.getObjective();
 		int difficultyLevelDifference = Math.abs(difficulty.getLevelNumber() - exercise.getDifficultyLevel());
 
-		points += isAbleToExercise ? 1 : -10;
-		points += doesObjectiveMatch ? 10 : -10;
+		if (isAbleToExercise)
+			points += POINTS_FOR_EQUIPMENT_MATCH;
+		if (objectiveMatches)
+			points += POINTS_FOR_OBJECTIVE_MATCH;
 		points -= difficultyLevelDifference;
 
 		return points;
@@ -86,14 +91,15 @@ public class ExerciseChooser {
 		WorkoutDayPreferences preferences = new WorkoutDayPreferences();
 		preferences.setDifficultyLevel(DifficultyLevel.Easy);
 		preferences.setObjective(Objective.MassGain);
-		preferences.setEquipmentRequired(false);
+		preferences.setEquipmentRequired(true);
 
 		ExerciseChooser ec = new ExerciseChooser(preferences);
 
 		ec.initializeLibrary();
-		
-		for (Exercise ex :  ec.chooseBestMatchedExercises()){
-			System.out.println(ex.getName());
-		}
+		ec.chooseBestMatchedExercises();
+
+		/*
+		 * for (Exercise ex : ) { System.out.println(ex.getName()); }
+		 */
 	}
 }
