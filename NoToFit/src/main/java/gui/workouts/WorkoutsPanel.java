@@ -84,7 +84,9 @@ public class WorkoutsPanel extends JPanel {
 		int selectedRowNumber = table.getSelectedRow();
 		if (selectedRowNumber != -1) {
 			Workout selectedWorkout = tableModel.getWorkoutAt(selectedRowNumber);
-			
+			WorkoutOverviewDialog workoutView = new WorkoutOverviewDialog(selectedWorkout);
+			workoutView.setLocationRelativeTo(this);
+			workoutView.setVisible(true);
 		} else {
 			JOptionPane.showMessageDialog(this, "No row selected.");
 		}

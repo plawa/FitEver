@@ -99,7 +99,5 @@ public class ExerciseChooser {
 			System.out.println(e.getName());
 		}*/
 		
-		
-		
 	}
 }

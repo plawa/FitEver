@@ -113,18 +113,6 @@ public class DietOverviewDialog extends JDialog {
 	}
 
 	private DietDayTable createDietDayTable(List<Meal> dietDayMeals) {
-		/*JTable dietDayTable = new JTable();
-		dietDayTable.setFillsViewportHeight(true);
-		MealsTableModel mealModel = new MealsTableModel(dietDayMeals)
-		dietDayTable.setModel(mealModel);
-		dietDayTable.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if (me.getClickCount() == 2)
-					mealModel.getMealAt(dietDayTable.getSelectedRow());
-			}
-		});*/
-		
 		return new DietDayTable(dietDayMeals);
 	}
 
@@ -244,19 +232,7 @@ public class DietOverviewDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						tearDown(); // TODO : Check if OK and Cancel buttons are
-									// necessary
-					}
-				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Close");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						tearDown();
