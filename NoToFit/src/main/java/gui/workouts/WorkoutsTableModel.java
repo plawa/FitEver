@@ -6,6 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 import database.entities.Workout;
 import gui.common.GuiTools;
+import gui.common.Objective;
 
 class WorkoutsTableModel extends AbstractTableModel {
 
@@ -41,11 +42,11 @@ class WorkoutsTableModel extends AbstractTableModel {
 		case 0:
 			return workout.getName();
 		case 1:
-			return workout.getObjective();			
+			return Objective.get(workout.getObjective());			
 		case 2:
 			return GuiTools.parseDateToString(workout.getValidFrom());
 		case 3:
-			return GuiTools.parseDateToString(workout.getValidFrom());
+			return GuiTools.parseDateToString(workout.getValidTo());
 		default:
 			return "Error!";
 		}

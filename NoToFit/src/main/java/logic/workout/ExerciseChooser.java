@@ -1,6 +1,6 @@
 package logic.workout;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -11,10 +11,12 @@ import database.entities.Exercise;
 import database.entities.Workoutday;
 import gui.common.Objective;
 import gui.exercises.DifficultyLevel;
-import logic.TupleInt;
+import logic.EntityValuePair;
 
 public class ExerciseChooser {
 
+	private static final int REDUCTION_EXERCISES_COUNT = 10;
+	private static final int MASS_GAIN_EXERCISES_COUNT = 8;
 	private static final int POINTS_FOR_EQUIPMENT_MATCH = 2;
 	private static final int POINTS_FOR_OBJECTIVE_MATCH = 4;
 	private int exercisesPerDayCount;
@@ -22,7 +24,7 @@ public class ExerciseChooser {
 	private Objective objective;
 	private boolean hasUserEquipment;
 
-	private List<Exercise> exercisesLib;
+	private static List<Exercise> exercisesLib;
 
 	public ExerciseChooser(WorkoutDayPreferences preferences) {
 		exercisesPerDayCount = getExercisesPerDayCountByObjective(preferences.getObjective());
@@ -30,46 +32,40 @@ public class ExerciseChooser {
 		objective = preferences.getObjective();
 		hasUserEquipment = preferences.isEquipmentRequired();
 	}
-
+	
+	public static void initializeLibrary() {
+		exercisesLib = DatabaseController.getAll(Exercise.class);
+	}
+	
 	private int getExercisesPerDayCountByObjective(Objective objective) {
 		switch (objective) {
 		case MassGain:
-			return 9;
+			return MASS_GAIN_EXERCISES_COUNT;
 		case Reduction:
-			return 12;
+			return REDUCTION_EXERCISES_COUNT;
 		default:
 			return 0;
 		}
 	}
 
-	public Workoutday generateWorkoutDay() {
+	public Workoutday generateWorkoutDay(Date date) {
 		initializeLibrary();
-		chooseBestMatchedExercises();
-		Workoutday day = new Workoutday();
-
-		Set<Exercise> exercisesForDay = new HashSet<>();
-
-		return null;
+		Workoutday day = new Workoutday(date);
+		day.setExercises(chooseBestMatchedExercises());
+		return day;
 	}
 
-	private void initializeLibrary() {
-		exercisesLib = DatabaseController.getAll(Exercise.class);
-	}
-
-	private List<Exercise> chooseBestMatchedExercises() {
-		PriorityQueue<TupleInt> bestMatchedExercises = new PriorityQueue<>();
-		for (int libIndex = 0; libIndex < exercisesLib.size(); libIndex++) {
-			Exercise currentExercise = exercisesLib.get(libIndex);
-			Integer exerciseRate = rateExercise(currentExercise);
-			bestMatchedExercises.add(new TupleInt(exerciseRate, libIndex));
-			System.out.println(String.format("%s: %d", exercisesLib.get(libIndex).getName(), exerciseRate));
+	private Set<Exercise> chooseBestMatchedExercises() {
+		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = new PriorityQueue<EntityValuePair>();
+		for (Exercise currentExercise : exercisesLib) {
+			int exerciseRate = rateExercise(currentExercise);
+			exercisesSortedByMatchRank.add(new EntityValuePair(currentExercise, exerciseRate));
 		}
-		List<Exercise> exercisesChosen = new ArrayList<>();
-		for (int i = 0; i < exercisesPerDayCount; i++) {
-			Exercise ex = exercisesLib.get(bestMatchedExercises.poll().b);
-			exercisesChosen.add(ex);
+		Set<Exercise> resultSet = new HashSet<>();
+		for(int i = 0; i < exercisesPerDayCount; i++){
+			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().entity);
 		}
-		return exercisesChosen;
+		return resultSet;
 	}
 
 	private int rateExercise(Exercise exercise) {
@@ -91,15 +87,19 @@ public class ExerciseChooser {
 		WorkoutDayPreferences preferences = new WorkoutDayPreferences();
 		preferences.setDifficultyLevel(DifficultyLevel.Easy);
 		preferences.setObjective(Objective.MassGain);
-		preferences.setEquipmentRequired(true);
+		preferences.setEquipmentRequired(false);
 
 		ExerciseChooser ec = new ExerciseChooser(preferences);
 
-		ec.initializeLibrary();
-		ec.chooseBestMatchedExercises();
+		/*initializeLibrary();
 
-		/*
-		 * for (Exercise ex : ) { System.out.println(ex.getName()); }
-		 */
+		Set<Exercise> choosenSet = ec.chooseBestMatchedExercises();
+		System.out.println("*** Chosen set ***");
+		for(Exercise e : choosenSet){
+			System.out.println(e.getName());
+		}*/
+		
+		
+		
 	}
 }

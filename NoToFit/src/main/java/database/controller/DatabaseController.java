@@ -14,6 +14,7 @@ import org.hibernate.cfg.Configuration;
 import database.entities.Entity;
 import database.entities.Exercise;
 import database.entities.Shadow;
+import database.entities.User;
 import database.entities.Workout;
 import database.entities.Workoutday;
 
@@ -105,7 +106,7 @@ public class DatabaseController {
 		exercises.add(ex3);
 
 		Workout workout = new Workout();
-		workout.setUserId(13);
+		workout.setUser(getEntityByID(User.class, 13));
 		workout.setName("Przykładowy workout");
 		workout.setObjective('m');
 		workout.setValidFrom(new Date());

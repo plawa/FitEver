@@ -3,31 +3,34 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 2016-10-30 15:10:58 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
-    <class name="database.entities.Workout" table="workout" optimistic-lock="version">
-        <id name="id" type="java.lang.Integer">
-            <column name="ID" />
-            <generator class="identity" />
-        </id>
-        <property name="userId" type="int">
-            <column name="UserID" not-null="true" />
-        </property>
-        <property name="name" type="string">
-            <column name="name" length="30" not-null="true" />
-        </property>
-        <property name="validFrom" type="date">
-            <column name="validFrom" length="10" not-null="true" />
-        </property>
-        <property name="validTo" type="date">
-            <column name="validTo" length="10" not-null="true" />
-        </property>
-        <property name="objective" type="java.lang.Character">
-            <column name="objective" length="1" />
-        </property>
-        <set name="workoutdays" table="workoutday" inverse="true" lazy="false" fetch="select" cascade="all">
-            <key>
-                <column name="WorkoutID" not-null="true" />
-            </key>
-            <one-to-many class="database.entities.Workoutday" />
-        </set>
-    </class>
+	<class name="database.entities.Workout" table="workout"
+		optimistic-lock="version">
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" />
+			<generator class="identity" />
+		</id>
+		<many-to-one name="user" class="database.entities.User"
+			fetch="select">
+			<column name="UserID" not-null="true" />
+		</many-to-one>
+		<property name="name" type="string">
+			<column name="name" length="30" not-null="true" />
+		</property>
+		<property name="validFrom" type="date">
+			<column name="validFrom" length="10" not-null="true" />
+		</property>
+		<property name="validTo" type="date">
+			<column name="validTo" length="10" not-null="true" />
+		</property>
+		<property name="objective" type="java.lang.Character">
+			<column name="objective" length="1" />
+		</property>
+		<set name="workoutdays" table="workoutday" inverse="true" lazy="false"
+			fetch="select" cascade="all">
+			<key>
+				<column name="WorkoutID" not-null="true" />
+			</key>
+			<one-to-many class="database.entities.Workoutday" />
+		</set>
+	</class>
 </hibernate-mapping>

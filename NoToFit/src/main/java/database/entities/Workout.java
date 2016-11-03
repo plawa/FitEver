@@ -10,10 +10,9 @@ import java.util.Set;
  */
 public class Workout extends Entity {
 
-
 	private static final long serialVersionUID = 5479860479872562447L;
 	private Integer id;
-	private int userId;
+	private User user;
 	private String name;
 	private Date validFrom;
 	private Date validTo;
@@ -32,12 +31,12 @@ public class Workout extends Entity {
 		this.id = id;
 	}
 
-	public int getUserId() {
-		return this.userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getName() {
