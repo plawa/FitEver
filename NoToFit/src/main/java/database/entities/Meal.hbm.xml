@@ -27,7 +27,7 @@
 		</property>
 
 		<property name="gramature" type="int">
-			<column name="gramature" not-null="true" />
+			<column name="grammage" not-null="true" />
 		</property>
 		<property name="carbohydratesPercentage" type="int">
 			<column name="carbohydratesPercentage" not-null="true" />

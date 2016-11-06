@@ -9,25 +9,31 @@ import database.entities.Workoutday;
 import gui.common.Objective;
 
 public class WorkoutPlanGenerator {
-	
+
 	public static Workout generateWorkout(WorkoutGenerationPreferences workoutPreferences) {
-		Workout newWorkout = initializeWorkout(workoutPreferences);
-		newWorkout.setWorkoutdays(generateWorkoutDaysSet(newWorkout, workoutPreferences));
-		return newWorkout;
+		Workout newWorkout = initializeWorkoutPrototype(workoutPreferences);
+		Set<Workoutday> generateWorkoutDaysSet = generateWorkoutDaysSet(newWorkout, workoutPreferences);
+		if (generateWorkoutDaysSet != null) {
+			newWorkout.setWorkoutdays(generateWorkoutDaysSet);
+			return newWorkout;
+		} else {
+			return null;
+		}
 	}
 
-	private static Set<Workoutday> generateWorkoutDaysSet(Workout workout,
-			WorkoutGenerationPreferences preferences) {
-		Set<Workoutday> workoutDaysSet = new HashSet<>();
+	private static Set<Workoutday> generateWorkoutDaysSet(Workout workout, WorkoutGenerationPreferences preferences) {
 		int daysToGenerateCount = preferences.getTrainingDaysPerWeek() * preferences.getWorkoutPeriodInWeeks();
 
+		Set<Workoutday> workoutDaysSet = null;
 		ExerciseChooser dayGenerator = new ExerciseChooser(buildWorkoutDayPreferences(preferences));
-		Date[] workoutDayDates = preferences.getDatesForWorkoutDays();
-		
-		for (int i = 0; i < daysToGenerateCount; i++) {
-			Workoutday day = dayGenerator.generateWorkoutDay(workoutDayDates[i]);
-			day.setWorkout(workout);
-			workoutDaysSet.add(day);
+		if (dayGenerator.isExercisesLibraryBigEnough()) {
+			workoutDaysSet = new HashSet<>();
+			Date[] workoutDayDates = preferences.getDatesForWorkoutDays();
+			for (int i = 0; i < daysToGenerateCount; i++) {
+				Workoutday day = dayGenerator.generateWorkoutDay(workoutDayDates[i]);
+				day.setWorkout(workout);
+				workoutDaysSet.add(day);
+			}
 		}
 		return workoutDaysSet;
 	}
@@ -40,7 +46,7 @@ public class WorkoutPlanGenerator {
 		return dayPreferences;
 	}
 
-	private static Workout initializeWorkout(WorkoutGenerationPreferences workoutPreferences) {
+	private static Workout initializeWorkoutPrototype(WorkoutGenerationPreferences workoutPreferences) {
 		Workout newWorkout = new Workout();
 		newWorkout.setValidFrom(workoutPreferences.getFirstDayDate());
 		newWorkout.setValidTo(workoutPreferences.getLastDayDate());

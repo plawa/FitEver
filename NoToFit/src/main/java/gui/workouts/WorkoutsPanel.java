@@ -28,8 +28,10 @@ import logic.workout.WorkoutGenerationPreferences;
 import logic.workout.WorkoutPlanGenerator;
 
 public class WorkoutsPanel extends JPanel {
-
 	private static final long serialVersionUID = -4659573390181954313L;
+
+	private static final String MSG_TOO_LESS_EXERCISES = "Workout could not have been generated. Exercises library consists of too less entries";
+	private static final String POPUP_HEADER_ERROR = "Error!";
 
 	private User currentUser;
 	private JTable table;
@@ -50,13 +52,17 @@ public class WorkoutsPanel extends JPanel {
 
 	protected void generateWorkoutPlanButtonPressed() {
 		WorkoutGenerationPreferences preferences = askForWorkoutGenerationPreferences();
-		if (preferences == null)
-			return;
-		preferences.setUser(currentUser);
-		Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
-		currentUser.getWorkouts().add(generatedWorkout);
-		DatabaseController.saveEntityToDatabase(generatedWorkout);
-		refreshTable();
+		if (preferences != null) {
+			preferences.setUser(currentUser);
+			Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
+			if (generatedWorkout != null) {
+				currentUser.getWorkouts().add(generatedWorkout);
+				DatabaseController.saveEntityToDatabase(generatedWorkout);
+				refreshTable();
+			} else {
+				JOptionPane.showMessageDialog(this, MSG_TOO_LESS_EXERCISES, POPUP_HEADER_ERROR, 0);
+			}
+		}
 	}
 
 	private WorkoutGenerationPreferences askForWorkoutGenerationPreferences() {

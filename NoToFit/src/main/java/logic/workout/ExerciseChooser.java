@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
+
 import database.controller.DatabaseController;
 import database.entities.Exercise;
 import database.entities.Workoutday;
@@ -23,9 +25,16 @@ public class ExerciseChooser {
 	private DifficultyLevel difficulty;
 	private Objective objective;
 	private boolean hasUserEquipment;
-
 	private static List<Exercise> exercisesLib;
 
+	static {
+		updateLibrary();
+	}
+	
+	public static void updateLibrary() {
+		exercisesLib = DatabaseController.getAll(Exercise.class);
+	}
+	
 	public ExerciseChooser(WorkoutDayPreferences preferences) {
 		exercisesPerDayCount = getExercisesPerDayCountByObjective(preferences.getObjective());
 		difficulty = preferences.getDifficultyLevel();
@@ -33,8 +42,8 @@ public class ExerciseChooser {
 		hasUserEquipment = preferences.isEquipmentRequired();
 	}
 	
-	public static void initializeLibrary() {
-		exercisesLib = DatabaseController.getAll(Exercise.class);
+	public boolean isExercisesLibraryBigEnough(){
+		return exercisesPerDayCount <= exercisesLib.size();
 	}
 	
 	private int getExercisesPerDayCountByObjective(Objective objective) {
@@ -49,23 +58,28 @@ public class ExerciseChooser {
 	}
 
 	public Workoutday generateWorkoutDay(Date date) {
-		initializeLibrary();
 		Workoutday day = new Workoutday(date);
 		day.setExercises(chooseBestMatchedExercises());
 		return day;
 	}
 
 	private Set<Exercise> chooseBestMatchedExercises() {
-		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = new PriorityQueue<EntityValuePair>();
-		for (Exercise currentExercise : exercisesLib) {
-			int exerciseRate = rateExercise(currentExercise);
-			exercisesSortedByMatchRank.add(new EntityValuePair(currentExercise, exerciseRate));
-		}
+		Preconditions.checkArgument(isExercisesLibraryBigEnough());
+		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = getRankedExercisesSorted();
 		Set<Exercise> resultSet = new HashSet<>();
 		for(int i = 0; i < exercisesPerDayCount; i++){
 			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().entity);
 		}
 		return resultSet;
+	}
+
+	private PriorityQueue<EntityValuePair> getRankedExercisesSorted() {
+		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = new PriorityQueue<EntityValuePair>();
+		for (Exercise currentExercise : exercisesLib) {
+			int exerciseRate = rateExercise(currentExercise);
+			exercisesSortedByMatchRank.add(new EntityValuePair(currentExercise, exerciseRate));
+		}
+		return exercisesSortedByMatchRank;
 	}
 
 	private int rateExercise(Exercise exercise) {
@@ -91,13 +105,11 @@ public class ExerciseChooser {
 
 		ExerciseChooser ec = new ExerciseChooser(preferences);
 
-		/*initializeLibrary();
-
 		Set<Exercise> choosenSet = ec.chooseBestMatchedExercises();
 		System.out.println("*** Chosen set ***");
 		for(Exercise e : choosenSet){
 			System.out.println(e.getName());
-		}*/
+		}
 		
 	}
 }

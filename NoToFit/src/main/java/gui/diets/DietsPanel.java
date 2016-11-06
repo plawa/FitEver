@@ -31,6 +31,8 @@ import logic.diet.DietPlanGenerator;
 
 public class DietsPanel extends JPanel {
 
+	private static final String POPUP_HEADER_ERROR = "Error!";
+	private static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less entries.";
 	private static final long serialVersionUID = -3015175045558720497L;
 	private JTable table;
 	private DietsTableModel tableModel;
@@ -50,28 +52,31 @@ public class DietsPanel extends JPanel {
 		initializeSwingComponents();
 		refreshTable();
 	}
-	
+
 	protected void generateDietPlanButtonPressed() {
 		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
-		if (dietPreferences == null)
-			return;
-		dietPreferences.setUser(currentUser);
-		Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
-		currentUser.getDiets().add(generatedDiet);
-		DatabaseController.saveEntityToDatabase(generatedDiet);
-		refreshTable();
-	}	
-
+		if (dietPreferences != null) {
+			dietPreferences.setUser(currentUser);
+			Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
+			if (generatedDiet != null) {
+				currentUser.getDiets().add(generatedDiet);
+				DatabaseController.saveEntityToDatabase(generatedDiet);
+				refreshTable();
+			} else {
+				JOptionPane.showMessageDialog(this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);
+			}
+		}
+	}
 
 	private DietGenerationPreferences extractDietPreferencesFromInputDialog() {
 		GenerateDietDialog dietPropertiesDialog = new GenerateDietDialog(currentUser);
 		dietPropertiesDialog.setLocationRelativeTo(this);
 		dietPropertiesDialog.setVisible(true);
-		
+
 		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();
 		return dietPreferences;
 	}
-	
+
 	protected void openSelectedDietPlan() {
 		if (table.getSelectedRow() != -1) {
 			Diet selectedDiet = tableModel.getDietAt(table.getSelectedRow());
@@ -102,7 +107,7 @@ public class DietsPanel extends JPanel {
 		refreshButtonIcon = new ImageIcon(getClass().getResource("/images/refresh_icon.png"));
 		generateDietButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
 	}
-	
+
 	private void initializeSwingComponents() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 430, 0, 0 };
@@ -154,8 +159,7 @@ public class DietsPanel extends JPanel {
 			}
 		});
 		toolBar.add(btnRefresh);
-		
-		
+
 		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
 		btnGenerateDietPlan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

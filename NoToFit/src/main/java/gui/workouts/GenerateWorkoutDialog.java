@@ -90,6 +90,7 @@ public class GenerateWorkoutDialog extends JDialog {
 		}
 		{
 			textFieldName = new JTextField();
+			textFieldName.setText("My new example workout");
 			GridBagConstraints gbc_textFieldName = new GridBagConstraints();
 			gbc_textFieldName.gridwidth = 2;
 			gbc_textFieldName.insets = new Insets(0, 0, 5, 5);

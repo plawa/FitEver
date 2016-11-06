@@ -32,7 +32,7 @@ public class GenerateDietDialog extends JDialog {
 	
 	private final JPanel contentPanel = new JPanel();
 	private JSlider sliderDietPeriod;
-	private JTextField textField;
+	private JTextField txtMyNewExample;
 	private DietGenerationPreferences newDietPreferences;
 	private JSpinner spinnerSupperMealsCount;
 	private JSpinner spinnerMainDishesCount;
@@ -64,7 +64,7 @@ public class GenerateDietDialog extends JDialog {
 
 	private void retrieveDietProperties() {
 		newDietPreferences = new DietGenerationPreferences();
-		newDietPreferences.setDietName(textField.getText());
+		newDietPreferences.setDietName(txtMyNewExample.getText());
 		newDietPreferences.setDietPeriodDays(sliderDietPeriod.getValue());
 		
 		int dailyCaloriesReq = EnergyRequirementCalculator.performCalculation(user);
@@ -106,14 +106,15 @@ public class GenerateDietDialog extends JDialog {
 			contentPanel.add(lblDietName, gbc_lblDietName);
 		}
 		{
-			textField = new JTextField();
-			GridBagConstraints gbc_textField = new GridBagConstraints();
-			gbc_textField.insets = new Insets(0, 0, 5, 5);
-			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textField.gridx = 2;
-			gbc_textField.gridy = 1;
-			contentPanel.add(textField, gbc_textField);
-			textField.setColumns(10);
+			txtMyNewExample = new JTextField();
+			txtMyNewExample.setText("My new example diet");
+			GridBagConstraints gbc_txtMyNewExample = new GridBagConstraints();
+			gbc_txtMyNewExample.insets = new Insets(0, 0, 5, 5);
+			gbc_txtMyNewExample.fill = GridBagConstraints.HORIZONTAL;
+			gbc_txtMyNewExample.gridx = 2;
+			gbc_txtMyNewExample.gridy = 1;
+			contentPanel.add(txtMyNewExample, gbc_txtMyNewExample);
+			txtMyNewExample.setColumns(10);
 		}
 		{
 			JLabel lblBreakfastsPerDay = new JLabel("Breakfasts Per Day:");
