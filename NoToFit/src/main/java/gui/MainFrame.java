@@ -44,7 +44,7 @@ public class MainFrame extends JFrame {
 	private void createFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(NOTOFIT_VERSION_HEADER);
-		setBounds(100, 100, 778, 550);
+		setBounds(100, 100, 863, 550);
 	}
 
 	private void loadTabbedPaneIcons() {

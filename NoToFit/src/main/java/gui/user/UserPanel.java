@@ -22,7 +22,11 @@ import javax.swing.UIManager;
 import database.controller.DatabaseController;
 import database.entities.User;
 import gui.LoginDialog;
+import gui.common.PieChartFX;
 import gui.common.Translator;
+import javafx.collections.FXCollections;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.chart.PieChart;
 import logic.entitytools.UserTools;
 
 public class UserPanel extends JPanel {
@@ -75,7 +79,7 @@ public class UserPanel extends JPanel {
 	}
 
 	private void switchUser() {
-		//TODO: Fix other tabs refreshing
+		// TODO: Fix other tabs refreshing
 		LoginDialog loginDlg = new LoginDialog();
 		User newLoggedUser = loginDlg.getAuthorizedUser();
 		if (newLoggedUser != null) {
@@ -123,9 +127,9 @@ public class UserPanel extends JPanel {
 
 	private void initializeSwingComponents() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 25, 0, 20, 0, 0, 0, 0, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 16, 0, 23, 0, 0, 0, 0, 0, 20, 0, 0, 136, 1, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 7.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.columnWidths = new int[] { 0, 25, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 16, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 136, 1, 0 };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 7.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				0.0, Double.MIN_VALUE };
 		setLayout(gridBagLayout);
@@ -136,7 +140,7 @@ public class UserPanel extends JPanel {
 		toolBar.setFloatable(false);
 		GridBagConstraints gbc_toolBar = new GridBagConstraints();
 		gbc_toolBar.anchor = GridBagConstraints.WEST;
-		gbc_toolBar.gridwidth = 9;
+		gbc_toolBar.gridwidth = 5;
 		gbc_toolBar.insets = new Insets(0, 0, 5, 0);
 		gbc_toolBar.gridx = 0;
 		gbc_toolBar.gridy = 0;
@@ -222,32 +226,6 @@ public class UserPanel extends JPanel {
 		gbc_lblValueNameAndSurname.gridy = 2;
 		add(lblValueNameAndSurname, gbc_lblValueNameAndSurname);
 
-		Component dataColumnStrut = Box.createHorizontalStrut(20);
-		GridBagConstraints gbc_dataColumnStrut = new GridBagConstraints();
-		gbc_dataColumnStrut.insets = new Insets(0, 5, 5, 5);
-		gbc_dataColumnStrut.gridx = 3;
-		gbc_dataColumnStrut.gridy = 2;
-		add(dataColumnStrut, gbc_dataColumnStrut);
-
-		JLabel lblDescriptionBmi = new JLabel("BMI:");
-		lblDescriptionBmi.setForeground(Color.GRAY);
-		lblDescriptionBmi.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		GridBagConstraints gbc_lblDescriptionBmi = new GridBagConstraints();
-		gbc_lblDescriptionBmi.anchor = GridBagConstraints.WEST;
-		gbc_lblDescriptionBmi.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescriptionBmi.gridx = 4;
-		gbc_lblDescriptionBmi.gridy = 2;
-		add(lblDescriptionBmi, gbc_lblDescriptionBmi);
-
-		lblValueBmi = new JLabel("");
-		lblValueBmi.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblValueBmi = new GridBagConstraints();
-		gbc_lblValueBmi.anchor = GridBagConstraints.WEST;
-		gbc_lblValueBmi.insets = new Insets(0, 0, 5, 5);
-		gbc_lblValueBmi.gridx = 5;
-		gbc_lblValueBmi.gridy = 2;
-		add(lblValueBmi, gbc_lblValueBmi);
-
 		JLabel lblDescriptionSex = new JLabel("Sex:");
 		lblDescriptionSex.setForeground(Color.GRAY);
 		lblDescriptionSex.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -266,25 +244,6 @@ public class UserPanel extends JPanel {
 		gbc_lblValueSex.gridx = 2;
 		gbc_lblValueSex.gridy = 3;
 		add(lblValueSex, gbc_lblValueSex);
-
-		JLabel lblBmiState = new JLabel("Overall state:");
-		lblBmiState.setForeground(Color.GRAY);
-		lblBmiState.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		GridBagConstraints gbc_lblBmiState = new GridBagConstraints();
-		gbc_lblBmiState.anchor = GridBagConstraints.WEST;
-		gbc_lblBmiState.insets = new Insets(0, 0, 5, 5);
-		gbc_lblBmiState.gridx = 4;
-		gbc_lblBmiState.gridy = 3;
-		add(lblBmiState, gbc_lblBmiState);
-
-		lblValueBmiState = new JLabel("state");
-		lblValueBmiState.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblValueBmiState = new GridBagConstraints();
-		gbc_lblValueBmiState.anchor = GridBagConstraints.WEST;
-		gbc_lblValueBmiState.insets = new Insets(0, 0, 5, 5);
-		gbc_lblValueBmiState.gridx = 5;
-		gbc_lblValueBmiState.gridy = 3;
-		add(lblValueBmiState, gbc_lblValueBmiState);
 
 		JLabel lblDescriptionAge = new JLabel("Age:");
 		lblDescriptionAge.setForeground(Color.GRAY);
@@ -362,25 +321,6 @@ public class UserPanel extends JPanel {
 		gbc_lblValueActualWeight.gridy = 7;
 		add(lblValueActualWeight, gbc_lblValueActualWeight);
 
-		JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
-		lblDescriptionStartWeight.setForeground(Color.GRAY);
-		lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
-		gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescriptionStartWeight.gridx = 4;
-		gbc_lblDescriptionStartWeight.gridy = 7;
-		add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
-
-		lblValueStartWeight = new JLabel();
-		lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
-		gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblValueStartWeight.gridx = 5;
-		gbc_lblValueStartWeight.gridy = 7;
-		add(lblValueStartWeight, gbc_lblValueStartWeight);
-
 		JLabel lblDescriptionGoalWeight = new JLabel("Goal Weight:");
 		lblDescriptionGoalWeight.setForeground(Color.GRAY);
 		lblDescriptionGoalWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -418,8 +358,84 @@ public class UserPanel extends JPanel {
 		gbc_lblValueUserObjective.gridx = 2;
 		gbc_lblValueUserObjective.gridy = 9;
 		add(lblValueUserObjective, gbc_lblValueUserObjective);
+
+		final JFXPanel fxPanel = createChartFXPanel();
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 3;
+		gbc_lblNewLabel.gridy = 2;
+		gbc_lblNewLabel.gridheight = 12;
+		add(fxPanel, gbc_lblNewLabel);
+
+		JLabel lblDescriptionBmi = new JLabel("BMI:");
+		lblDescriptionBmi.setForeground(Color.GRAY);
+		lblDescriptionBmi.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblDescriptionBmi = new GridBagConstraints();
+		gbc_lblDescriptionBmi.anchor = GridBagConstraints.WEST;
+		gbc_lblDescriptionBmi.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescriptionBmi.gridx = 1;
+		gbc_lblDescriptionBmi.gridy = 10;
+		add(lblDescriptionBmi, gbc_lblDescriptionBmi);
+
+		lblValueBmi = new JLabel("");
+		lblValueBmi.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblValueBmi = new GridBagConstraints();
+		gbc_lblValueBmi.anchor = GridBagConstraints.WEST;
+		gbc_lblValueBmi.insets = new Insets(0, 0, 5, 5);
+		gbc_lblValueBmi.gridx = 2;
+		gbc_lblValueBmi.gridy = 10;
+		add(lblValueBmi, gbc_lblValueBmi);
+
+		JLabel lblBmiState = new JLabel("Overall state:");
+		lblBmiState.setForeground(Color.GRAY);
+		lblBmiState.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblBmiState = new GridBagConstraints();
+		gbc_lblBmiState.anchor = GridBagConstraints.WEST;
+		gbc_lblBmiState.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBmiState.gridx = 1;
+		gbc_lblBmiState.gridy = 11;
+		add(lblBmiState, gbc_lblBmiState);
+
+		lblValueBmiState = new JLabel("state");
+		lblValueBmiState.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblValueBmiState = new GridBagConstraints();
+		gbc_lblValueBmiState.anchor = GridBagConstraints.WEST;
+		gbc_lblValueBmiState.insets = new Insets(0, 0, 5, 5);
+		gbc_lblValueBmiState.gridx = 2;
+		gbc_lblValueBmiState.gridy = 11;
+		add(lblValueBmiState, gbc_lblValueBmiState);
+
+		JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
+		lblDescriptionStartWeight.setForeground(Color.GRAY);
+		lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
+		gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
+		gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescriptionStartWeight.gridx = 1;
+		gbc_lblDescriptionStartWeight.gridy = 12;
+		add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
+
+		lblValueStartWeight = new JLabel();
+		lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
+		gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
+		gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
+		gbc_lblValueStartWeight.gridx = 2;
+		gbc_lblValueStartWeight.gridy = 12;
+		add(lblValueStartWeight, gbc_lblValueStartWeight);
 	}
-	
+
+	private JFXPanel createChartFXPanel() {
+		JFXPanel chartPanel = new JFXPanel();
+		PieChartFX chart = new PieChartFX();
+		chart.setPieChartData(FXCollections.observableArrayList(
+				new PieChart.Data("Grapefruit", 13), new PieChart.Data("Oranges", 25), new PieChart.Data("Plums", 10),
+				new PieChart.Data("Pears", 22), new PieChart.Data("Apples", 30)));
+		chartPanel.setScene(chart.getScene());
+		return chartPanel;
+	}
+
 	protected void exit() {
 		DatabaseController.tidyUp();
 		System.exit(0);

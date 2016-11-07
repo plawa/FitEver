@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
+
 import database.controller.DatabaseController;
 import database.entities.Exercise;
 import database.entities.Workoutday;

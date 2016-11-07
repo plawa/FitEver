@@ -40,7 +40,6 @@ public class WorkoutsPanel extends JPanel {
 	private WorkoutsTableModel tableModel;
 	private ImageIcon openButtonIcon;
 	private ImageIcon showExercisesButtonIcon;
-	private ImageIcon refreshButtonIcon;
 	private ImageIcon generateWorkoutButtonIcon;
 
 	public WorkoutsPanel() {
@@ -166,7 +165,6 @@ public class WorkoutsPanel extends JPanel {
 	private void loadIcons() {
 		openButtonIcon = new ImageIcon(getClass().getResource("/images/open_icon.png"));
 		showExercisesButtonIcon = new ImageIcon(getClass().getResource("/images/generate_workout_button.png"));
-		refreshButtonIcon = new ImageIcon(getClass().getResource("/images/refresh_icon.png"));
 		generateWorkoutButtonIcon = new ImageIcon(getClass().getResource("/images/generate_workout_button.png"));
 	}
 
@@ -202,18 +200,6 @@ public class WorkoutsPanel extends JPanel {
 		btnShowAllExercises.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnShowAllExercises.setIcon(showExercisesButtonIcon);
 		toolBar.add(btnShowAllExercises);
-
-		JButton btnRefresh = new JButton("Refresh");
-		btnRefresh.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnRefresh.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnRefresh.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnRefresh.setIcon(refreshButtonIcon);
-		btnRefresh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				refreshTable();
-			}
-		});
-		toolBar.add(btnRefresh);
 
 		JButton btnGenerateDietPlan = new JButton("Generate Workout Plan");
 		btnGenerateDietPlan.addActionListener(new ActionListener() {

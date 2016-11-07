@@ -39,7 +39,6 @@ public class DietsPanel extends JPanel {
 	private User currentUser;
 	private ImageIcon openButtonIcon;
 	private ImageIcon showMealsButtonIcon;
-	private ImageIcon refreshButtonIcon;
 	private ImageIcon generateDietButtonIcon;
 
 	public DietsPanel() {
@@ -104,7 +103,6 @@ public class DietsPanel extends JPanel {
 	private void loadIcons() {
 		openButtonIcon = new ImageIcon(getClass().getResource("/images/open_icon.png"));
 		showMealsButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
-		refreshButtonIcon = new ImageIcon(getClass().getResource("/images/refresh_icon.png"));
 		generateDietButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
 	}
 
@@ -147,18 +145,6 @@ public class DietsPanel extends JPanel {
 		btnShowAllMeals.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnShowAllMeals.setIcon(showMealsButtonIcon);
 		toolBar.add(btnShowAllMeals);
-
-		JButton btnRefresh = new JButton("Refresh");
-		btnRefresh.setVerticalTextPosition(SwingConstants.BOTTOM);
-		btnRefresh.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnRefresh.setVerticalAlignment(SwingConstants.BOTTOM);
-		btnRefresh.setIcon(refreshButtonIcon);
-		btnRefresh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				refreshTable();
-			}
-		});
-		toolBar.add(btnRefresh);
 
 		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
 		btnGenerateDietPlan.addActionListener(new ActionListener() {
