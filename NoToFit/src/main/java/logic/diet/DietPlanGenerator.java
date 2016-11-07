@@ -10,30 +10,36 @@ import database.entities.Meal;
 public class DietPlanGenerator {
 
 	private final static int ONE_DAY_IN_MILISECONDS = 86400000;
+	private final static float toleranceStep = 0.05f;
+	
 
 	public static Diet generateDiet(DietGenerationPreferences dietConf) {
-		DietDayConfiguration dayConf = dietConf.getDayMealsPref();
+		Diet generatedDiet = null;
+		DietDayConfiguration dayConfiguration = dietConf.getDayMealsPref();
+		if (isMealsLibraryBigEnough(dayConfiguration)) {
+			generatedDiet = generateDietPrototype(dietConf);
+			int dietDays = dietConf.getDietPeriodDays();
+			int expectedMealsCount = dietDays * dayConfiguration.getDayMealsCount();
 
-		Diet generatedDiet = generateDietPrototype(dietConf);
-		int dietDays = dietConf.getDietPeriodDays();
-		int expectedMealsCount = dietDays*dayConf.getDayMealsCount();
-		
-		Set<Meal> dietMeals;
-		float caloriesToleranceFactor = 0.05f;
-		float toleranceStep = 0.05f;
-		
-		do {
-			dietMeals = new HashSet<>();
-			MealChooser mealChooser = new MealChooser(caloriesToleranceFactor);
-			for (int i = 0; i < dietDays; i++) {
-				Set<Meal> dietDay = mealChooser.chooseDayMealSet(dayConf);
-				dietMeals.addAll(dietDay);
-			}
-			caloriesToleranceFactor += toleranceStep;
-		} while (dietMeals.size() < expectedMealsCount);
-
-		generatedDiet.setMeals(dietMeals);
+			Set<Meal> dietMeals;
+			MealChooser.updateLibraries();
+			float caloriesToleranceFactor = 0.05f;
+			do {
+				dietMeals = new HashSet<>();
+				MealChooser mealChooser = new MealChooser(caloriesToleranceFactor);
+				for (int i = 0; i < dietDays; i++) {
+					Set<Meal> dietDay = mealChooser.chooseDayMealSet(dayConfiguration);
+					dietMeals.addAll(dietDay);
+				}
+				caloriesToleranceFactor += toleranceStep;
+			} while (dietMeals.size() < expectedMealsCount);
+			generatedDiet.setMeals(dietMeals);
+		}
 		return generatedDiet;
+	}
+
+	private static boolean isMealsLibraryBigEnough(DietDayConfiguration dayConfig) {
+		return MealChooser.isMealsLibraryBigEnough(dayConfig);
 	}
 
 	private static Diet generateDietPrototype(DietGenerationPreferences dietPreferences) {

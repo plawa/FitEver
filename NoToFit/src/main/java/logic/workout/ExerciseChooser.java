@@ -26,6 +26,14 @@ public class ExerciseChooser {
 
 	private static List<Exercise> exercisesLib;
 
+	static {
+		updateLibrary();
+	}
+	
+	public static void updateLibrary() {
+		exercisesLib = DatabaseController.getAll(Exercise.class);
+	}
+	
 	public ExerciseChooser(WorkoutDayPreferences preferences) {
 		exercisesPerDayCount = getExercisesPerDayCountByObjective(preferences.getObjective());
 		difficulty = preferences.getDifficultyLevel();
@@ -33,8 +41,8 @@ public class ExerciseChooser {
 		hasUserEquipment = preferences.isEquipmentRequired();
 	}
 	
-	public static void initializeLibrary() {
-		exercisesLib = DatabaseController.getAll(Exercise.class);
+	public boolean isExercisesLibraryBigEnough(){
+		return exercisesPerDayCount <= exercisesLib.size();
 	}
 	
 	private int getExercisesPerDayCountByObjective(Objective objective) {
@@ -49,23 +57,28 @@ public class ExerciseChooser {
 	}
 
 	public Workoutday generateWorkoutDay(Date date) {
-		initializeLibrary();
 		Workoutday day = new Workoutday(date);
 		day.setExercises(chooseBestMatchedExercises());
 		return day;
 	}
 
 	private Set<Exercise> chooseBestMatchedExercises() {
-		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = new PriorityQueue<EntityValuePair>();
-		for (Exercise currentExercise : exercisesLib) {
-			int exerciseRate = rateExercise(currentExercise);
-			exercisesSortedByMatchRank.add(new EntityValuePair(currentExercise, exerciseRate));
-		}
+		Preconditions.checkArgument(isExercisesLibraryBigEnough());
+		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = getRankedExercisesSorted();
 		Set<Exercise> resultSet = new HashSet<>();
 		for(int i = 0; i < exercisesPerDayCount; i++){
 			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().entity);
 		}
 		return resultSet;
+	}
+
+	private PriorityQueue<EntityValuePair> getRankedExercisesSorted() {
+		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = new PriorityQueue<EntityValuePair>();
+		for (Exercise currentExercise : exercisesLib) {
+			int exerciseRate = rateExercise(currentExercise);
+			exercisesSortedByMatchRank.add(new EntityValuePair(currentExercise, exerciseRate));
+		}
+		return exercisesSortedByMatchRank;
 	}
 
 	private int rateExercise(Exercise exercise) {

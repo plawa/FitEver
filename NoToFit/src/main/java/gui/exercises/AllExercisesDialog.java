@@ -37,22 +37,24 @@ public class AllExercisesDialog extends AllMealsDialog {
 	@Override
 	protected void editButtonPressed() {
 		Exercise selectedExercise = retrieveSelectedExercise();
-		MaintainExerciseDialog editExerciseView = new MaintainExerciseDialog(selectedExercise);
-		editExerciseView.setLocationRelativeTo(this);
-		editExerciseView.setVisible(true);
-		refreshTable();
+		if (selectedExercise != null) {
+			MaintainExerciseDialog editExerciseDialog = new MaintainExerciseDialog(selectedExercise);
+			editExerciseDialog.setLocationRelativeTo(this);
+			editExerciseDialog.setVisible(true);
+			refreshTable();
+		}
 	}
 
 	@Override
 	protected void deleteButtonPressed() {
 		Exercise selectedExercise = retrieveSelectedExercise();
-		if (selectedExercise == null)
-			return;
-		int confirmationInput = JOptionPane.showConfirmDialog(this, "Are you sure to delete?", "Confirm",
-				JOptionPane.YES_NO_OPTION);
-		if (confirmationInput == JOptionPane.YES_OPTION) {
-			DatabaseController.deleteEntityFromDatabase(selectedExercise);
-			refreshTable();
+		if (selectedExercise != null) {
+			int confirmationInput = JOptionPane.showConfirmDialog(this, "Are you sure to delete?", "Confirm",
+					JOptionPane.YES_NO_OPTION);
+			if (confirmationInput == JOptionPane.YES_OPTION) {
+				DatabaseController.deleteEntityFromDatabase(selectedExercise);
+				refreshTable();
+			}
 		}
 	}
 
