@@ -41,7 +41,8 @@ public class MaintainUserDialog extends JDialog {
 	private static final long serialVersionUID = 9182720162758099907L;
 	private static final String MSG_SAVE_ERROR = "Error occured while saving data to database.";
 	private static final String TOOLTIP_WEIGHT_CHANGE = "You can change actual weight in Update Weight Dialog";
-	
+	private static final Object MSG_LOGIN_ALREADY_EXISTS = "User with the same login is already registered.";
+
 	protected User userMaintained;
 	private JTextField textFieldName;
 	private JTextField textFieldSurname;
@@ -60,7 +61,6 @@ public class MaintainUserDialog extends JDialog {
 	private DialogMode mode;
 	private JTextArea txtrExampleMessageDescribing;
 
-	
 	public MaintainUserDialog() {
 		getContentPane().setFocusable(false);
 		mode = DialogMode.CREATE;
@@ -359,7 +359,7 @@ public class MaintainUserDialog extends JDialog {
 		gbc_lblLifeStyle.gridx = 1;
 		gbc_lblLifeStyle.gridy = 14;
 		getContentPane().add(lblLifeStyle, gbc_lblLifeStyle);
-		
+
 		txtrExampleMessageDescribing = new JTextArea();
 		txtrExampleMessageDescribing.setDisabledTextColor(Color.BLACK);
 		txtrExampleMessageDescribing.setText("EXAMPLE MESSAGE DESCRIBING LIFESTYLE");
@@ -398,7 +398,6 @@ public class MaintainUserDialog extends JDialog {
 		gbc_sliderLifeStyle.gridx = 2;
 		gbc_sliderLifeStyle.gridy = 14;
 		getContentPane().add(sliderLifeStyle, gbc_sliderLifeStyle);
-		
 
 		Component horizontalStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
@@ -482,12 +481,16 @@ public class MaintainUserDialog extends JDialog {
 
 		switch (mode) {
 		case CREATE:
-			if (areEnteredPasswordsTheSame()) {
-				assignNewUserCredentialsToMaintainedUser();
-				operationSucceeded = saveNewUserToDatabase();
-			} else {
-				JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, "Error!", 2);
+			if (!loginNotExists()) {
+				JOptionPane.showMessageDialog(this, MSG_LOGIN_ALREADY_EXISTS, "Error!", 2);
+				return;
 			}
+			if (!areEnteredPasswordsTheSame()) {
+				JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, "Error!", 2);
+				return;
+			}
+			assignNewUserCredentialsToMaintainedUser();
+			operationSucceeded = saveNewUserToDatabase();
 			break;
 		case EDIT:
 			operationSucceeded = updateUserToDatabase();
@@ -497,6 +500,11 @@ public class MaintainUserDialog extends JDialog {
 			tearDown();
 		else
 			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR, "Error!", 2);
+	}
+
+	private boolean loginNotExists() {
+		String login = textFieldLogin.getText();
+		return DatabaseController.getEntitiesByParameter(Shadow.class, "login", login).size() == 0;
 	}
 
 	private void setUserPropertiesFromEnteredValues() {

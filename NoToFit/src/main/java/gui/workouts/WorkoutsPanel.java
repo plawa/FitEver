@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +52,13 @@ public class WorkoutsPanel extends JPanel {
 
 	protected void generateWorkoutPlanButtonPressed() {
 		WorkoutGenerationPreferences preferences = askForWorkoutGenerationPreferences();
-		if (preferences == null)
-			return;
-		preferences.setUser(currentUser);
-		Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
-		currentUser.getWorkouts().add(generatedWorkout);
-		DatabaseController.saveEntityToDatabase(generatedWorkout);
-		refreshTable();
+		if (preferences != null) {
+			preferences.setUser(currentUser);
+			Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
+			currentUser.getWorkouts().add(generatedWorkout);
+			DatabaseController.saveEntityToDatabase(generatedWorkout);
+			refreshTable();
+		}
 	}
 
 	private WorkoutGenerationPreferences askForWorkoutGenerationPreferences() {
@@ -145,6 +147,13 @@ public class WorkoutsPanel extends JPanel {
 
 		table = new JTable();
 		table.setFillsViewportHeight(true);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if (me.getClickCount() == 2)
+					openSelectedWorkoutPlan();
+			}
+		});
 		scrollPane.setViewportView(table);
 	}
 

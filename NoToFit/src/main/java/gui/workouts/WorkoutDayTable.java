@@ -31,7 +31,9 @@ public class WorkoutDayTable extends JTable {
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 2) {
 					Exercise chosenExercise = tableModel.getExerciseAt(getSelectedRow());
-					new MaintainExerciseDialog(chosenExercise).setVisible(true);;
+					MaintainExerciseDialog exerciseView = new MaintainExerciseDialog(chosenExercise);
+					exerciseView.setLocationRelativeTo(WorkoutDayTable.this);
+					exerciseView.setVisible(true);
 				}
 			}
 		});

@@ -28,6 +28,9 @@ public class WorkoutOverviewDialog extends JDialog {
 	private static final long serialVersionUID = 4775756922675353668L;
 	private final JPanel contentPanel = new JPanel();
 	private Workout workoutDisplaying;
+	private JLabel lblValueValidTo;
+	private JLabel lblValueValidFrom;
+	private JLabel lblValueName;
 	
 	
 	public WorkoutOverviewDialog() {
@@ -41,8 +44,9 @@ public class WorkoutOverviewDialog extends JDialog {
 	}
 
 	private void refreshWorkoutDetails() {
-		// TODO Auto-generated method stub
-		
+		lblValueName.setText(workoutDisplaying.getName());	
+		lblValueValidFrom.setText(GuiTools.parseDateToString(workoutDisplaying.getValidFrom()));
+		lblValueValidTo.setText(GuiTools.parseDateToString(workoutDisplaying.getValidTo()));
 	}
 
 	private JTabbedPane initializeWorkoutDaysTabbedPane() {
@@ -86,26 +90,53 @@ public class WorkoutOverviewDialog extends JDialog {
 		{
 			JLabel lblName = new JLabel("Name: ");
 			GridBagConstraints gbc_lblName = new GridBagConstraints();
+			gbc_lblName.anchor = GridBagConstraints.WEST;
 			gbc_lblName.insets = new Insets(0, 0, 5, 5);
 			gbc_lblName.gridx = 1;
 			gbc_lblName.gridy = 1;
 			contentPanel.add(lblName, gbc_lblName);
 		}
 		{
+			lblValueName = new JLabel("exercise name");
+			GridBagConstraints gbc_lblValueName = new GridBagConstraints();
+			gbc_lblValueName.insets = new Insets(0, 0, 5, 5);
+			gbc_lblValueName.gridx = 2;
+			gbc_lblValueName.gridy = 1;
+			contentPanel.add(lblValueName, gbc_lblValueName);
+		}
+		{
 			JLabel lblValidFrom = new JLabel("Valid From:");
 			GridBagConstraints gbc_lblValidFrom = new GridBagConstraints();
+			gbc_lblValidFrom.anchor = GridBagConstraints.WEST;
 			gbc_lblValidFrom.insets = new Insets(0, 0, 5, 5);
 			gbc_lblValidFrom.gridx = 4;
 			gbc_lblValidFrom.gridy = 1;
 			contentPanel.add(lblValidFrom, gbc_lblValidFrom);
 		}
 		{
+			lblValueValidFrom = new JLabel("ddsa");
+			GridBagConstraints gbc_lblValueValidFrom = new GridBagConstraints();
+			gbc_lblValueValidFrom.insets = new Insets(0, 0, 5, 5);
+			gbc_lblValueValidFrom.gridx = 5;
+			gbc_lblValueValidFrom.gridy = 1;
+			contentPanel.add(lblValueValidFrom, gbc_lblValueValidFrom);
+		}
+		{
 			JLabel lblValidTo = new JLabel("Valid To:");
 			GridBagConstraints gbc_lblValidTo = new GridBagConstraints();
+			gbc_lblValidTo.anchor = GridBagConstraints.WEST;
 			gbc_lblValidTo.insets = new Insets(0, 0, 5, 5);
 			gbc_lblValidTo.gridx = 4;
 			gbc_lblValidTo.gridy = 2;
 			contentPanel.add(lblValidTo, gbc_lblValidTo);
+		}
+		{
+			lblValueValidTo = new JLabel("wq");
+			GridBagConstraints gbc_lblValueValidTo = new GridBagConstraints();
+			gbc_lblValueValidTo.insets = new Insets(0, 0, 5, 5);
+			gbc_lblValueValidTo.gridx = 5;
+			gbc_lblValueValidTo.gridy = 2;
+			contentPanel.add(lblValueValidTo, gbc_lblValueValidTo);
 		}
 		{
 			JTabbedPane tabbedPane = initializeWorkoutDaysTabbedPane();

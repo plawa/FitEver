@@ -15,6 +15,7 @@ public class AllExercisesDialog extends AllMealsDialog {
 
 	public AllExercisesDialog() {
 		super();
+		setModal(false);
 		setSwingProperties();
 	}
 
@@ -27,14 +28,18 @@ public class AllExercisesDialog extends AllMealsDialog {
 
 	@Override
 	protected void addButtonPressed() {
-		new MaintainExerciseDialog().setLocationRelativeTo(this);
+		MaintainExerciseDialog createExerciseView = new MaintainExerciseDialog();
+		createExerciseView.setLocationRelativeTo(this);
+		createExerciseView.setVisible(true);
 		refreshTable();
 	}
 
 	@Override
 	protected void editButtonPressed() {
 		Exercise selectedExercise = retrieveSelectedExercise();
-		new MaintainExerciseDialog(selectedExercise).setLocationRelativeTo(this);
+		MaintainExerciseDialog editExerciseView = new MaintainExerciseDialog(selectedExercise);
+		editExerciseView.setLocationRelativeTo(this);
+		editExerciseView.setVisible(true);
 		refreshTable();
 	}
 

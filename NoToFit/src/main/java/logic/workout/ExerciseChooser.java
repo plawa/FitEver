@@ -82,22 +82,4 @@ public class ExerciseChooser {
 
 		return points;
 	}
-
-	public static void main(String[] args) {
-		WorkoutDayPreferences preferences = new WorkoutDayPreferences();
-		preferences.setDifficultyLevel(DifficultyLevel.Easy);
-		preferences.setObjective(Objective.MassGain);
-		preferences.setEquipmentRequired(false);
-
-		ExerciseChooser ec = new ExerciseChooser(preferences);
-
-		/*initializeLibrary();
-
-		Set<Exercise> choosenSet = ec.chooseBestMatchedExercises();
-		System.out.println("*** Chosen set ***");
-		for(Exercise e : choosenSet){
-			System.out.println(e.getName());
-		}*/
-		
-	}
 }

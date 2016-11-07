@@ -179,7 +179,7 @@ public class GenerateWorkoutDialog extends JDialog {
 		}
 		{
 			comboBox = new JComboBox<DifficultyLevel>();
-			comboBox.setModel(new DefaultComboBoxModel(DifficultyLevel.values()));
+			comboBox.setModel(new DefaultComboBoxModel<>(DifficultyLevel.values()));
 			GridBagConstraints gbc_comboBox = new GridBagConstraints();
 			gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 			gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;

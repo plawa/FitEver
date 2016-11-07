@@ -30,7 +30,9 @@ public class DietDayTable extends JTable {
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 2) {
 					Meal chosenMeal = model.getMealAt(getSelectedRow());
-					new ShowMealDialog(chosenMeal).setVisible(true);
+					ShowMealDialog mealView = new ShowMealDialog(chosenMeal);
+					mealView.setLocationRelativeTo(DietDayTable.this);
+					mealView.setVisible(true);
 				}
 			}
 		});

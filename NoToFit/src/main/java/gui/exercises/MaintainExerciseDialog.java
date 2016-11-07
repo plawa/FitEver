@@ -38,7 +38,6 @@ public class MaintainExerciseDialog extends JDialog {
 		mode = DialogMode.CREATE;
 		this.exerciseMaintained = new Exercise();
 		initializeSwingComponents();
-		setVisible(true);
 	}
 
 	public MaintainExerciseDialog(Exercise exerciseToEdit) {
@@ -46,7 +45,6 @@ public class MaintainExerciseDialog extends JDialog {
 		this.exerciseMaintained = exerciseToEdit;
 		initializeSwingComponents();
 		fillSwingFields();
-		setVisible(true);
 	}
 
 	protected void saveButtonPressed() {

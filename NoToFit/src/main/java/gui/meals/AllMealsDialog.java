@@ -85,7 +85,6 @@ public class AllMealsDialog extends JDialog {
 	}
 
 	private void initializeLayout() {
-		setModal(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 660, 478);
 		getContentPane().setLayout(new BorderLayout());
