@@ -1,11 +1,15 @@
 package gui;
 
+import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
+import database.controller.DatabaseController;
 import database.entities.User;
 import gui.diets.DietsPanel;
 import gui.user.UserPanel;
@@ -15,11 +19,12 @@ public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -3253794944742197441L;
 	private static final String NOTOFIT_VERSION_HEADER = "NoToFit v0.0.1";
-	
+
 	private User userLogged;
 	private ImageIcon userIcon;
 	private ImageIcon mealIcon;
 	private ImageIcon exerciseIcon;
+	private JTabbedPane tabbedPane;
 
 	// FOR DEBUGGING PURPOSES ONLY
 	public MainFrame() {
@@ -28,10 +33,24 @@ public class MainFrame extends JFrame {
 
 	public MainFrame(User authorizedUser) {
 		if (authorizedUser == null) {
-			System.exit(0);
+			tidyUp();
 		}
-		this.userLogged = authorizedUser;
+		userLogged = authorizedUser;
 		initializeInterface();
+		setVisible(true);
+	}
+
+	public void switchUser(){
+		setVisible(false);
+		userLogged = new LoginDialog().getAuthorizedUser();
+		
+		SwingUtilities.invokeLater(() -> getContentPane().remove(0));
+		buildTabbedPane();
+		
+		/*SwingUtilities.invokeLater(() -> removeTabs());
+		refreshTabs();
+		tabbedPane.getTabComponentAt(0).repaint();*/
+		
 		setVisible(true);
 	}
 
@@ -55,10 +74,30 @@ public class MainFrame extends JFrame {
 
 	private void buildTabbedPane() {
 		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
+		refreshTabs();
+		getContentPane().add(tabbedPane);
+	}
+
+	private void removeTabs(){
+		tabbedPane.removeTabAt(0);
+		tabbedPane.removeTabAt(1);
+		tabbedPane.removeTabAt(2);
+	}
+	
+	private void refreshTabs() {
 		tabbedPane.addTab("", userIcon, new UserPanel(userLogged));
 		tabbedPane.addTab("", mealIcon, new DietsPanel(userLogged));
 		tabbedPane.addTab("", exerciseIcon, new WorkoutsPanel(userLogged));
-		getContentPane().add(tabbedPane);
 	}
+	
+	public void tidyUp() {
+		DatabaseController.tidyUp();
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                MainFrame.this.dispatchEvent(new WindowEvent(MainFrame.this, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+	}
+	
 }

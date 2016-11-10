@@ -21,10 +21,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import database.controller.DatabaseController;
 import database.entities.Diet;
 import database.entities.User;
+import gui.MainFrame;
+import gui.common.WaitDialog;
 import gui.meals.AllMealsDialog;
 import logic.diet.DietGenerationPreferences;
 import logic.diet.DietPlanGenerator;
@@ -32,6 +36,7 @@ import logic.diet.DietPlanGenerator;
 public class DietsPanel extends JPanel {
 
 	private static final String POPUP_HEADER_ERROR = "Error!";
+	private static final String MSG_WAIT_FOR_DIET = "Please wait while your diet is being generated.";
 	private static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less entries.";
 	private static final long serialVersionUID = -3015175045558720497L;
 	private JTable table;
@@ -40,6 +45,7 @@ public class DietsPanel extends JPanel {
 	private ImageIcon openButtonIcon;
 	private ImageIcon showMealsButtonIcon;
 	private ImageIcon generateDietButtonIcon;
+	private ImageIcon exitButtonIcon;
 
 	public DietsPanel() {
 		this(new User());
@@ -56,14 +62,34 @@ public class DietsPanel extends JPanel {
 		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
 		if (dietPreferences != null) {
 			dietPreferences.setUser(currentUser);
-			Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
-			if (generatedDiet != null) {
-				currentUser.getDiets().add(generatedDiet);
-				DatabaseController.saveEntityToDatabase(generatedDiet);
-				refreshTable();
-			} else {
-				JOptionPane.showMessageDialog(this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);
-			}
+			
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+				private WaitDialog waitDlg = new WaitDialog(MSG_WAIT_FOR_DIET);
+				
+				@Override
+				protected Void doInBackground() throws Exception {
+					waitDlg.setLocationRelativeTo(DietsPanel.this);
+					waitDlg.setVisible(true);
+					Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
+					if (generatedDiet != null) {
+						currentUser.getDiets().add(generatedDiet);
+						DatabaseController.saveEntityToDatabase(generatedDiet);
+						refreshTable();
+					} else {
+						JOptionPane.showMessageDialog(DietsPanel.this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);
+					}
+					return null;
+				}
+				
+				protected void done() {
+					waitDlg.setVisible(false);
+				};
+				
+			};
+			worker.execute();
+			
+			//Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
+
 		}
 	}
 
@@ -83,7 +109,7 @@ public class DietsPanel extends JPanel {
 			dietDetailsDlg.setLocationRelativeTo(this);
 			dietDetailsDlg.setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(this, "No row selected!", "Error", 0);
+			JOptionPane.showMessageDialog(this, "No row selected!", POPUP_HEADER_ERROR, 0);
 		}
 	}
 
@@ -104,6 +130,7 @@ public class DietsPanel extends JPanel {
 		openButtonIcon = new ImageIcon(getClass().getResource("/images/open_icon.png"));
 		showMealsButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
 		generateDietButtonIcon = new ImageIcon(getClass().getResource("/images/generate_diet_button.png"));
+		exitButtonIcon = new ImageIcon(getClass().getResource("/images/exit_button.png"));
 	}
 
 	private void initializeSwingComponents() {
@@ -157,6 +184,18 @@ public class DietsPanel extends JPanel {
 		btnGenerateDietPlan.setIcon(generateDietButtonIcon);
 		toolBar.add(btnGenerateDietPlan);
 
+		JButton btnExit = new JButton("Exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				exitButtonPressed();
+			}
+		});
+		btnExit.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnExit.setIcon(exitButtonIcon);
+		toolBar.add(btnExit);
+		
+		
 		Component leftStrut = Box.createHorizontalStrut(20);
 		GridBagConstraints gbc_leftStrut = new GridBagConstraints();
 		gbc_leftStrut.insets = new Insets(0, 0, 5, 5);
@@ -204,6 +243,10 @@ public class DietsPanel extends JPanel {
 		gbc_bottomStrut.gridx = 1;
 		gbc_bottomStrut.gridy = 3;
 		add(bottomStrut, gbc_bottomStrut);
+	}
+	
+	protected void exitButtonPressed() {
+		((MainFrame) SwingUtilities.getWindowAncestor(this)).tidyUp();
 	}
 
 }

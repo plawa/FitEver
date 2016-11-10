@@ -12,18 +12,25 @@ public class ApplicationLauncher {
 	private static final String MSG_DATABASE_ERROR = "Error with database connection!";
 	private static final String MSG_FATAL_ERROR = "Fatal error occured!";
 
-	private static Thread databaseInitializationThread = initializeDatabaseInitializationThread();
-	private static Thread applicationInterfaceThread = initializeApplicationInterfaceThread();
+	private Thread databaseInitializationThread = initializeDatabaseInitializationThread();
+	private Thread applicationInterfaceThread = initializeApplicationInterfaceThread();
 
-	public static void main() throws InterruptedException {
-		databaseInitializationThread.start();
-		applicationInterfaceThread.start();
-		
-		databaseInitializationThread.join();
-		applicationInterfaceThread.join();
+	public static void main(String[] args) {
+		new ApplicationLauncher().launchApplication();
 	}
 
-	private static Thread initializeDatabaseInitializationThread() {
+	private void launchApplication() {
+		databaseInitializationThread.start();
+		applicationInterfaceThread.start();
+		try {
+			databaseInitializationThread.join();
+			applicationInterfaceThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Thread initializeDatabaseInitializationThread() {
 		return new Thread() {
 			@Override
 			public void run() {
@@ -32,7 +39,7 @@ public class ApplicationLauncher {
 		};
 	}
 
-	private static Thread initializeApplicationInterfaceThread() {
+	private Thread initializeApplicationInterfaceThread() {
 		return new Thread() {
 			@Override
 			public void run() {

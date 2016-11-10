@@ -17,11 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import database.controller.DatabaseController;
 import database.entities.User;
-import gui.LoginDialog;
+import gui.MainFrame;
 import gui.common.PieChartFX;
 import gui.common.Translator;
 import javafx.collections.FXCollections;
@@ -80,12 +80,15 @@ public class UserPanel extends JPanel {
 
 	private void switchUser() {
 		// TODO: Fix other tabs refreshing
-		LoginDialog loginDlg = new LoginDialog();
+		
+		((MainFrame)SwingUtilities.getWindowAncestor(this)).switchUser();
+		
+		/*LoginDialog loginDlg = new LoginDialog();
 		User newLoggedUser = loginDlg.getAuthorizedUser();
 		if (newLoggedUser != null) {
 			userDisplaying = newLoggedUser;
 			refreshUserDetails();
-		}
+		}*/
 	}
 
 	protected void refreshUserDetails() {
@@ -179,13 +182,15 @@ public class UserPanel extends JPanel {
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				exit();
+				exitButtonPressed();
 			}
 		});
 		btnExit.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnExit.setIcon(exitButtonIcon);
 		toolBar.add(btnExit);
+		
+		
 		btnEditUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				editUserToolbarButtonPressed();
@@ -415,7 +420,6 @@ public class UserPanel extends JPanel {
 		gbc_lblValueStartWeight.gridx = 2;
 		gbc_lblValueStartWeight.gridy = 12;
 		add(lblValueStartWeight, gbc_lblValueStartWeight);
-		
 
 		final JFXPanel fxPanel = createChartFXPanel();
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -430,15 +434,14 @@ public class UserPanel extends JPanel {
 	private JFXPanel createChartFXPanel() {
 		JFXPanel chartPanel = new JFXPanel();
 		PieChartFX chart = new PieChartFX();
-		chart.setPieChartData(FXCollections.observableArrayList(
-				new PieChart.Data("Grapefruit", 13), new PieChart.Data("Oranges", 25), new PieChart.Data("Plums", 10),
-				new PieChart.Data("Pears", 22), new PieChart.Data("Apples", 30)));
+		chart.setPieChartData(FXCollections.observableArrayList(new PieChart.Data("Grapefruit", 13),
+				new PieChart.Data("Oranges", 25), new PieChart.Data("Plums", 10), new PieChart.Data("Pears", 22),
+				new PieChart.Data("Apples", 30)));
 		chartPanel.setScene(chart.getScene());
 		return chartPanel;
 	}
 
-	protected void exit() {
-		DatabaseController.tidyUp();
-		System.exit(0);
+	protected void exitButtonPressed() {
+		((MainFrame) SwingUtilities.getWindowAncestor(this)).tidyUp();
 	}
 }

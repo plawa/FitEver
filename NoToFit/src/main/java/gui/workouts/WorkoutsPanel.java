@@ -21,10 +21,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import database.controller.DatabaseController;
 import database.entities.User;
 import database.entities.Workout;
+import gui.MainFrame;
 import gui.exercises.AllExercisesDialog;
 import logic.workout.WorkoutGenerationPreferences;
 import logic.workout.WorkoutPlanGenerator;
@@ -32,8 +34,8 @@ import logic.workout.WorkoutPlanGenerator;
 public class WorkoutsPanel extends JPanel {
 	private static final long serialVersionUID = -4659573390181954313L;
 
-	private static final String MSG_TOO_LESS_EXERCISES = "Workout could not have been generated. Exercises library consists of too less entries";
 	private static final String POPUP_HEADER_ERROR = "Error!";
+	private static final String MSG_TOO_LESS_EXERCISES = "Workout could not have been generated. Exercises library consists of too less entries";
 
 	private User currentUser;
 	private JTable table;
@@ -41,6 +43,8 @@ public class WorkoutsPanel extends JPanel {
 	private ImageIcon openButtonIcon;
 	private ImageIcon showExercisesButtonIcon;
 	private ImageIcon generateWorkoutButtonIcon;
+
+	private ImageIcon exitButtonIcon;
 
 	public WorkoutsPanel() {
 		this(new User());
@@ -166,6 +170,7 @@ public class WorkoutsPanel extends JPanel {
 		openButtonIcon = new ImageIcon(getClass().getResource("/images/open_icon.png"));
 		showExercisesButtonIcon = new ImageIcon(getClass().getResource("/images/generate_workout_button.png"));
 		generateWorkoutButtonIcon = new ImageIcon(getClass().getResource("/images/generate_workout_button.png"));
+		exitButtonIcon = new ImageIcon(getClass().getResource("/images/exit_button.png"));
 	}
 
 	private void initializeToolbar() {
@@ -211,6 +216,21 @@ public class WorkoutsPanel extends JPanel {
 		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnGenerateDietPlan.setIcon(generateWorkoutButtonIcon);
 		toolBar.add(btnGenerateDietPlan);
+		
+		
+		JButton btnExit = new JButton("Exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				exitButtonPressed();
+			}
+		});
+		btnExit.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnExit.setIcon(exitButtonIcon);
+		toolBar.add(btnExit);
 	}
-
+	
+	protected void exitButtonPressed() {
+		((MainFrame) SwingUtilities.getWindowAncestor(this)).tidyUp();
+	}
 }
