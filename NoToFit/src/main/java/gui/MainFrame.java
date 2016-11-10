@@ -40,17 +40,18 @@ public class MainFrame extends JFrame {
 		setVisible(true);
 	}
 
-	public void switchUser(){
+	public void switchUser() {
 		setVisible(false);
 		userLogged = new LoginDialog().getAuthorizedUser();
-		
-		SwingUtilities.invokeLater(() -> getContentPane().remove(0));
-		buildTabbedPane();
-		
-		/*SwingUtilities.invokeLater(() -> removeTabs());
-		refreshTabs();
-		tabbedPane.getTabComponentAt(0).repaint();*/
-		
+		if (userLogged != null) {
+			SwingUtilities.invokeLater(() -> getContentPane().remove(0));
+			buildTabbedPane();
+
+			/*
+			 * SwingUtilities.invokeLater(() -> removeTabs()); refreshTabs();
+			 * tabbedPane.getTabComponentAt(0).repaint();
+			 */
+		}
 		setVisible(true);
 	}
 
@@ -64,6 +65,7 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(NOTOFIT_VERSION_HEADER);
 		setBounds(100, 100, 863, 550);
+		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 	}
 
 	private void loadTabbedPaneIcons() {
@@ -73,31 +75,23 @@ public class MainFrame extends JFrame {
 	}
 
 	private void buildTabbedPane() {
-		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
 		refreshTabs();
 		getContentPane().add(tabbedPane);
 	}
 
-	private void removeTabs(){
-		tabbedPane.removeTabAt(0);
-		tabbedPane.removeTabAt(1);
-		tabbedPane.removeTabAt(2);
-	}
-	
 	private void refreshTabs() {
 		tabbedPane.addTab("", userIcon, new UserPanel(userLogged));
 		tabbedPane.addTab("", mealIcon, new DietsPanel(userLogged));
 		tabbedPane.addTab("", exerciseIcon, new WorkoutsPanel(userLogged));
 	}
-	
+
 	public void tidyUp() {
 		DatabaseController.tidyUp();
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                MainFrame.this.dispatchEvent(new WindowEvent(MainFrame.this, WindowEvent.WINDOW_CLOSING));
-            }
-        });
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				MainFrame.this.dispatchEvent(new WindowEvent(MainFrame.this, WindowEvent.WINDOW_CLOSING));
+			}
+		});
 	}
-	
 }

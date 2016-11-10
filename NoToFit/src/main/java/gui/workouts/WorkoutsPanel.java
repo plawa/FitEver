@@ -22,11 +22,13 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import database.controller.DatabaseController;
 import database.entities.User;
 import database.entities.Workout;
 import gui.MainFrame;
+import gui.common.WaitDialog;
 import gui.exercises.AllExercisesDialog;
 import logic.workout.WorkoutGenerationPreferences;
 import logic.workout.WorkoutPlanGenerator;
@@ -36,6 +38,7 @@ public class WorkoutsPanel extends JPanel {
 
 	private static final String POPUP_HEADER_ERROR = "Error!";
 	private static final String MSG_TOO_LESS_EXERCISES = "Workout could not have been generated. Exercises library consists of too less entries";
+	protected static final String MSG_WAIT_FOR_WORKOUT = "Please wait until your workout is being generated.";
 
 	private User currentUser;
 	private JTable table;
@@ -58,15 +61,30 @@ public class WorkoutsPanel extends JPanel {
 	protected void generateWorkoutPlanButtonPressed() {
 		WorkoutGenerationPreferences preferences = askForWorkoutGenerationPreferences();
 		if (preferences != null) {
-			preferences.setUser(currentUser);
-			Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
-			if (generatedWorkout != null) {
-				currentUser.getWorkouts().add(generatedWorkout);
-				DatabaseController.saveEntityToDatabase(generatedWorkout);
-				refreshTable();
-			} else {
-				JOptionPane.showMessageDialog(this, MSG_TOO_LESS_EXERCISES, POPUP_HEADER_ERROR, 0);
-			}
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+				private WaitDialog waitDlg = new WaitDialog(MSG_WAIT_FOR_WORKOUT);
+				
+				@Override
+				protected Void doInBackground() throws Exception {
+					waitDlg.setLocationRelativeTo(WorkoutsPanel.this);
+					waitDlg.setVisible(true);
+					preferences.setUser(currentUser);
+					Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
+					if (generatedWorkout != null) {
+						currentUser.getWorkouts().add(generatedWorkout);
+						DatabaseController.saveEntityToDatabase(generatedWorkout);
+						refreshTable();
+					} else {
+						JOptionPane.showMessageDialog(WorkoutsPanel.this, MSG_TOO_LESS_EXERCISES, POPUP_HEADER_ERROR, 0);
+					}
+					return null;
+				}
+
+				protected void done() {
+					waitDlg.setVisible(false);					
+				};
+			};
+			worker.execute();
 		}
 	}
 

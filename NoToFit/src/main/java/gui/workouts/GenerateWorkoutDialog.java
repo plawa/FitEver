@@ -61,7 +61,7 @@ public class GenerateWorkoutDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setTitle("Generate Workout - Workout Properties");
-		setBounds(100, 100, 566, 339);
+		setBounds(100, 100, 548, 309);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -126,7 +126,7 @@ public class GenerateWorkoutDialog extends JDialog {
 			sliderDaysPerWeek.setPaintLabels(true);
 			sliderDaysPerWeek.setMajorTickSpacing(1);
 			sliderDaysPerWeek.setMinimum(1);
-			sliderDaysPerWeek.setMaximum(7);
+			sliderDaysPerWeek.setMaximum(5);
 			GridBagConstraints gbc_sliderDaysPerWeek = new GridBagConstraints();
 			gbc_sliderDaysPerWeek.gridwidth = 2;
 			gbc_sliderDaysPerWeek.fill = GridBagConstraints.HORIZONTAL;
@@ -155,12 +155,12 @@ public class GenerateWorkoutDialog extends JDialog {
 		{
 			sliderWorkoutPeriodInDays = new JSlider();
 			sliderWorkoutPeriodInDays.setPaintLabels(true);
-			sliderWorkoutPeriodInDays.setMajorTickSpacing(2);
+			sliderWorkoutPeriodInDays.setMajorTickSpacing(1);
 			sliderWorkoutPeriodInDays.setPaintTicks(true);
 			sliderWorkoutPeriodInDays.setSnapToTicks(true);
-			sliderWorkoutPeriodInDays.setValue(30);
-			sliderWorkoutPeriodInDays.setMinimum(2);
-			sliderWorkoutPeriodInDays.setMaximum(8);
+			sliderWorkoutPeriodInDays.setValue(2);
+			sliderWorkoutPeriodInDays.setMinimum(1);
+			sliderWorkoutPeriodInDays.setMaximum(4);
 			GridBagConstraints gbc_slider = new GridBagConstraints();
 			gbc_slider.gridwidth = 2;
 			gbc_slider.fill = GridBagConstraints.HORIZONTAL;
