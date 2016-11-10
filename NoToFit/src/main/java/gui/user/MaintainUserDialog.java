@@ -33,7 +33,7 @@ import database.entities.User;
 import gui.common.DialogMode;
 import gui.common.GuiTools;
 import gui.common.Translator;
-import logic.Encrypter;
+import logic.utils.Encrypter;
 
 public class MaintainUserDialog extends JDialog {
 

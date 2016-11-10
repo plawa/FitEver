@@ -1,15 +1,13 @@
 package logic;
 
-import org.hibernate.exception.JDBCConnectionException;
-
 import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
+import logic.utils.Encrypter;
 
 public class Login {
 
-	
-	public static User performLogin(String login, String passwordRaw) throws JDBCConnectionException {
+	public static User performLogin(String login, String passwordRaw) {
 		
 		Shadow credentialsInDatabase = DatabaseController.getShadowEntityByLogin(login);
 		

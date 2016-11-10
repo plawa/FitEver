@@ -13,7 +13,7 @@ import database.entities.Exercise;
 import database.entities.Workoutday;
 import gui.common.Objective;
 import gui.exercises.DifficultyLevel;
-import logic.EntityValuePair;
+import logic.utils.EntityValuePair;
 
 public class ExerciseChooser {
 

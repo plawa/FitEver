@@ -127,9 +127,9 @@ public class UserPanel extends JPanel {
 
 	private void initializeSwingComponents() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 25, 0, 0, 0, 0 };
+		gridBagLayout.columnWidths = new int[] { 0, 25, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 16, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 136, 1, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 7.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 7.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				0.0, Double.MIN_VALUE };
 		setLayout(gridBagLayout);
@@ -140,7 +140,7 @@ public class UserPanel extends JPanel {
 		toolBar.setFloatable(false);
 		GridBagConstraints gbc_toolBar = new GridBagConstraints();
 		gbc_toolBar.anchor = GridBagConstraints.WEST;
-		gbc_toolBar.gridwidth = 5;
+		gbc_toolBar.gridwidth = 4;
 		gbc_toolBar.insets = new Insets(0, 0, 5, 0);
 		gbc_toolBar.gridx = 0;
 		gbc_toolBar.gridy = 0;
@@ -359,15 +359,6 @@ public class UserPanel extends JPanel {
 		gbc_lblValueUserObjective.gridy = 9;
 		add(lblValueUserObjective, gbc_lblValueUserObjective);
 
-		final JFXPanel fxPanel = createChartFXPanel();
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.fill = GridBagConstraints.BOTH;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 3;
-		gbc_lblNewLabel.gridy = 2;
-		gbc_lblNewLabel.gridheight = 12;
-		add(fxPanel, gbc_lblNewLabel);
-
 		JLabel lblDescriptionBmi = new JLabel("BMI:");
 		lblDescriptionBmi.setForeground(Color.GRAY);
 		lblDescriptionBmi.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -424,6 +415,16 @@ public class UserPanel extends JPanel {
 		gbc_lblValueStartWeight.gridx = 2;
 		gbc_lblValueStartWeight.gridy = 12;
 		add(lblValueStartWeight, gbc_lblValueStartWeight);
+		
+
+		final JFXPanel fxPanel = createChartFXPanel();
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel.gridx = 3;
+		gbc_lblNewLabel.gridy = 2;
+		gbc_lblNewLabel.gridheight = 12;
+		add(fxPanel, gbc_lblNewLabel);
 	}
 
 	private JFXPanel createChartFXPanel() {
