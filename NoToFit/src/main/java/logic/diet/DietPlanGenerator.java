@@ -29,7 +29,7 @@ public class DietPlanGenerator {
 				
 				newDietDays = new HashSet<>();
 				for (DietDayConfiguration dayConfiguration : dietDayConfigurations) {
-					Dietday dietDay = mealChooser.generateDietDay(dayConfiguration);
+					Dietday dietDay = mealChooser.generateDietDay(dayConfiguration, newDiet);
 					if (dietDay.getMeals().size() != dayConfiguration.getMealsPerDayCount()){
 						isMealsInGeneratedDietCountOK = false;
 					}

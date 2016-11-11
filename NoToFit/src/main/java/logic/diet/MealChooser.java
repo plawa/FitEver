@@ -9,6 +9,7 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 
 import database.controller.DatabaseController;
+import database.entities.Diet;
 import database.entities.Dietday;
 import database.entities.Meal;
 import logic.entitytools.MealTools;
@@ -47,7 +48,7 @@ public class MealChooser {
 		return breakfastsOK && mainMealsOK && supperOK;
 	}
 	
-	public Dietday generateDietDay(DietDayConfiguration preferences){
+	public Dietday generateDietDay(DietDayConfiguration preferences, Diet parentDiet){
 		Preconditions.checkArgument(isMealsLibraryBigEnough(preferences), MSG_TOO_LESS_MEALS);
 		
 		Dietday newDietDay = new Dietday();
@@ -68,6 +69,8 @@ public class MealChooser {
 		newDayMealSet.addAll(chooseSupper(supperMealsCount, supperCalories));
 		
 		newDietDay.setMeals(newDayMealSet);
+		newDietDay.setDiet(parentDiet);
+		newDietDay.setDate(preferences.getDate());
 		
 		return newDietDay;
 	}
