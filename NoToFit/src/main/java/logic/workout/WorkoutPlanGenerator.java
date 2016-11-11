@@ -12,13 +12,12 @@ public class WorkoutPlanGenerator {
 
 	public static Workout generateWorkout(WorkoutGenerationPreferences workoutPreferences) {
 		Workout newWorkout = initializeWorkoutPrototype(workoutPreferences);
-		Set<Workoutday> generateWorkoutDaysSet = generateWorkoutDaysSet(newWorkout, workoutPreferences);
-		if (generateWorkoutDaysSet != null) {
-			newWorkout.setWorkoutdays(generateWorkoutDaysSet);
+		Set<Workoutday> generatedWorkoutDaysSet = generateWorkoutDaysSet(newWorkout, workoutPreferences);
+		if (generatedWorkoutDaysSet != null) {
+			newWorkout.setWorkoutdays(generatedWorkoutDaysSet);
 			return newWorkout;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	private static Set<Workoutday> generateWorkoutDaysSet(Workout workout, WorkoutGenerationPreferences preferences) {

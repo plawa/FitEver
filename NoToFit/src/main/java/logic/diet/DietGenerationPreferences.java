@@ -1,14 +1,23 @@
 package logic.diet;
 
+import java.util.Date;
+
 import database.entities.User;
 
 public class DietGenerationPreferences {
 
+	private static final int ONE_DAY_IN_MILISECONDS = 86400000;
+	
 	private User user;
 	private String dietName;
-	private int dietPeriodDays;
+	private int dietPeriodInDays;
 	private DietDayConfiguration dayMealsPref;
+	private Date firstDietDay;
 
+	
+	public DietGenerationPreferences() {
+		setFirstDietDay(new Date());
+	}
 	
 	public User getUser() {
 		return user;
@@ -30,12 +39,12 @@ public class DietGenerationPreferences {
 		this.dietName = dietName;
 	}
 
-	public int getDietPeriodDays() {
-		return dietPeriodDays;
+	public int getDietPeriodInDays() {
+		return dietPeriodInDays;
 	}
 
 	public void setDietPeriodDays(int dietPeriodDays) {
-		this.dietPeriodDays = dietPeriodDays;
+		this.dietPeriodInDays = dietPeriodDays;
 	}
 
 	public DietDayConfiguration getDayMealsPref() {
@@ -44,5 +53,18 @@ public class DietGenerationPreferences {
 
 	public void setDayMealsPref(DietDayConfiguration dayMealsPref) {
 		this.dayMealsPref = dayMealsPref;
+	}
+
+	public Date getFirstDietDay() {
+		return firstDietDay;
+	}
+
+	private void setFirstDietDay(Date firstDietDay) {
+		this.firstDietDay = firstDietDay;
+	}
+	
+	public Date getLastDietDay(){
+		long inMiliseconds = getFirstDietDay().getTime() + dietPeriodInDays * ONE_DAY_IN_MILISECONDS;
+		return new Date(inMiliseconds);
 	}
 }

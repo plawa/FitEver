@@ -34,11 +34,12 @@ import logic.diet.DietGenerationPreferences;
 import logic.diet.DietPlanGenerator;
 
 public class DietsPanel extends JPanel {
-
+	private static final long serialVersionUID = -3015175045558720497L;
+	
 	private static final String POPUP_HEADER_ERROR = "Error!";
 	private static final String MSG_WAIT_FOR_DIET = "Please wait while your diet is being generated.";
 	private static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less entries.";
-	private static final long serialVersionUID = -3015175045558720497L;
+
 	private JTable table;
 	private DietsTableModel tableModel;
 	private User currentUser;
@@ -62,7 +63,6 @@ public class DietsPanel extends JPanel {
 		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
 		if (dietPreferences != null) {
 			dietPreferences.setUser(currentUser);
-			
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
 				private WaitDialog waitDlg = new WaitDialog(MSG_WAIT_FOR_DIET);
 				
@@ -87,9 +87,6 @@ public class DietsPanel extends JPanel {
 				
 			};
 			worker.execute();
-			
-			//Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
-
 		}
 	}
 

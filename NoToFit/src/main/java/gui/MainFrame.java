@@ -18,6 +18,7 @@ import gui.workouts.WorkoutsPanel;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -3253794944742197441L;
+	
 	private static final String NOTOFIT_VERSION_HEADER = "NoToFit v0.0.1";
 
 	private User userLogged;
@@ -46,11 +47,6 @@ public class MainFrame extends JFrame {
 		if (userLogged != null) {
 			SwingUtilities.invokeLater(() -> getContentPane().remove(0));
 			buildTabbedPane();
-
-			/*
-			 * SwingUtilities.invokeLater(() -> removeTabs()); refreshTabs();
-			 * tabbedPane.getTabComponentAt(0).repaint();
-			 */
 		}
 		setVisible(true);
 	}
