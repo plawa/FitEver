@@ -20,32 +20,9 @@ public class Meal extends Entity {
 	private int carbohydratesPercentage;
 	private int proteinPercentage;
 	private int fatPercentage;
-	private Set<Dietday> dietdays = new HashSet<Dietday>(0);
+	private Set<Dietday> dietdays = new HashSet<Dietday>();
 
 	public Meal() {
-	}
-
-	public Meal(String name, char objective, char type, int grammage, int carbohydratesPercentage,
-			int proteinPercentage, int fatPercentage) {
-		this.name = name;
-		this.objective = objective;
-		this.type = type;
-		this.grammage = grammage;
-		this.carbohydratesPercentage = carbohydratesPercentage;
-		this.proteinPercentage = proteinPercentage;
-		this.fatPercentage = fatPercentage;
-	}
-
-	public Meal(String name, char objective, char type, int grammage, int carbohydratesPercentage,
-			int proteinPercentage, int fatPercentage, Set<Dietday> dietdays) {
-		this.name = name;
-		this.objective = objective;
-		this.type = type;
-		this.grammage = grammage;
-		this.carbohydratesPercentage = carbohydratesPercentage;
-		this.proteinPercentage = proteinPercentage;
-		this.fatPercentage = fatPercentage;
-		this.dietdays = dietdays;
 	}
 
 	public Integer getId() {

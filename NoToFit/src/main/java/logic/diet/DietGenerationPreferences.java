@@ -1,6 +1,7 @@
 package logic.diet;
 
 import java.util.Date;
+import java.util.List;
 
 import database.entities.User;
 
@@ -11,8 +12,9 @@ public class DietGenerationPreferences {
 	private User user;
 	private String dietName;
 	private int dietPeriodInDays;
-	private DietDayConfiguration dayMealsPref;
+	private int caloriesRequirementPerDay;
 	private Date firstDietDay;
+	private List<DietDayConfiguration> dayMealsPref;
 
 	
 	public DietGenerationPreferences() {
@@ -39,6 +41,14 @@ public class DietGenerationPreferences {
 		this.dietName = dietName;
 	}
 
+	public int getCaloriesRequirementPerDay() {
+		return caloriesRequirementPerDay;
+	}
+
+	public void setCaloriesRequirementPerDay(int caloriesRequirementPerDay) {
+		this.caloriesRequirementPerDay = caloriesRequirementPerDay;
+	}
+
 	public int getDietPeriodInDays() {
 		return dietPeriodInDays;
 	}
@@ -47,11 +57,11 @@ public class DietGenerationPreferences {
 		this.dietPeriodInDays = dietPeriodDays;
 	}
 
-	public DietDayConfiguration getDayMealsPref() {
+	public List<DietDayConfiguration> getDayMealsPref() {
 		return dayMealsPref;
 	}
 
-	public void setDayMealsPref(DietDayConfiguration dayMealsPref) {
+	public void setDayMealsPref(List<DietDayConfiguration> dayMealsPref) {
 		this.dayMealsPref = dayMealsPref;
 	}
 

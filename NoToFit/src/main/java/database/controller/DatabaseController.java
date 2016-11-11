@@ -1,5 +1,6 @@
 package database.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -8,10 +9,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.google.common.collect.Sets;
+
+import database.entities.Diet;
 import database.entities.Dietday;
 import database.entities.Entity;
 import database.entities.Meal;
 import database.entities.Shadow;
+import database.entities.User;
 
 public class DatabaseController {
 
@@ -97,10 +102,23 @@ public class DatabaseController {
 	}
 	
 	public static void main(String[] args) {
+		Diet newDiet = new Diet();
+		newDiet.setUser(getEntityByID(User.class, 13));
+		newDiet.setName("testujemy nowy schemat");
+		newDiet.setValidFrom(new Date());
+		newDiet.setValidTo(new Date());
+		newDiet.setDailyReq(1652);
+		
 		Meal meal1 = getEntityByID(Meal.class, 12245);
 		Meal meal2 = getEntityByID(Meal.class, 11441);
 		
 		Dietday dietDay = new Dietday();
-		dietDay.set
+		dietDay.setMeals(Sets.newHashSet(meal1, meal2));
+		dietDay.setDiet(newDiet);
+		dietDay.setDate(new Date(545554));
+		
+		newDiet.setDietdays(Sets.newHashSet(dietDay));
+		
+		saveEntityToDatabase(newDiet);
 	}
 }

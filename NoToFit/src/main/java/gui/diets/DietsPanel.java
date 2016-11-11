@@ -95,8 +95,7 @@ public class DietsPanel extends JPanel {
 		dietPropertiesDialog.setLocationRelativeTo(this);
 		dietPropertiesDialog.setVisible(true);
 
-		DietGenerationPreferences dietPreferences = dietPropertiesDialog.getNewDietPreferences();
-		return dietPreferences;
+		return dietPropertiesDialog.getNewDietPreferences();
 	}
 
 	protected void openSelectedDietPlan() {

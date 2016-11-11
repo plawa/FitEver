@@ -10,7 +10,7 @@ public class MealTools {
 	private static final float CALORIES_IN_ONE_GRAM_OF_FAT = 9f;
 	
 	public static int countMealCalories(Meal meal){
-		int grammage = meal.getGramature();
+		int grammage = meal.getGrammage();
 		int carboCalories = Math.round(grammage * CALORIES_IN_ONE_GRAM_OF_CARBOHYDRATES *
 				meal.getCarbohydratesPercentage()/100f);
 		int proteinCalories = Math.round(grammage * CALORIES_IN_ONE_GRAM_OF_PROTEINS *
@@ -24,7 +24,7 @@ public class MealTools {
 		Meal newMeal = new Meal();
 		newMeal.setName(sourceMeal.getName());
 		newMeal.setObjective(sourceMeal.getObjective());
-		newMeal.setGramature(sourceMeal.getGramature());
+		newMeal.setGrammage(sourceMeal.getGrammage());
 		newMeal.setCarbohydratesPercentage(sourceMeal.getCarbohydratesPercentage());
 		newMeal.setProteinPercentage(sourceMeal.getProteinPercentage());
 		newMeal.setFatPercentage(sourceMeal.getFatPercentage());

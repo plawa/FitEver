@@ -9,7 +9,7 @@ import gui.exercises.DifficultyLevel;
 
 public class WorkoutGenerationPreferences {
 
-	private final static int ONE_DAY_IN_MILISECONDS = 86400000;
+	private final static long ONE_DAY_IN_MILISECONDS = 86400000;
 	private static final int DAYS_IN_WEEK_COUNT = 7;
 	
 	private User user;

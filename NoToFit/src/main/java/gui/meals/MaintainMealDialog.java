@@ -80,7 +80,7 @@ public class MaintainMealDialog extends JDialog {
 	protected void setMealAttributesFromFields() {
 		mealMaintained.setName(textFieldName.getText());
 		mealMaintained.setType(Translator.parseMealTypeStringToChar((String) comboBoxMealType.getSelectedItem()));
-		mealMaintained.setGramature(Integer.parseInt(textFieldGrammage.getText()));
+		mealMaintained.setGrammage(Integer.parseInt(textFieldGrammage.getText()));
 		mealMaintained.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
 		mealMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
 		mealMaintained.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
@@ -91,7 +91,7 @@ public class MaintainMealDialog extends JDialog {
 	protected void initializeFields() {
 		textFieldName.setText(mealMaintained.getName());
 		comboBoxMealType.setSelectedItem(Translator.parseMealTypeCharToString(mealMaintained.getType()));
-		textFieldGrammage.setText(Integer.toString(mealMaintained.getGramature()));
+		textFieldGrammage.setText(Integer.toString(mealMaintained.getGrammage()));
 		spinnerCarbohydratesPercentage.setValue(mealMaintained.getCarbohydratesPercentage());
 		spinnerProteinPercentage.setValue(mealMaintained.getProteinPercentage());
 		spinnerFatPercentage.setValue(mealMaintained.getFatPercentage());

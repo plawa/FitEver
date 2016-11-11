@@ -1,38 +1,44 @@
 package logic.diet;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import database.entities.Diet;
-import database.entities.Meal;
+import database.entities.Dietday;
 
 public class DietPlanGenerator {
 
 	private final static float caloriesToleranceStep = 0.05f;
 
-	public static Diet generateDiet(DietGenerationPreferences dietConf) {
-		Diet generatedDiet = null;
-		DietDayConfiguration dayConfiguration = dietConf.getDayMealsPref();
-		if (isMealsLibraryBigEnough(dayConfiguration)) {
-			generatedDiet = initializeDietPrototype(dietConf);
-			int dietDaysCount = dietConf.getDietPeriodInDays();
-			int expectedMealsCount = dietDaysCount * dayConfiguration.getMealsPerDayCount();
+	public static Diet generateDiet(DietGenerationPreferences dietConfiguration) {
+		Diet newDiet = null;
+		List<DietDayConfiguration> dietDayConfigurations = dietConfiguration.getDayMealsPref();
+		if (isMealsLibraryBigEnough(dietDayConfigurations.get(0))) { //TODO IMPROVE
+			newDiet = initializeDietPrototype(dietConfiguration);
 
-			Set<Meal> dietMeals;
+			Set<Dietday> newDietDays;
 			MealChooser.updateLibraries();
-			float caloriesToleranceFactor = 0.05f;
+			float caloriesToleranceFactor = 0f;
+			
+			boolean isMealsInGeneratedDietCountOK;
 			do {
-				dietMeals = new HashSet<>();
-				MealChooser mealChooser = new MealChooser(caloriesToleranceFactor);
-				for (int i = 0; i < dietDaysCount; i++) {
-					Set<Meal> dietDay = mealChooser.chooseDayMealSet(dayConfiguration);
-					dietMeals.addAll(dietDay);
-				}
+				isMealsInGeneratedDietCountOK = true;
 				caloriesToleranceFactor += caloriesToleranceStep;
-			} while (dietMeals.size() < expectedMealsCount);
-			generatedDiet.setMeals(dietMeals);
+				MealChooser mealChooser = new MealChooser(caloriesToleranceFactor);
+				
+				newDietDays = new HashSet<>();
+				for (DietDayConfiguration dayConfiguration : dietDayConfigurations) {
+					Dietday dietDay = mealChooser.generateDietDay(dayConfiguration);
+					if (dietDay.getMeals().size() != dayConfiguration.getMealsPerDayCount()){
+						isMealsInGeneratedDietCountOK = false;
+					}
+					newDietDays.add(dietDay);
+				}
+			} while (!isMealsInGeneratedDietCountOK);
+			newDiet.setDietdays(newDietDays);
 		}
-		return generatedDiet;
+		return newDiet;
 	}
 
 	private static boolean isMealsLibraryBigEnough(DietDayConfiguration dayConfig) {
@@ -45,7 +51,7 @@ public class DietPlanGenerator {
 		newDiet.setName(dietPreferences.getDietName());
 		newDiet.setValidFrom(dietPreferences.getFirstDietDay());
 		newDiet.setValidTo(dietPreferences.getLastDietDay());
-		newDiet.setDietDayProperties(dietPreferences.getDayMealsPref());
+		newDiet.setDailyReq(dietPreferences.getCaloriesRequirementPerDay());
 		return newDiet;
 	}
 }

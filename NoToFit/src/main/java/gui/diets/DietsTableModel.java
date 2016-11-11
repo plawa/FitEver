@@ -36,7 +36,7 @@ class DietsTableModel extends AbstractTableModel {
 		case 0:
 			return diet.getName();
 		case 1:
-			return diet.getDailyRequirement();
+			return diet.getDailyReq();
 		case 2:
 			return GuiTools.parseDateToString(diet.getValidFrom());
 		case 3:

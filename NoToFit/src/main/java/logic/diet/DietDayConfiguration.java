@@ -1,5 +1,7 @@
 package logic.diet;
 
+import java.util.Date;
+
 public class DietDayConfiguration {
 
 	private int dailyCaloriesReq;
@@ -12,6 +14,23 @@ public class DietDayConfiguration {
 	private float mainDishCaloriesWeight;
 	private float supperCaloriesWeight;
 
+	private Date date;
+	
+	public DietDayConfiguration() {
+		this(new Date());
+	}
+
+	public DietDayConfiguration(Date date) {
+		this.setDate(date);
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
 	public void setCaloriesWeightsByDefault() {
 		float allMealsCount = breakfastMealsCount + mainDishMealsCount + supperMealsCount; //should be float due to calculations below

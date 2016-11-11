@@ -36,7 +36,7 @@ public class MealsTableModel extends javax.swing.table.AbstractTableModel {
 		case 1:
 			return Translator.parseMealTypeCharToString(meal.getType());
 		case 2:
-			return meal.getGramature();
+			return meal.getGrammage();
 		case 3:
 			return meal.getCarbohydratesPercentage();
 		case 4:

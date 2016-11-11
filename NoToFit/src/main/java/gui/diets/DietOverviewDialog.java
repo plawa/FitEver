@@ -10,8 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -22,9 +21,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
 import database.entities.Diet;
+import database.entities.Dietday;
 import database.entities.Meal;
 import gui.common.GuiTools;
-import gui.meals.MealsTableModel;
 
 public class DietOverviewDialog extends JDialog {
 
@@ -48,79 +47,33 @@ public class DietOverviewDialog extends JDialog {
 
 	private void refreshDietDetails() {
 		lblNameValue.setText(dietDisplaying.getName());
-		lblCaloriesValue.setText(String.format("%d", dietDisplaying.getDailyRequirement()));
+		lblCaloriesValue.setText(String.format("%d", dietDisplaying.getDailyReq()));
 		lblValidFromValue.setText(GuiTools.parseDateToString(dietDisplaying.getValidFrom()));
 		lblValidToValue.setText(GuiTools.parseDateToString(dietDisplaying.getValidTo()));
 	}
 
-	protected void refreshTable() {
-		List<Meal> dietMealsList = new ArrayList<>(dietDisplaying.getMeals());
-		new MealsTableModel(dietMealsList);
-	}
-
 	private JTabbedPane initializeDietDaysTabbedPane() {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		
-		Stack<Meal> breakfasts = new Stack<>();
-		Stack<Meal> mainDishes = new Stack<>();
-		Stack<Meal> suppers = new Stack<>();
-		for (Meal meal : dietDisplaying.getMeals()) {
-			if (meal.getType() == 'b')
-				breakfasts.add(meal);
-			else if (meal.getType() == 'm')
-				mainDishes.add(meal);
-			else if (meal.getType() == 's')
-				suppers.add(meal);
-		}
-
-		int dietDays = countDietDays();
-		
-		for (int i = 1; i <= dietDays; i++) {
-			List<Meal> dayOfDiet = new ArrayList<>();
-			int b = dietDisplaying.getBreakfastCount();
-			while (b > 0) {
-				dayOfDiet.add(breakfasts.pop());
-				b--;
-			}
-
-			int m = dietDisplaying.getMainDishCount();
-			while (m > 0) {
-				dayOfDiet.add(mainDishes.pop());
-				m--;
-			}
-
-			int s = dietDisplaying.getBreakfastCount();
-			while (s > 0) {
-				dayOfDiet.add(suppers.pop());
-				s--;
-			}
-
-			tabbedPane.add("Day " + Integer.toString(i), createDietDayPanel(dayOfDiet));
+		for (Dietday day : dietDisplaying.getDietdays()) {						
+			tabbedPane.add(GuiTools.parseDateToString(day.getDate()), createDietDayJPanel(day));
 		}
 		return tabbedPane;
 	}
 
-	private JPanel createDietDayPanel(List<Meal> dietDayMeals) {
+	private JPanel createDietDayJPanel(Dietday dietDay) {
 		JPanel newPanel = new JPanel();
 		newPanel.setLayout(new BorderLayout());
-		
+
 		JScrollPane newScrollPane = new JScrollPane();
-		newScrollPane.setViewportView(createDietDayTable(dietDayMeals));
+		newScrollPane.setViewportView(createDietDayJTable(dietDay.getMeals()));
 
 		newPanel.add(newScrollPane);
-		
+
 		return newPanel;
 	}
 
-	private DietDayTable createDietDayTable(List<Meal> dietDayMeals) {
-		return new DietDayTable(dietDayMeals);
-	}
-
-	private int countDietDays() {
-		int mealsDayCount = dietDisplaying.getBreakfastCount() + dietDisplaying.getMainDishCount()
-				+ dietDisplaying.getSupperCount();
-		int allMealsCount = dietDisplaying.getMeals().size();
-		return allMealsCount / mealsDayCount;
+	private DietDayJTable createDietDayJTable(Set<Meal> dietDayMeals) {
+		return new DietDayJTable(new ArrayList<>(dietDayMeals));
 	}
 
 	private void initializeSwingComponents() {
@@ -134,8 +87,7 @@ public class DietOverviewDialog extends JDialog {
 		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-				Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			JLabel lblNameDescription = new JLabel("Diet Name: ");
@@ -219,7 +171,7 @@ public class DietOverviewDialog extends JDialog {
 		}
 
 		JTabbedPane tabbed = initializeDietDaysTabbedPane();
-		
+
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
 		gbc_tabbedPane.gridwidth = 5;
 		gbc_tabbedPane.insets = new Insets(0, 0, 5, 5);
@@ -242,7 +194,6 @@ public class DietOverviewDialog extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		refreshTable();
 	}
 
 	protected void tearDown() {

@@ -7,6 +7,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -27,9 +30,12 @@ import logic.diet.EnergyRequirementCalculator;
 public class GenerateDietDialog extends JDialog {
 
 	private static final long serialVersionUID = 1865875837806092179L;
-	private static final String MSG_MEAL_COUNT_ERROR = "You mustn't have more than 7 meals per day!";
-	private static final int MAX_MEALS_COUNT = 7;
 	
+	private static final String MSG_MEAL_COUNT_ERROR = "You mustn't have more than 7 meals per day!";
+	
+	private static final int MAX_MEALS_COUNT = 7;
+	private static final long DAYS_IN_MILISECONDS = 86400000;
+
 	private final JPanel contentPanel = new JPanel();
 	private JSlider sliderDietPeriod;
 	private JTextField txtMyNewExample;
@@ -54,7 +60,7 @@ public class GenerateDietDialog extends JDialog {
 	}
 
 	protected void okButtonPressed() {
-		if (!isMealsCountOK()){
+		if (!isMealsCountOK()) {
 			JOptionPane.showMessageDialog(this, MSG_MEAL_COUNT_ERROR);
 			return;
 		}
@@ -64,19 +70,28 @@ public class GenerateDietDialog extends JDialog {
 
 	private void retrieveDietProperties() {
 		newDietPreferences = new DietGenerationPreferences();
+		
+		final long startDateInMilis = newDietPreferences.getFirstDietDay().getTime();
+		final int dietPeriodInDays = sliderDietPeriod.getValue();
+		final int dailyCaloriesReq = EnergyRequirementCalculator.performCalculation(user);
+
 		newDietPreferences.setDietName(txtMyNewExample.getText());
-		newDietPreferences.setDietPeriodDays(sliderDietPeriod.getValue());
-		
-		int dailyCaloriesReq = EnergyRequirementCalculator.performCalculation(user);
-		
-		DietDayConfiguration dayConf = new DietDayConfiguration();
-		dayConf.setDailyCaloriesReq(dailyCaloriesReq);
-		dayConf.setBreakfastMealsCount((int) spinnerBreakfastMealsCount.getValue());
-		dayConf.setMainDishMealsCount((int) spinnerMainDishesCount.getValue());
-		dayConf.setSupperMealsCount((int) spinnerSupperMealsCount.getValue());
-		dayConf.setCaloriesWeightsByDefault();
-		
-		newDietPreferences.setDayMealsPref(dayConf);
+		newDietPreferences.setDietPeriodDays(dietPeriodInDays);
+		newDietPreferences.setCaloriesRequirementPerDay(dailyCaloriesReq);
+
+		List<DietDayConfiguration> dietDayConfigurations = new ArrayList<>();
+		for (int i = 0; i < dietPeriodInDays; i++) {
+			Date dayDate = new Date(startDateInMilis + i*DAYS_IN_MILISECONDS);
+			DietDayConfiguration dayConfig = new DietDayConfiguration(dayDate);
+			dayConfig.setDailyCaloriesReq(dailyCaloriesReq);
+			dayConfig.setBreakfastMealsCount((int) spinnerBreakfastMealsCount.getValue());
+			dayConfig.setMainDishMealsCount((int) spinnerMainDishesCount.getValue());
+			dayConfig.setSupperMealsCount((int) spinnerSupperMealsCount.getValue());
+			dayConfig.setCaloriesWeightsByDefault();
+			dietDayConfigurations.add(dayConfig);
+		}
+
+		newDietPreferences.setDayMealsPref(dietDayConfigurations);
 	}
 
 	private boolean isMealsCountOK() {

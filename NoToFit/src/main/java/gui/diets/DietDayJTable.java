@@ -10,12 +10,12 @@ import database.entities.Meal;
 import gui.meals.MealsTableModel;
 import gui.meals.ShowMealDialog;
 
-public class DietDayTable extends JTable {
+public class DietDayJTable extends JTable {
 
 	private static final long serialVersionUID = 7886074277844124153L;
 	private MealsTableModel model;
 
-	public DietDayTable(List<Meal> dayMeals) {
+	public DietDayJTable(List<Meal> dayMeals) {
 		super();
 		setFillsViewportHeight(true);
 		model = new MealsTableModel(dayMeals);
@@ -31,7 +31,7 @@ public class DietDayTable extends JTable {
 				if (me.getClickCount() == 2) {
 					Meal chosenMeal = model.getMealAt(getSelectedRow());
 					ShowMealDialog mealView = new ShowMealDialog(chosenMeal);
-					mealView.setLocationRelativeTo(DietDayTable.this);
+					mealView.setLocationRelativeTo(DietDayJTable.this);
 					mealView.setVisible(true);
 				}
 			}
