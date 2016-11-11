@@ -8,7 +8,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import database.entities.Dietday;
 import database.entities.Entity;
+import database.entities.Meal;
 import database.entities.Shadow;
 
 public class DatabaseController {
@@ -92,5 +94,13 @@ public class DatabaseController {
 	public static void tidyUp() {
 		mySessionFactory.getCurrentSession().close();
 		mySessionFactory.close();
+	}
+	
+	public static void main(String[] args) {
+		Meal meal1 = getEntityByID(Meal.class, 12245);
+		Meal meal2 = getEntityByID(Meal.class, 11441);
+		
+		Dietday dietDay = new Dietday();
+		dietDay.set
 	}
 }

@@ -1,5 +1,5 @@
 package database.entities;
-// Generated 2016-09-29 20:51:33 by Hibernate Tools 5.2.0.Beta1
+// Generated 2016-11-11 15:44:57 by Hibernate Tools 5.2.0.Beta1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,18 +11,41 @@ import logic.entitytools.MealTools;
  */
 public class Meal extends Entity {
 
-	private static final long serialVersionUID = -3460371620499533617L;
+	private static final long serialVersionUID = -5478353296080109577L;
 	private Integer id;
 	private String name;
 	private char objective;
 	private char type;
-	private int gramature;
+	private int grammage;
 	private int carbohydratesPercentage;
 	private int proteinPercentage;
 	private int fatPercentage;
-	private Set<Diet> diets = new HashSet<Diet>(0);
-	
+	private Set<Dietday> dietdays = new HashSet<Dietday>(0);
+
 	public Meal() {
+	}
+
+	public Meal(String name, char objective, char type, int grammage, int carbohydratesPercentage,
+			int proteinPercentage, int fatPercentage) {
+		this.name = name;
+		this.objective = objective;
+		this.type = type;
+		this.grammage = grammage;
+		this.carbohydratesPercentage = carbohydratesPercentage;
+		this.proteinPercentage = proteinPercentage;
+		this.fatPercentage = fatPercentage;
+	}
+
+	public Meal(String name, char objective, char type, int grammage, int carbohydratesPercentage,
+			int proteinPercentage, int fatPercentage, Set<Dietday> dietdays) {
+		this.name = name;
+		this.objective = objective;
+		this.type = type;
+		this.grammage = grammage;
+		this.carbohydratesPercentage = carbohydratesPercentage;
+		this.proteinPercentage = proteinPercentage;
+		this.fatPercentage = fatPercentage;
+		this.dietdays = dietdays;
 	}
 
 	public Integer getId() {
@@ -48,21 +71,21 @@ public class Meal extends Entity {
 	public void setObjective(char objective) {
 		this.objective = objective;
 	}
-	
+
 	public char getType() {
-		return type;
+		return this.type;
 	}
 
 	public void setType(char type) {
 		this.type = type;
 	}
 
-	public int getGramature() {
-		return this.gramature;
+	public int getGrammage() {
+		return this.grammage;
 	}
 
-	public void setGramature(int gramature) {
-		this.gramature = gramature;
+	public void setGrammage(int grammage) {
+		this.grammage = grammage;
 	}
 
 	public int getCarbohydratesPercentage() {
@@ -89,14 +112,14 @@ public class Meal extends Entity {
 		this.fatPercentage = fatPercentage;
 	}
 
-	public Set<Diet> getDiets() {
-		return this.diets;
-	} 
- 
-	public void setDiets(Set<Diet> dietMeals) {
-		this.diets = dietMeals;
+	public Set<Dietday> getDietdays() {
+		return this.dietdays;
 	}
-	
+
+	public void setDietdays(Set<Dietday> dietdays) {
+		this.dietdays = dietdays;
+	}
+
 	/* MANUAL CODE REGION */
 	
 	@Override

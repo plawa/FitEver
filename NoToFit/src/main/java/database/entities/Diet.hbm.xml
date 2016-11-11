@@ -1,47 +1,33 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-10-12 20:49:43 by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated 2016-11-11 15:44:57 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
-	<class name="database.entities.Diet" table="diet"
-		optimistic-lock="version">
-		<id name="id" type="java.lang.Integer">
-			<column name="ID" />
-			<generator class="identity" />
-		</id>
-		<many-to-one name="user" class="database.entities.User"
-			fetch="select">
-			<column name="UserID" not-null="true" />
-		</many-to-one>
-		<property name="name" type="string">
-			<column name="name" length="30" not-null="true" />
-		</property>
-		<property name="dailyRequirement" type="java.lang.Integer">
-			<column name="dailyReq" length="5" not-null="true" />
-		</property>
-		<property name="breakfastCount" type="java.lang.Integer">
-			<column name="breakfastCount" length="1" not-null="false" />
-		</property>
-		<property name="mainDishCount" type="java.lang.Integer">
-			<column name="mainDishCount" length="1" not-null="false" />
-		</property>
-		<property name="supperCount" type="java.lang.Integer">
-			<column name="supperCount" length="1" not-null="false" />
-		</property>
-		<property name="validFrom" type="date">
-			<column name="validFrom" length="10" not-null="true" />
-		</property>
-		<property name="validTo" type="date">
-			<column name="validTo" length="10" not-null="true" />
-		</property>
-		<set name="meals" table="diet_meal" inverse="false" lazy="false"
-			fetch="select">
-			<key>
-				<column name="DietID" not-null="true" />
-			</key>
-			<many-to-many entity-name="database.entities.Meal">
-				<column name="MealID" not-null="true" />
-			</many-to-many>
-		</set>
-	</class>
+    <class name="database.entities.Diet" table="diet" catalog="notofit" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="userId" type="int">
+            <column name="UserID" not-null="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="name" length="30" not-null="true" />
+        </property>
+        <property name="validFrom" type="date">
+            <column name="validFrom" length="10" not-null="true" />
+        </property>
+        <property name="validTo" type="date">
+            <column name="validTo" length="10" not-null="true" />
+        </property>
+        <property name="dailyReq" type="int">
+            <column name="dailyReq" not-null="true" />
+        </property>
+        <set name="dietdays" table="dietday" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DietID" not-null="true" />
+            </key>
+            <one-to-many class="database.entities.Dietday" />
+        </set>
+    </class>
 </hibernate-mapping>
