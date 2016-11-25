@@ -37,34 +37,26 @@ public class AllExercisesDialog extends AllMealsDialog {
 	@Override
 	protected void editButtonPressed() {
 		Exercise selectedExercise = retrieveSelectedExercise();
-		if (selectedExercise != null) {
-			MaintainExerciseDialog editExerciseDialog = new MaintainExerciseDialog(selectedExercise);
-			editExerciseDialog.setLocationRelativeTo(this);
-			editExerciseDialog.setVisible(true);
-			refreshTable();
-		}
+		MaintainExerciseDialog editExerciseDialog = new MaintainExerciseDialog(selectedExercise);
+		editExerciseDialog.setLocationRelativeTo(this);
+		editExerciseDialog.setVisible(true);
+		refreshTable();
+
 	}
 
 	@Override
 	protected void deleteButtonPressed() {
 		Exercise selectedExercise = retrieveSelectedExercise();
-		if (selectedExercise != null) {
-			int confirmationInput = JOptionPane.showConfirmDialog(this, "Are you sure to delete?", "Confirm",
-					JOptionPane.YES_NO_OPTION);
-			if (confirmationInput == JOptionPane.YES_OPTION) {
-				DatabaseController.deleteEntityFromDatabase(selectedExercise);
-				refreshTable();
-			}
+		int confirmationInput = JOptionPane.showConfirmDialog(this, "Are you sure to delete?", "Confirm",
+				JOptionPane.YES_NO_OPTION);
+		if (confirmationInput == JOptionPane.YES_OPTION) {
+			DatabaseController.deleteEntityFromDatabase(selectedExercise);
+			refreshTable();
 		}
 	}
 
 	private Exercise retrieveSelectedExercise() {
-		int selectedRowIndex = table.getSelectedRow();
-		if (selectedRowIndex == -1) {
-			JOptionPane.showMessageDialog(this, "No row selected!", "Error!", 0);
-			return null;
-		}
-		return tableModel.getExerciseAt(selectedRowIndex);
+		return tableModel.getExerciseAt(table.getSelectedRow());
 	}
 
 	private void setSwingProperties() {

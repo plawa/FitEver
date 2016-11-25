@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -3253794944742197441L;
 	
-	private static final String NOTOFIT_VERSION_HEADER = "NoToFit v0.0.1";
+	private static final String FITEVER_DLG_TITLE = "FitEver v1.0";
 
 	private User userLogged;
 	private ImageIcon userIcon;
@@ -59,7 +59,7 @@ public class MainFrame extends JFrame {
 
 	private void createFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle(NOTOFIT_VERSION_HEADER);
+		setTitle(FITEVER_DLG_TITLE);
 		setBounds(100, 100, 863, 550);
 		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 	}

@@ -8,6 +8,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -51,7 +53,16 @@ public class WorkoutOverviewDialog extends JDialog {
 
 	private JTabbedPane initializeWorkoutDaysTabbedPane() {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		for(Workoutday workoutDay : workoutDisplaying.getWorkoutdays()){
+		
+		List<Workoutday> workoutDaysSorted = new ArrayList<>(workoutDisplaying.getWorkoutdays());
+		workoutDaysSorted.sort(new Comparator<Workoutday>() {
+			@Override
+			public int compare(Workoutday o1, Workoutday o2) {
+				return o1.getDate().compareTo(o2.getDate());
+			}
+		});
+		
+		for(Workoutday workoutDay : workoutDaysSorted){
 			String dateHeader = GuiTools.parseDateToString(workoutDay.getDate());
 			JPanel newPanel = createWorkoutDayPanel(workoutDay.getExercises());
 			tabbedPane.add(dateHeader, newPanel);

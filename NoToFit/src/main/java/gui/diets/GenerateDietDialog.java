@@ -91,7 +91,7 @@ public class GenerateDietDialog extends JDialog {
 			dietDayConfigurations.add(dayConfig);
 		}
 
-		newDietPreferences.setDayMealsPref(dietDayConfigurations);
+		newDietPreferences.setDayMealsPreferences(dietDayConfigurations);
 	}
 
 	private boolean isMealsCountOK() {

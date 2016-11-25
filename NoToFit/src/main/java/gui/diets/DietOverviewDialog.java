@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -54,7 +56,18 @@ public class DietOverviewDialog extends JDialog {
 
 	private JTabbedPane initializeDietDaysTabbedPane() {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		for (Dietday day : dietDisplaying.getDietdays()) {						
+		
+		List<Dietday> dietDaysSorted = new ArrayList<>(dietDisplaying.getDietdays());
+		
+		dietDaysSorted.sort(new Comparator<Dietday>() {
+			@Override
+			public int compare(Dietday o1, Dietday o2) {
+				return o1.getDate().compareTo(o2.getDate());
+			}
+		});
+		
+		
+		for (Dietday day : dietDaysSorted) {						
 			tabbedPane.add(GuiTools.parseDateToString(day.getDate()), createDietDayJPanel(day));
 		}
 		return tabbedPane;

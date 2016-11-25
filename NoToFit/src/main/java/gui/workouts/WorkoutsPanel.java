@@ -103,7 +103,7 @@ public class WorkoutsPanel extends JPanel {
 		table.getColumnModel().getColumn(0).setPreferredWidth(200);
 	}
 
-	protected void showAllExercisesButtonPressed() {
+	protected void manageExercisesButtonPressed() {
 		AllExercisesDialog exercisesLibDlg = new AllExercisesDialog();
 		exercisesLibDlg.setLocationRelativeTo(this);
 		exercisesLibDlg.setVisible(true);
@@ -216,7 +216,7 @@ public class WorkoutsPanel extends JPanel {
 		JButton btnShowAllExercises = new JButton("Show All Exercises");
 		btnShowAllExercises.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showAllExercisesButtonPressed();
+				manageExercisesButtonPressed();
 			}
 		});
 		btnShowAllExercises.setHorizontalTextPosition(SwingConstants.CENTER);

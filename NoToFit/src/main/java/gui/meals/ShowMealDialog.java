@@ -20,7 +20,7 @@ public class ShowMealDialog extends MaintainMealDialog {
 		textFieldName.setEditable(false);
 		comboBoxMealType.setEnabled(false);
 		comboBoxObjective.setEnabled(false);
-		okButton.setEnabled(false);
-		
+		okButton.setVisible(false);
+		cancelButton.setText("Close");
 	}
 }

@@ -16,6 +16,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
@@ -28,6 +29,8 @@ import database.entities.User;
 public class UpdateUserWeightDialog extends JDialog {
 
 	private static final long serialVersionUID = 2665625473604154239L;
+
+	private static final String MSG_SAVE_ERROR = "Unable to store data to the database. An error occured!";
 	private final JPanel contentPanel = new JPanel();
 	private User userToMaintain;
 	private JSlider slider;
@@ -212,8 +215,12 @@ public class UpdateUserWeightDialog extends JDialog {
 
 	protected void updateButtonPressed() {
 		userToMaintain.setActualWeight(newWeight);
-		DatabaseController.updateEntityToDatabase(userToMaintain);
-		tearDown();
+		try {
+			DatabaseController.updateEntityToDatabase(userToMaintain);
+			tearDown();
+		} catch (RuntimeException e) {
+			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR);
+		}
 	}
 
 	private void tearDown() {

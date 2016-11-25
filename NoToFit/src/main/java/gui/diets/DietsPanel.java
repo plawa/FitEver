@@ -35,10 +35,10 @@ import logic.diet.DietPlanGenerator;
 
 public class DietsPanel extends JPanel {
 	private static final long serialVersionUID = -3015175045558720497L;
-	
+
+	public static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less meals that match your specific needs.";
 	private static final String POPUP_HEADER_ERROR = "Error!";
 	private static final String MSG_WAIT_FOR_DIET = "Please wait while your diet is being generated.";
-	private static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less entries.";
 
 	private JTable table;
 	private DietsTableModel tableModel;
@@ -63,28 +63,39 @@ public class DietsPanel extends JPanel {
 		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
 		if (dietPreferences != null) {
 			dietPreferences.setUser(currentUser);
-			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+			SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 				private WaitDialog waitDlg = new WaitDialog(MSG_WAIT_FOR_DIET);
-				
+
 				@Override
-				protected Void doInBackground() throws Exception {
+				protected Boolean doInBackground() throws Exception {
 					waitDlg.setLocationRelativeTo(DietsPanel.this);
 					waitDlg.setVisible(true);
-					Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
-					if (generatedDiet != null) {
+					try {
+						Diet generatedDiet = DietPlanGenerator.generateDiet(dietPreferences);
 						currentUser.getDiets().add(generatedDiet);
 						DatabaseController.saveEntityToDatabase(generatedDiet);
 						refreshTable();
-					} else {
-						JOptionPane.showMessageDialog(DietsPanel.this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);
+						return true;
+					} catch (Exception ex) {
+						ex.printStackTrace();
 					}
-					return null;
+					return false;
 				}
-				
+
 				protected void done() {
+					Boolean successfullyGenerated = false;
+					try {
+						successfullyGenerated = get();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					waitDlg.setVisible(false);
+					waitDlg.dispose();
+					if(!successfullyGenerated){
+						JOptionPane.showMessageDialog(DietsPanel.this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);						
+					}
 				};
-				
+
 			};
 			worker.execute();
 		}
@@ -109,7 +120,7 @@ public class DietsPanel extends JPanel {
 		}
 	}
 
-	protected void showAllMealsButtonPressed() {
+	protected void manageMealsButtonPressed() {
 		AllMealsDialog mealsLibDialog = new AllMealsDialog();
 		mealsLibDialog.setLocationRelativeTo(this);
 		mealsLibDialog.setVisible(true);
@@ -158,10 +169,10 @@ public class DietsPanel extends JPanel {
 		btnOpenSelectedDiet.setIcon(openButtonIcon);
 		toolBar.add(btnOpenSelectedDiet);
 
-		JButton btnShowAllMeals = new JButton("Show All Meals");
+		JButton btnShowAllMeals = new JButton("Manage Meals");
 		btnShowAllMeals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showAllMealsButtonPressed();
+				manageMealsButtonPressed();
 			}
 		});
 		btnShowAllMeals.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -190,8 +201,7 @@ public class DietsPanel extends JPanel {
 		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnExit.setIcon(exitButtonIcon);
 		toolBar.add(btnExit);
-		
-		
+
 		Component leftStrut = Box.createHorizontalStrut(20);
 		GridBagConstraints gbc_leftStrut = new GridBagConstraints();
 		gbc_leftStrut.insets = new Insets(0, 0, 5, 5);
@@ -240,7 +250,7 @@ public class DietsPanel extends JPanel {
 		gbc_bottomStrut.gridy = 3;
 		add(bottomStrut, gbc_bottomStrut);
 	}
-	
+
 	protected void exitButtonPressed() {
 		((MainFrame) SwingUtilities.getWindowAncestor(this)).tidyUp();
 	}

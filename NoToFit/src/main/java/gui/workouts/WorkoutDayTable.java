@@ -8,7 +8,7 @@ import javax.swing.JTable;
 
 import database.entities.Exercise;
 import gui.exercises.ExercisesTableModel;
-import gui.exercises.MaintainExerciseDialog;
+import gui.exercises.ShowExerciseDialog;
 
 public class WorkoutDayTable extends JTable {
 
@@ -31,7 +31,7 @@ public class WorkoutDayTable extends JTable {
 			public void mouseClicked(MouseEvent me) {
 				if (me.getClickCount() == 2) {
 					Exercise chosenExercise = tableModel.getExerciseAt(getSelectedRow());
-					MaintainExerciseDialog exerciseView = new MaintainExerciseDialog(chosenExercise);
+					ShowExerciseDialog exerciseView = new ShowExerciseDialog(chosenExercise);
 					exerciseView.setLocationRelativeTo(WorkoutDayTable.this);
 					exerciseView.setVisible(true);
 				}

@@ -19,7 +19,6 @@ public class Workout extends Entity {
 	private Character objective;
 	private Set<Workoutday> workoutdays = new HashSet<>(0);
 
-
 	public Workout() {
 	}
 

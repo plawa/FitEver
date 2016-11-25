@@ -20,6 +20,8 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
@@ -31,6 +33,8 @@ public class AllMealsDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	protected JTable table;
 	protected MealsTableModel tableModel;
+	private JButton btnEdit;
+	private JButton btnDelete;
 
 	public AllMealsDialog() {
 		initializeSwingComponents();
@@ -45,30 +49,22 @@ public class AllMealsDialog extends JDialog {
 
 	protected void deleteButtonPressed() {
 		int rowIndex = table.getSelectedRow();
-		if (rowIndex != -1) {
-			int confirmationInput = JOptionPane.showConfirmDialog(contentPanel, "Are you sure to delete?", "Confirm",
-					JOptionPane.YES_NO_OPTION);
-			if (confirmationInput == JOptionPane.YES_OPTION) {
-				Meal mealToDelete = tableModel.getMealAt(rowIndex);
-				DatabaseController.deleteEntityFromDatabase(mealToDelete);
-				refreshTable();
-			}
-		} else {
-			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error!", 0);
+		int confirmationInput = JOptionPane.showConfirmDialog(contentPanel, "Are you sure to delete?", "Confirm",
+				JOptionPane.YES_NO_OPTION);
+		if (confirmationInput == JOptionPane.YES_OPTION) {
+			Meal mealToDelete = tableModel.getMealAt(rowIndex);
+			DatabaseController.deleteEntityFromDatabase(mealToDelete);
+			refreshTable();
 		}
 	}
 
 	protected void editButtonPressed() {
 		int rowIndex = table.getSelectedRow();
-		if (rowIndex != -1) {
-			Meal mealToEdit = tableModel.getMealAt(rowIndex);
-			MaintainMealDialog editMealDlg = new MaintainMealDialog(mealToEdit);
-			editMealDlg.setLocationRelativeTo(this);
-			editMealDlg.setVisible(true);
-			refreshTable();
-		} else {
-			JOptionPane.showMessageDialog(contentPanel, "No row selected!", "Error!", 0);
-		}
+		Meal mealToEdit = tableModel.getMealAt(rowIndex);
+		MaintainMealDialog editMealDlg = new MaintainMealDialog(mealToEdit);
+		editMealDlg.setLocationRelativeTo(this);
+		editMealDlg.setVisible(true);
+		refreshTable();
 	}
 
 	protected void addButtonPressed() {
@@ -128,6 +124,14 @@ public class AllMealsDialog extends JDialog {
 						editButtonPressed();
 				}
 			});
+			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					boolean areEnabled = table.getSelectedRow() != -1;
+					setMutationButtonsEnabled(areEnabled);
+				}
+			});
 			refreshTable();
 			scrollPane.setViewportView(table);
 		}
@@ -159,7 +163,8 @@ public class AllMealsDialog extends JDialog {
 			toolBar.add(btnAdd);
 		}
 		{
-			JButton btnEdit = new JButton("Edit");
+			btnEdit = new JButton("Edit");
+			btnEdit.setEnabled(false);
 			btnEdit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					editButtonPressed();
@@ -172,7 +177,8 @@ public class AllMealsDialog extends JDialog {
 			toolBar.add(btnEdit);
 		}
 		{
-			JButton btnDelete = new JButton("Delete");
+			btnDelete = new JButton("Delete");
+			btnDelete.setEnabled(false);
 			btnDelete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					deleteButtonPressed();
@@ -189,5 +195,10 @@ public class AllMealsDialog extends JDialog {
 	protected void tearDown() {
 		setVisible(false);
 		dispose();
+	}
+
+	private void setMutationButtonsEnabled(boolean isEnabled) {
+		btnEdit.setEnabled(isEnabled);
+		btnDelete.setEnabled(isEnabled);
 	}
 }

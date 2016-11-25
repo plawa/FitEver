@@ -14,7 +14,7 @@ public class DietGenerationPreferences {
 	private int dietPeriodInDays;
 	private int caloriesRequirementPerDay;
 	private Date firstDietDay;
-	private List<DietDayConfiguration> dayMealsPref;
+	private List<DietDayConfiguration> dayMealsPreferences;
 
 	
 	public DietGenerationPreferences() {
@@ -57,12 +57,12 @@ public class DietGenerationPreferences {
 		this.dietPeriodInDays = dietPeriodDays;
 	}
 
-	public List<DietDayConfiguration> getDayMealsPref() {
-		return dayMealsPref;
+	public List<DietDayConfiguration> getDayMealsPreferences() {
+		return dayMealsPreferences;
 	}
 
-	public void setDayMealsPref(List<DietDayConfiguration> dayMealsPref) {
-		this.dayMealsPref = dayMealsPref;
+	public void setDayMealsPreferences(List<DietDayConfiguration> dayMealsPref) {
+		this.dayMealsPreferences = dayMealsPref;
 	}
 
 	public Date getFirstDietDay() {

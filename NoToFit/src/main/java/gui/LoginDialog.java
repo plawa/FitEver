@@ -26,6 +26,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.hibernate.service.spi.ServiceException;
+
 import database.entities.User;
 import gui.user.MaintainUserDialog;
 import logic.Login;
@@ -38,7 +40,7 @@ public class LoginDialog extends JDialog {
 
 	private static final String LBL_MSG_IMAGE_NOT_FOUND = "Error! Image not found.";
 	private static final String MSG_LOGIN_DENIED = "Username or password incorrect.";
-	private static final String MSG_DATABASE_ERROR = "Unable to reach database.";
+	private static final String MSG_DATABASE_ERROR = "Error initializing database connection!";
 
 	private User authorizedUser = null;
 	private final JPanel contentPanel = new JPanel();
@@ -186,9 +188,9 @@ public class LoginDialog extends JDialog {
 	private void loginButtonPressed() {
 		try {
 			authorizedUser = Login.performLogin(txtFldLogin.getText(), passFld.getText());
-		} catch (Error err) {
+		} catch (ServiceException err) {
 			err.printStackTrace();
-			JOptionPane.showMessageDialog(LoginDialog.this, MSG_DATABASE_ERROR, "Error!", 2);
+			JOptionPane.showMessageDialog(LoginDialog.this, MSG_DATABASE_ERROR, "Error!", 0);
 			return;
 		}
 		if (authorizedUser == null)

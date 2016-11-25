@@ -476,7 +476,7 @@ public class MaintainUserDialog extends JDialog {
 	}
 
 	protected void saveButtonPressed() {
-		setUserPropertiesFromEnteredValues();
+		retrieveUserPropertiesFromEnteredValues();
 		boolean operationSucceeded = false;
 
 		switch (mode) {
@@ -507,7 +507,7 @@ public class MaintainUserDialog extends JDialog {
 		return DatabaseController.getEntitiesByParameter(Shadow.class, "login", login).size() == 0;
 	}
 
-	private void setUserPropertiesFromEnteredValues() {
+	private void retrieveUserPropertiesFromEnteredValues() {
 		float startWeight = GuiTools.parseFloatCommaOrDotSep(txtFldStartWeight.getText());
 		float goalWeight = GuiTools.parseFloatCommaOrDotSep(txtFldGoalWeight.getText());
 

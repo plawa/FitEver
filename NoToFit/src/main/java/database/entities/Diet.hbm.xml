@@ -24,7 +24,7 @@
         <property name="dailyReq" type="int">
             <column name="dailyReq" not-null="true" />
         </property>
-        <set name="dietdays" table="dietday" inverse="true" lazy="true" fetch="select" cascade="all">
+        <set name="dietdays" table="dietday" inverse="true" lazy="false" fetch="select" cascade="all">
             <key>
                 <column name="DietID" not-null="true" />
             </key>

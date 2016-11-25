@@ -79,16 +79,7 @@ public class UserPanel extends JPanel {
 	}
 
 	private void switchUser() {
-		// TODO: Fix other tabs refreshing
-		
 		((MainFrame)SwingUtilities.getWindowAncestor(this)).switchUser();
-		
-		/*LoginDialog loginDlg = new LoginDialog();
-		User newLoggedUser = loginDlg.getAuthorizedUser();
-		if (newLoggedUser != null) {
-			userDisplaying = newLoggedUser;
-			refreshUserDetails();
-		}*/
 	}
 
 	protected void refreshUserDetails() {

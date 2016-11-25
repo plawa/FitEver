@@ -26,11 +26,13 @@ import gui.common.Objective;
 public class MaintainExerciseDialog extends JDialog {
 
 	private static final long serialVersionUID = -8160642732810147230L;
-	private JTextField txtFldName;
-	private JComboBox<Objective> comboBoxObjective;
-	private JComboBox<DifficultyLevel> comboBoxDifficulty;
-	private JTextArea textAreaDescription;
-	private JCheckBox chckbxEquipmentRequired;
+	protected JTextField txtFldName;
+	protected JComboBox<Objective> comboBoxObjective;
+	protected JComboBox<DifficultyLevel> comboBoxDifficulty;
+	protected JTextArea textAreaDescription;
+	protected JCheckBox chckbxEquipmentRequired;
+	protected JButton btnCancel;
+	protected JButton btnSave;
 	private Exercise exerciseMaintained;
 	private DialogMode mode;
 
@@ -48,7 +50,7 @@ public class MaintainExerciseDialog extends JDialog {
 	}
 
 	protected void saveButtonPressed() {
-		setExerciseFromFields();
+		retrieveExerciseFromFields();
 		switch (mode) {
 		case CREATE:
 			DatabaseController.saveEntityToDatabase(exerciseMaintained);
@@ -62,7 +64,7 @@ public class MaintainExerciseDialog extends JDialog {
 		tearDown();
 	}
 
-	private void setExerciseFromFields() {
+	private void retrieveExerciseFromFields() {
 		exerciseMaintained.setName(txtFldName.getText());
 		Objective objective = (Objective) comboBoxObjective.getSelectedItem();
 		exerciseMaintained.setObjective(objective.getObjectiveChar());
@@ -88,9 +90,9 @@ public class MaintainExerciseDialog extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 394, 387);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
@@ -119,7 +121,7 @@ public class MaintainExerciseDialog extends JDialog {
 		getContentPane().add(txtFldName, gbc_txtFldName);
 		txtFldName.setColumns(10);
 
-		Component leftStrut = Box.createHorizontalStrut(20);
+		Component leftStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_leftStrut = new GridBagConstraints();
 		gbc_leftStrut.insets = new Insets(0, 0, 5, 5);
 		gbc_leftStrut.gridx = 0;
@@ -188,19 +190,26 @@ public class MaintainExerciseDialog extends JDialog {
 		gbc_textAreaDescription.gridy = 4;
 		getContentPane().add(textAreaDescription, gbc_textAreaDescription);
 
-		JButton btnSave = new JButton("Save");
+		btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				saveButtonPressed();
 			}
 		});
+		
+		Component glue = Box.createGlue();
+		GridBagConstraints gbc_glue = new GridBagConstraints();
+		gbc_glue.insets = new Insets(0, 0, 5, 5);
+		gbc_glue.gridx = 5;
+		gbc_glue.gridy = 5;
+		getContentPane().add(glue, gbc_glue);
 
-		Component rightStrut = Box.createHorizontalStrut(20);
+		Component rightStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_rightStrut = new GridBagConstraints();
 		gbc_rightStrut.anchor = GridBagConstraints.EAST;
 		gbc_rightStrut.insets = new Insets(0, 0, 5, 0);
-		gbc_rightStrut.gridx = 5;
-		gbc_rightStrut.gridy = 4;
+		gbc_rightStrut.gridx = 6;
+		gbc_rightStrut.gridy = 5;
 		getContentPane().add(rightStrut, gbc_rightStrut);
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
 		gbc_btnSave.insets = new Insets(0, 0, 5, 5);
@@ -208,7 +217,7 @@ public class MaintainExerciseDialog extends JDialog {
 		gbc_btnSave.gridy = 5;
 		getContentPane().add(btnSave, gbc_btnSave);
 
-		JButton btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tearDown();

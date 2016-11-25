@@ -14,7 +14,7 @@
         <property name="date" type="date">
             <column name="Date" length="10" not-null="true" />
         </property>
-        <set name="meals" table="dietday_meal" inverse="false" lazy="true" fetch="select">
+        <set name="meals" table="dietday_meal" inverse="false" lazy="false" fetch="select">
             <key>
                 <column name="DietDayID" not-null="true" />
             </key>
