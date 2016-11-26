@@ -1,7 +1,7 @@
 package logic.workout;
 
-import gui.common.Objective;
-import gui.exercises.DifficultyLevel;
+import logic.enums.DifficultyLevel;
+import logic.enums.Objective;
 
 public class WorkoutDayPreferences {
 

@@ -7,8 +7,8 @@ import org.hibernate.service.spi.ServiceException;
 
 import database.controller.DatabaseController;
 import database.entities.User;
-import gui.LoginDialog;
-import gui.MainFrame;
+import presentation.LoginDialog;
+import presentation.MainFrame;
 
 public class ApplicationLauncher {
 

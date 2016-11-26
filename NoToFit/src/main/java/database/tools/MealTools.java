@@ -1,6 +1,5 @@
 package database.tools;
 
-import database.controller.DatabaseController;
 import database.entities.Meal;
 
 public class MealTools {
@@ -29,11 +28,6 @@ public class MealTools {
 		newMeal.setProteinPercentage(sourceMeal.getProteinPercentage());
 		newMeal.setFatPercentage(sourceMeal.getFatPercentage());
 		return newMeal;
-	}
-	
-	public static void main(String[] args) {
-		Meal testMeal = DatabaseController.getEntityByID(Meal.class, 1);
-		System.out.print(MealTools.countMealCalories(testMeal));
 	}
 
 }

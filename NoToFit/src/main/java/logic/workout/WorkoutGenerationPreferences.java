@@ -5,7 +5,7 @@ import java.util.Date;
 import com.google.common.base.Preconditions;
 
 import database.entities.User;
-import gui.exercises.DifficultyLevel;
+import logic.enums.DifficultyLevel;
 
 public class WorkoutGenerationPreferences {
 

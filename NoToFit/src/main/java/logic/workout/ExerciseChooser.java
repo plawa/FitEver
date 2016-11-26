@@ -11,8 +11,8 @@ import com.google.common.base.Preconditions;
 import database.controller.DatabaseController;
 import database.entities.Exercise;
 import database.entities.Workoutday;
-import gui.common.Objective;
-import gui.exercises.DifficultyLevel;
+import logic.enums.DifficultyLevel;
+import logic.enums.Objective;
 import logic.utils.EntityValuePair;
 
 public class ExerciseChooser {

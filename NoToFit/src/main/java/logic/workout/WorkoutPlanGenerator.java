@@ -6,7 +6,7 @@ import java.util.Set;
 
 import database.entities.Workout;
 import database.entities.Workoutday;
-import gui.common.Objective;
+import logic.enums.Objective;
 
 public class WorkoutPlanGenerator {
 
