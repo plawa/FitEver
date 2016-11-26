@@ -24,7 +24,7 @@ public class WorkoutGenerationPreferences {
 		firstDayDate = new Date(); //start from now
 	}
 	
-	public Date[] getDatesForWorkoutDays() {
+	public Date[] retrieveDatesForWorkoutDays() {
 		Preconditions.checkArgument(workoutDaysPerWeek != 0 && workoutPeriodInWeeks != 0);
 		
 		int workoutDaysCount = workoutDaysPerWeek * workoutPeriodInWeeks;
@@ -103,7 +103,7 @@ public class WorkoutGenerationPreferences {
 		wgp.setTrainingDaysPerWeek(3);
 		wgp.setWorkoutPeriodInWeeks(4);
 		
-		for (Date d : wgp.getDatesForWorkoutDays()){
+		for (Date d : wgp.retrieveDatesForWorkoutDays()){
 			System.out.println(d);
 		}
 	}

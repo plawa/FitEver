@@ -27,7 +27,7 @@ public class WorkoutPlanGenerator {
 		ExerciseChooser dayGenerator = new ExerciseChooser(buildWorkoutDayPreferences(preferences));
 		if (dayGenerator.isExercisesLibraryBigEnough()) {
 			workoutDaysSet = new HashSet<>();
-			Date[] workoutDayDates = preferences.getDatesForWorkoutDays();
+			Date[] workoutDayDates = preferences.retrieveDatesForWorkoutDays();
 			for (int i = 0; i < daysToGenerateCount; i++) {
 				Workoutday day = dayGenerator.generateWorkoutDay(workoutDayDates[i]);
 				day.setWorkout(workout);

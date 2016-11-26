@@ -10,6 +10,8 @@ import database.entities.Dietday;
 
 public class DietPlanGenerator {
 
+	private static final float INITIAL_TOLERANCE_FACTOR = 0f;
+
 	private static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less meals that match your specific needs.";
 	
 	private final static float caloriesToleranceStep = 0.05f;
@@ -20,8 +22,7 @@ public class DietPlanGenerator {
 		Diet newDiet = initializeDietPrototype(dietConfiguration);
 
 		Set<Dietday> newDietDays;
-		MealChooser.updateLibraries();
-		float caloriesToleranceFactor = 0f;
+		float caloriesToleranceFactor = INITIAL_TOLERANCE_FACTOR;
 
 		boolean isMealsInGeneratedDietCountOK;
 		do {

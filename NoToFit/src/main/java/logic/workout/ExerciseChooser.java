@@ -28,34 +28,18 @@ public class ExerciseChooser {
 
 	private static List<Exercise> exercisesLib;
 
-	static {
-		updateLibrary();
-	}
-	
-	public static void updateLibrary() {
-		exercisesLib = DatabaseController.getAll(Exercise.class);
-	}
-	
 	public ExerciseChooser(WorkoutDayPreferences preferences) {
+		if (exercisesLib == null) {
+			updateLibrary();
+		}
 		exercisesPerDayCount = getExercisesPerDayCountByObjective(preferences.getObjective());
 		difficulty = preferences.getDifficultyLevel();
 		objective = preferences.getObjective();
 		hasUserEquipment = preferences.isEquipmentRequired();
 	}
-	
-	public boolean isExercisesLibraryBigEnough(){
+
+	public boolean isExercisesLibraryBigEnough() {
 		return exercisesPerDayCount <= exercisesLib.size();
-	}
-	
-	private int getExercisesPerDayCountByObjective(Objective objective) {
-		switch (objective) {
-		case MassGain:
-			return MASS_GAIN_EXERCISES_COUNT;
-		case Reduction:
-			return REDUCTION_EXERCISES_COUNT;
-		default:
-			return 0;
-		}
 	}
 
 	public Workoutday generateWorkoutDay(Date date) {
@@ -68,7 +52,7 @@ public class ExerciseChooser {
 		Preconditions.checkArgument(isExercisesLibraryBigEnough());
 		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = getRankedExercisesSorted();
 		Set<Exercise> resultSet = new HashSet<>();
-		for(int i = 0; i < exercisesPerDayCount; i++){
+		for (int i = 0; i < exercisesPerDayCount; i++) {
 			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().entity);
 		}
 		return resultSet;
@@ -97,4 +81,20 @@ public class ExerciseChooser {
 
 		return points;
 	}
+
+	private int getExercisesPerDayCountByObjective(Objective objective) {
+		switch (objective) {
+		case MassGain:
+			return MASS_GAIN_EXERCISES_COUNT;
+		case Reduction:
+			return REDUCTION_EXERCISES_COUNT;
+		default:
+			return 0;
+		}
+	}
+
+	private void updateLibrary() {
+		exercisesLib = DatabaseController.getAll(Exercise.class);
+	}
+
 }

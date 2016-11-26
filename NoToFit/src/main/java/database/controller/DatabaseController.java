@@ -7,6 +7,7 @@ import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
 import org.hibernate.service.spi.ServiceException;
 
 import database.entities.Entity;
@@ -70,6 +71,12 @@ public class DatabaseController {
 		return resultList;
 	}
 
+	public static <T extends Entity> long getRowCount(Class<T> entityType){
+		long resultCount = (long) getNewSessionWithTransaction().createCriteria(entityType).setProjection(Projections.rowCount()).uniqueResult();
+		finalizeCurrentTransactionAndSession();
+		return resultCount;
+	}
+	
 	public static Session getNewSessionWithTransaction() throws RuntimeException {
 		if (mySessionFactory == null) {
 			tryToInitializeSessionFactory();
@@ -89,7 +96,6 @@ public class DatabaseController {
 	}
 
 	public static void tidyUp() {
-		Session currentSession = null;
 		if (mySessionFactory != null) {
 			mySessionFactory.getCurrentSession().close();
 			mySessionFactory.close();

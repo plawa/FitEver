@@ -1,4 +1,4 @@
-package logic.entitytools;
+package database.tools;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;

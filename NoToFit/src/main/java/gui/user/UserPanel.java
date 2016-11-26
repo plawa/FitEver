@@ -21,13 +21,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import database.entities.User;
+import database.tools.UserTools;
 import gui.MainFrame;
 import gui.common.PieChartFX;
 import gui.common.Translator;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.chart.PieChart;
-import logic.entitytools.UserTools;
+import javafx.scene.chart.PieChart; 
 
 public class UserPanel extends JPanel {
 

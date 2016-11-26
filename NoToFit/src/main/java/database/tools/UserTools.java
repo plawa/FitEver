@@ -1,4 +1,4 @@
-package logic.entitytools;
+package database.tools;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;

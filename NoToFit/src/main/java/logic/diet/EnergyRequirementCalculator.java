@@ -2,7 +2,7 @@ package logic.diet;
 
 import database.controller.DatabaseController;
 import database.entities.User;
-import logic.entitytools.UserTools;
+import database.tools.UserTools; 
 
 //based on http://www.budujmase.pl/diety/o-dietach/6297-obliczanie-wymaganej-ilosci-kalorii-krok-po-kroku.html
 

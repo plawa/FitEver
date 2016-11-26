@@ -38,7 +38,7 @@ public class LoginDialog extends JDialog {
 	private static final long serialVersionUID = 8472433868284888754L;
 	private static final String HEADER_IMAGE_PATH = "/images/login_image.png";
 
-	private static final String LBL_MSG_IMAGE_NOT_FOUND = "Error! Image not found.";
+	private static final String LBL_MSG_LOGO_NOT_FOUND = "Error! Logo file not found.";
 	private static final String MSG_LOGIN_DENIED = "Username or password incorrect.";
 	private static final String MSG_DATABASE_ERROR = "Error initializing database connection!";
 
@@ -70,8 +70,8 @@ public class LoginDialog extends JDialog {
 			}
 		});
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setTitle("NoToFit Login");
-		setBounds(100, 100, 450, 360);
+		setTitle("FitEver Login");
+		setBounds(100, 100, 450, 275);
 	}
 
 	private void initializeSwingComponents() {
@@ -206,7 +206,7 @@ public class LoginDialog extends JDialog {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return new JLabel(LBL_MSG_IMAGE_NOT_FOUND);
+		return new JLabel(LBL_MSG_LOGO_NOT_FOUND);
 	}
 
 	private void tearDown() {
