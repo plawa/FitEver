@@ -7,10 +7,10 @@ public class MD5Encrypter {
 
 	private static MessageDigest md;
 
-	public static String encryptWithMD5(String pass) {
+	public static String encryptWithMD5(String password) {
 		try {
 			md = MessageDigest.getInstance("MD5");
-			byte[] passBytes = pass.getBytes();
+			byte[] passBytes = password.getBytes();
 			md.reset();
 			byte[] digested = md.digest(passBytes);
 			StringBuffer sb = new StringBuffer();

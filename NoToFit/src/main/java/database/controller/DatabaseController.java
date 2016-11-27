@@ -2,9 +2,8 @@ package database.controller;
 
 import java.util.List;
 
-import javax.persistence.TypedQuery;
-
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -51,17 +50,15 @@ public class DatabaseController {
 		return resultList;
 	}
 
-	public static Shadow getShadowEntityByLogin(String login) throws RuntimeException {
-		String queryText = "SELECT s FROM Shadow s JOIN FETCH s.user WHERE s.login = :login";
-		TypedQuery<Shadow> queryForShadow = getNewSessionWithTransaction().createQuery(queryText);
-		queryForShadow.setParameter("login", login);
-
-		List<Shadow> resultList = queryForShadow.getResultList();
+	public static Shadow getShadowEntityByLogin(String login) throws RuntimeException {		
+		Shadow result = (Shadow) getNewSessionWithTransaction()
+				.createCriteria(Shadow.class)
+				.add(Restrictions.eq("login", login))
+				.setFetchMode("user", FetchMode.JOIN)
+				.uniqueResult();
+		
 		finalizeCurrentTransactionAndSession();
-		if (resultList.size() == 1) {
-			return resultList.get(0);
-		}
-		return null;
+		return result;
 	}
 
 	public static <T extends Entity> T getEntityByID(Class<T> entityType, int ID) throws RuntimeException {
@@ -98,6 +95,14 @@ public class DatabaseController {
 		List<T> resultList = getNewSessionWithTransaction().createQuery(q).getResultList();
 		finalizeCurrentTransactionAndSession();
 		return resultList;
+	}
+	
+	public static <T extends Entity> T getEntityByUniqueParameter(Class<T> entityType, String paramName,
+			String paramValue) {
+		Session session = getNewSessionWithTransaction();
+		T resultEntity = (T) session.createCriteria(entityType).add(Restrictions.eq(paramName, paramValue)).uniqueResult();
+		finalizeCurrentTransactionAndSession();
+		return resultEntity;
 	}
 
 	public static <T extends Entity> long getRowCount(Class<T> entityType) {

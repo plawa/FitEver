@@ -104,7 +104,7 @@ public class UserPanel extends JPanel {
 
 	protected void refreshUserDetails() {
 		userActualWeight = UserTools.retrieveActualWeight(userDisplaying);
-		
+
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
 		lblValueSex.setText(Translator.parseSexCharToString(userDisplaying.getSex()));
 		lblValueAge.setText(String.format("%d years", UserTools.calculateAge(userDisplaying)));
@@ -342,25 +342,25 @@ public class UserPanel extends JPanel {
 		gbc_lblValueFatPercentage.gridx = 2;
 		gbc_lblValueFatPercentage.gridy = 6;
 		add(lblValueFatPercentage, gbc_lblValueFatPercentage);
-		
-				JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
-				lblDescriptionStartWeight.setForeground(Color.GRAY);
-				lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
-				GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
-				gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
-				gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
-				gbc_lblDescriptionStartWeight.gridx = 1;
-				gbc_lblDescriptionStartWeight.gridy = 7;
-				add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
-		
-				lblValueStartWeight = new JLabel();
-				lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
-				GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
-				gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
-				gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
-				gbc_lblValueStartWeight.gridx = 2;
-				gbc_lblValueStartWeight.gridy = 7;
-				add(lblValueStartWeight, gbc_lblValueStartWeight);
+
+		JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
+		lblDescriptionStartWeight.setForeground(Color.GRAY);
+		lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
+		gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
+		gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescriptionStartWeight.gridx = 1;
+		gbc_lblDescriptionStartWeight.gridy = 7;
+		add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
+
+		lblValueStartWeight = new JLabel();
+		lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
+		gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
+		gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
+		gbc_lblValueStartWeight.gridx = 2;
+		gbc_lblValueStartWeight.gridy = 7;
+		add(lblValueStartWeight, gbc_lblValueStartWeight);
 
 		JLabel lblDescriptionActualWeight = new JLabel("Actual Weight:");
 		lblDescriptionActualWeight.setForeground(Color.GRAY);
@@ -477,7 +477,8 @@ public class UserPanel extends JPanel {
 	}
 
 	private void changeSeriesToSelectedMonth(Month month) {
-		List<Weighthistory> weightHistory = DatabaseController.getWeightHistoryByMonth(userDisplaying.getId(), month.getMonthNumber());
+		List<Weighthistory> weightHistory = DatabaseController.getWeightHistoryByMonth(userDisplaying.getId(),
+				month.getMonthNumber());
 
 		new Task<Void>() {
 			protected Void call() throws Exception {
