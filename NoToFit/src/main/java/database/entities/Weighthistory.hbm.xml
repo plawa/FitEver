@@ -1,21 +1,19 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1 -->
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-11-27 13:31:43 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
- <class catalog="notofit" name="database.entities.Weighthistory" table="weighthistory">
-  <id name="id" type="java.lang.Integer">
-   <column name="ID"/>
-   <generator class="identity"/>
-  </id>
-  <many-to-one class="database.entities.User" fetch="select" name="user">
-   <column name="UserID" not-null="true"/>
-  </many-to-one>
-  <property generated="never" lazy="false" name="weight" type="float">
-   <column name="weight" not-null="true" precision="12" scale="0"/>
-  </property>
-  <property generated="never" lazy="false" name="date">
-   <column length="10" name="date" not-null="true"/>
-  </property>
- </class>
+    <class name="database.entities.Weighthistory" table="weighthistory" catalog="notofit" optimistic-lock="version">
+        <composite-id name="id" class="database.entities.WeighthistoryId">
+            <key-many-to-one name="user" class="database.entities.User">
+                <column name="UserID" />
+            </key-many-to-one>
+            <key-property name="date" type="date">
+                <column name="date" length="10" />
+            </key-property>
+        </composite-id>
+        <property name="weight" type="float">
+            <column name="weight" precision="12" scale="0" not-null="true" />
+        </property>
+    </class>
 </hibernate-mapping>

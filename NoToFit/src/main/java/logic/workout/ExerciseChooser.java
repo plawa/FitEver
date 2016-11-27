@@ -13,7 +13,7 @@ import database.entities.Exercise;
 import database.entities.Workoutday;
 import logic.enums.DifficultyLevel;
 import logic.enums.Objective;
-import logic.utils.EntityValuePair;
+import logic.utils.EntityIntegerPair;
 
 public class ExerciseChooser {
 
@@ -50,7 +50,7 @@ public class ExerciseChooser {
 
 	private Set<Exercise> chooseBestMatchedExercises() {
 		Preconditions.checkArgument(isExercisesLibraryBigEnough());
-		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = getRankedExercisesSorted();
+		PriorityQueue<EntityIntegerPair> exercisesSortedByMatchRank = getRankedExercisesSorted();
 		Set<Exercise> resultSet = new HashSet<>();
 		for (int i = 0; i < exercisesPerDayCount; i++) {
 			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().entity);
@@ -58,11 +58,11 @@ public class ExerciseChooser {
 		return resultSet;
 	}
 
-	private PriorityQueue<EntityValuePair> getRankedExercisesSorted() {
-		PriorityQueue<EntityValuePair> exercisesSortedByMatchRank = new PriorityQueue<EntityValuePair>();
+	private PriorityQueue<EntityIntegerPair> getRankedExercisesSorted() {
+		PriorityQueue<EntityIntegerPair> exercisesSortedByMatchRank = new PriorityQueue<EntityIntegerPair>();
 		for (Exercise currentExercise : exercisesLib) {
 			int exerciseRate = rateExercise(currentExercise);
-			exercisesSortedByMatchRank.add(new EntityValuePair(currentExercise, exerciseRate));
+			exercisesSortedByMatchRank.add(new EntityIntegerPair(currentExercise, exerciseRate));
 		}
 		return exercisesSortedByMatchRank;
 	}
@@ -70,7 +70,7 @@ public class ExerciseChooser {
 	private int rateExercise(Exercise exercise) {
 		int points = 0;
 		boolean isAbleToExercise = hasUserEquipment || !exercise.isRequiresEquipment();
-		boolean objectiveMatches = objective.getObjectiveChar() == exercise.getObjective();
+		boolean objectiveMatches = objective.getCharID() == exercise.getObjective();
 		int difficultyLevelDifference = Math.abs(difficulty.getLevelNumber() - exercise.getDifficultyLevel());
 
 		if (isAbleToExercise)

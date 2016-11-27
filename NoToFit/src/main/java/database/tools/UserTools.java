@@ -21,11 +21,11 @@ public class UserTools {
 		return age.getYears();
 	}
 	
-	public static float retrieveActualWeight(final User user){
+	public static float retrieveActualWeight(final User user) throws IllegalArgumentException {
 		return DatabaseController.getUserWeightSortByDate(user, true);
 	}
 	
-	public static float retrieveInitialWeight(final User user){
+	public static float retrieveInitialWeight(final User user) throws IllegalArgumentException {
 		return DatabaseController.getUserWeightSortByDate(user, false);
 	}
 }

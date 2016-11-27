@@ -1,5 +1,5 @@
 package database.entities;
-// Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1
+// Generated 2016-11-27 13:31:43 by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -30,11 +30,39 @@ public class User extends Entity {
 	public User() {
 	}
 
-	public int getId() {
+	public User(String name, String surname, Date dateOfBirth, char sex, int height, float goalWeight) {
+		this.name = name;
+		this.surname = surname;
+		this.dateOfBirth = dateOfBirth;
+		this.sex = sex;
+		this.height = height;
+		this.goalWeight = goalWeight;
+	}
+
+	public User(String name, String surname, Date dateOfBirth, char sex, int height, float goalWeight,
+			Integer fatPercentage, Character userObjective, Integer lifeStyle, Integer somatotype, Set<Diet> diets,
+			Shadow shadow, Set<Weighthistory> weighthistories, Set<Workout> workouts) {
+		this.name = name;
+		this.surname = surname;
+		this.dateOfBirth = dateOfBirth;
+		this.sex = sex;
+		this.height = height;
+		this.goalWeight = goalWeight;
+		this.fatPercentage = fatPercentage;
+		this.userObjective = userObjective;
+		this.lifeStyle = lifeStyle;
+		this.somatotype = somatotype;
+		this.diets = diets;
+		this.shadow = shadow;
+		this.weighthistories = weighthistories;
+		this.workouts = workouts;
+	}
+
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

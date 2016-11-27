@@ -40,9 +40,9 @@ public class ExercisesTableModel extends AbstractTableModel {
 		case 0:
 			return exercise.getName();
 		case 1:
-			return Objective.get(exercise.getObjective());
+			return Objective.getByChar(exercise.getObjective());
 		case 2:
-			return DifficultyLevel.get(exercise.getDifficultyLevel());
+			return DifficultyLevel.getByNumber(exercise.getDifficultyLevel());
 		case 3:
 			return exercise.isRequiresEquipment();
 		case 4:

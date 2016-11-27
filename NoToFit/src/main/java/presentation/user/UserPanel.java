@@ -9,10 +9,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -24,9 +28,12 @@ import database.controller.DatabaseController;
 import database.entities.User;
 import database.entities.Weighthistory;
 import database.tools.UserTools;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.embed.swing.JFXPanel;
+import logic.enums.Month;
 import presentation.MainFrame;
-import presentation.charts.WeightHistoryLineChartFX;
+import presentation.charts.WeightHistoryChart;
 import presentation.common.Translator;
 
 public class UserPanel extends JPanel {
@@ -53,7 +60,8 @@ public class UserPanel extends JPanel {
 	private final static String MSG_BMI_OK = "Good";
 	private final static String MSG_BMI_TOO_LOW = "Underweight";
 	private final static String MSG_BMI_TOO_HIGH = "Overweight";
-	private WeightHistoryLineChartFX chart;
+	private WeightHistoryChart chart;
+	private JComboBox<Month> comboBoxMonth;
 
 	public UserPanel() {
 		this(new User());
@@ -61,6 +69,7 @@ public class UserPanel extends JPanel {
 
 	public UserPanel(User userToMaintain) {
 		userDisplaying = userToMaintain;
+		chart = new WeightHistoryChart();
 		loadIcons();
 		initializeSwingComponents();
 		refreshUserDetails();
@@ -77,11 +86,16 @@ public class UserPanel extends JPanel {
 		UpdateUserWeightDialog updateStatsDlg = new UpdateUserWeightDialog(userDisplaying, userActualWeight);
 		updateStatsDlg.setLocationRelativeTo(this);
 		updateStatsDlg.setVisible(true);
-		Weighthistory newWeightHistoryEntry = updateStatsDlg.getNewWeightHistoryEntry();
-		if (newWeightHistoryEntry != null) {
-			chart.updateWeightHistorySeriesWithNewEntry(newWeightHistoryEntry);
+		Weighthistory newWeightHistoryEntry = updateStatsDlg.getNewSavedWeightEntry();
+		if (newWeightHistoryEntry != null && matchesToCurrentlySelectedMonth(newWeightHistoryEntry)) {
+			chart.addSinglePointToCurrentSeries(newWeightHistoryEntry);
 			refreshUserDetails();
 		}
+	}
+
+	private boolean matchesToCurrentlySelectedMonth(Weighthistory newWeightHistoryEntry) {
+		return (newWeightHistoryEntry.getId().getDate().getMonth() + 1) == ((Month) comboBoxMonth.getSelectedItem())
+				.getMonthNumber();
 	}
 
 	private void switchUser() {
@@ -90,18 +104,17 @@ public class UserPanel extends JPanel {
 
 	protected void refreshUserDetails() {
 		userActualWeight = UserTools.retrieveActualWeight(userDisplaying);
-
+		
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
 		lblValueSex.setText(Translator.parseSexCharToString(userDisplaying.getSex()));
 		lblValueAge.setText(String.format("%d years", UserTools.calculateAge(userDisplaying)));
 		lblValueHeight.setText(String.format("%d cm", userDisplaying.getHeight()));
-		// lblValueStartWeight.setText(String.format("%.1f kg",
-		// userDisplaying.getStartWeight())); //TODO!
+		lblValueStartWeight.setText(String.format("%.1f kg", UserTools.retrieveInitialWeight(userDisplaying)));
+		lblValueActualWeight.setText(String.format("%.1f kg", userActualWeight));
 		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
 		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
 		lblValueUserObjective.setText(Translator.parseObjectiveCharToString(userDisplaying.getUserObjective()));
 		setBmiLabelsFormatted(UserTools.calculateBMI(userDisplaying));
-		lblValueActualWeight.setText(String.format("%.1f kg", userActualWeight));
 	}
 
 	private void setBmiLabelsFormatted(float bmi) {
@@ -130,9 +143,9 @@ public class UserPanel extends JPanel {
 
 	private void initializeSwingComponents() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 25, 0, 0, 0 };
+		gridBagLayout.columnWidths = new int[] { 0, 25, 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 16, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 136, 1, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 7.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 2.0, 1.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				0.0, Double.MIN_VALUE };
 		setLayout(gridBagLayout);
@@ -143,8 +156,8 @@ public class UserPanel extends JPanel {
 		toolBar.setFloatable(false);
 		GridBagConstraints gbc_toolBar = new GridBagConstraints();
 		gbc_toolBar.anchor = GridBagConstraints.WEST;
-		gbc_toolBar.gridwidth = 4;
-		gbc_toolBar.insets = new Insets(0, 0, 5, 0);
+		gbc_toolBar.gridwidth = 5;
+		gbc_toolBar.insets = new Insets(0, 0, 5, 5);
 		gbc_toolBar.gridx = 0;
 		gbc_toolBar.gridy = 0;
 		add(toolBar, gbc_toolBar);
@@ -215,7 +228,7 @@ public class UserPanel extends JPanel {
 		lblDescriptionName.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblDescriptionName.setForeground(Color.GRAY);
 		GridBagConstraints gbc_lblDescriptionName = new GridBagConstraints();
-		gbc_lblDescriptionName.anchor = GridBagConstraints.WEST;
+		gbc_lblDescriptionName.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_lblDescriptionName.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescriptionName.gridx = 1;
 		gbc_lblDescriptionName.gridy = 2;
@@ -224,11 +237,35 @@ public class UserPanel extends JPanel {
 		lblValueNameAndSurname = new JLabel();
 		lblValueNameAndSurname.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblValueNameAndSurname = new GridBagConstraints();
-		gbc_lblValueNameAndSurname.anchor = GridBagConstraints.WEST;
+		gbc_lblValueNameAndSurname.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_lblValueNameAndSurname.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValueNameAndSurname.gridx = 2;
 		gbc_lblValueNameAndSurname.gridy = 2;
 		add(lblValueNameAndSurname, gbc_lblValueNameAndSurname);
+
+		comboBoxMonth = new JComboBox<Month>();
+		comboBoxMonth.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Month selectedMonth = (Month) comboBoxMonth.getSelectedItem();
+				changeSeriesToSelectedMonth(selectedMonth);
+			}
+		});
+
+		JLabel lblChartTitle = new JLabel("Weight Progress Monitoring for:");
+		lblChartTitle.setFont(new Font("Tahoma", Font.BOLD, 14));
+		GridBagConstraints gbc_lblChartTitle = new GridBagConstraints();
+		gbc_lblChartTitle.insets = new Insets(0, 0, 5, 5);
+		gbc_lblChartTitle.anchor = GridBagConstraints.EAST;
+		gbc_lblChartTitle.gridx = 3;
+		gbc_lblChartTitle.gridy = 2;
+		add(lblChartTitle, gbc_lblChartTitle);
+		comboBoxMonth.setModel(new DefaultComboBoxModel<Month>(Month.values()));
+		GridBagConstraints gbc_comboBoxMonth = new GridBagConstraints();
+		gbc_comboBoxMonth.anchor = GridBagConstraints.WEST;
+		gbc_comboBoxMonth.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxMonth.gridx = 4;
+		gbc_comboBoxMonth.gridy = 2;
+		add(comboBoxMonth, gbc_comboBoxMonth);
 
 		JLabel lblDescriptionSex = new JLabel("Sex:");
 		lblDescriptionSex.setForeground(Color.GRAY);
@@ -305,6 +342,25 @@ public class UserPanel extends JPanel {
 		gbc_lblValueFatPercentage.gridx = 2;
 		gbc_lblValueFatPercentage.gridy = 6;
 		add(lblValueFatPercentage, gbc_lblValueFatPercentage);
+		
+				JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
+				lblDescriptionStartWeight.setForeground(Color.GRAY);
+				lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
+				GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
+				gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
+				gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
+				gbc_lblDescriptionStartWeight.gridx = 1;
+				gbc_lblDescriptionStartWeight.gridy = 7;
+				add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
+		
+				lblValueStartWeight = new JLabel();
+				lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
+				GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
+				gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
+				gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
+				gbc_lblValueStartWeight.gridx = 2;
+				gbc_lblValueStartWeight.gridy = 7;
+				add(lblValueStartWeight, gbc_lblValueStartWeight);
 
 		JLabel lblDescriptionActualWeight = new JLabel("Actual Weight:");
 		lblDescriptionActualWeight.setForeground(Color.GRAY);
@@ -313,7 +369,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionActualWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionActualWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescriptionActualWeight.gridx = 1;
-		gbc_lblDescriptionActualWeight.gridy = 7;
+		gbc_lblDescriptionActualWeight.gridy = 8;
 		add(lblDescriptionActualWeight, gbc_lblDescriptionActualWeight);
 
 		lblValueActualWeight = new JLabel("");
@@ -322,7 +378,7 @@ public class UserPanel extends JPanel {
 		gbc_lblValueActualWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblValueActualWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValueActualWeight.gridx = 2;
-		gbc_lblValueActualWeight.gridy = 7;
+		gbc_lblValueActualWeight.gridy = 8;
 		add(lblValueActualWeight, gbc_lblValueActualWeight);
 
 		JLabel lblDescriptionGoalWeight = new JLabel("Goal Weight:");
@@ -332,7 +388,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionGoalWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionGoalWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescriptionGoalWeight.gridx = 1;
-		gbc_lblDescriptionGoalWeight.gridy = 8;
+		gbc_lblDescriptionGoalWeight.gridy = 9;
 		add(lblDescriptionGoalWeight, gbc_lblDescriptionGoalWeight);
 
 		lblValueGoalWeight = new JLabel();
@@ -341,7 +397,7 @@ public class UserPanel extends JPanel {
 		gbc_lblValueGoalWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblValueGoalWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValueGoalWeight.gridx = 2;
-		gbc_lblValueGoalWeight.gridy = 8;
+		gbc_lblValueGoalWeight.gridy = 9;
 		add(lblValueGoalWeight, gbc_lblValueGoalWeight);
 
 		JLabel lblDescriptionMainObjective = new JLabel("Main Objective:");
@@ -351,7 +407,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionMainObjective.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionMainObjective.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescriptionMainObjective.gridx = 1;
-		gbc_lblDescriptionMainObjective.gridy = 9;
+		gbc_lblDescriptionMainObjective.gridy = 10;
 		add(lblDescriptionMainObjective, gbc_lblDescriptionMainObjective);
 
 		lblValueUserObjective = new JLabel();
@@ -360,7 +416,7 @@ public class UserPanel extends JPanel {
 		gbc_lblValueUserObjective.anchor = GridBagConstraints.WEST;
 		gbc_lblValueUserObjective.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValueUserObjective.gridx = 2;
-		gbc_lblValueUserObjective.gridy = 9;
+		gbc_lblValueUserObjective.gridy = 10;
 		add(lblValueUserObjective, gbc_lblValueUserObjective);
 
 		JLabel lblDescriptionBmi = new JLabel("BMI:");
@@ -370,7 +426,7 @@ public class UserPanel extends JPanel {
 		gbc_lblDescriptionBmi.anchor = GridBagConstraints.WEST;
 		gbc_lblDescriptionBmi.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescriptionBmi.gridx = 1;
-		gbc_lblDescriptionBmi.gridy = 10;
+		gbc_lblDescriptionBmi.gridy = 11;
 		add(lblDescriptionBmi, gbc_lblDescriptionBmi);
 
 		lblValueBmi = new JLabel("");
@@ -379,7 +435,7 @@ public class UserPanel extends JPanel {
 		gbc_lblValueBmi.anchor = GridBagConstraints.WEST;
 		gbc_lblValueBmi.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValueBmi.gridx = 2;
-		gbc_lblValueBmi.gridy = 10;
+		gbc_lblValueBmi.gridy = 11;
 		add(lblValueBmi, gbc_lblValueBmi);
 
 		JLabel lblBmiState = new JLabel("Overall state:");
@@ -389,7 +445,7 @@ public class UserPanel extends JPanel {
 		gbc_lblBmiState.anchor = GridBagConstraints.WEST;
 		gbc_lblBmiState.insets = new Insets(0, 0, 5, 5);
 		gbc_lblBmiState.gridx = 1;
-		gbc_lblBmiState.gridy = 11;
+		gbc_lblBmiState.gridy = 12;
 		add(lblBmiState, gbc_lblBmiState);
 
 		lblValueBmiState = new JLabel("state");
@@ -398,44 +454,43 @@ public class UserPanel extends JPanel {
 		gbc_lblValueBmiState.anchor = GridBagConstraints.WEST;
 		gbc_lblValueBmiState.insets = new Insets(0, 0, 5, 5);
 		gbc_lblValueBmiState.gridx = 2;
-		gbc_lblValueBmiState.gridy = 11;
+		gbc_lblValueBmiState.gridy = 12;
 		add(lblValueBmiState, gbc_lblValueBmiState);
-
-		JLabel lblDescriptionStartWeight = new JLabel("Start Weight:");
-		lblDescriptionStartWeight.setForeground(Color.GRAY);
-		lblDescriptionStartWeight.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		GridBagConstraints gbc_lblDescriptionStartWeight = new GridBagConstraints();
-		gbc_lblDescriptionStartWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblDescriptionStartWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblDescriptionStartWeight.gridx = 1;
-		gbc_lblDescriptionStartWeight.gridy = 12;
-		add(lblDescriptionStartWeight, gbc_lblDescriptionStartWeight);
-
-		lblValueStartWeight = new JLabel();
-		lblValueStartWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblValueStartWeight = new GridBagConstraints();
-		gbc_lblValueStartWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblValueStartWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblValueStartWeight.gridx = 2;
-		gbc_lblValueStartWeight.gridy = 12;
-		add(lblValueStartWeight, gbc_lblValueStartWeight);
 
 		final JFXPanel fxPanel = embedWeightHistoryChart();
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.gridwidth = 2;
 		gbc_lblNewLabel.fill = GridBagConstraints.BOTH;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 3;
-		gbc_lblNewLabel.gridy = 2;
-		gbc_lblNewLabel.gridheight = 12;
+		gbc_lblNewLabel.gridy = 3;
+		gbc_lblNewLabel.gridheight = 11;
 		add(fxPanel, gbc_lblNewLabel);
+
+		comboBoxMonth.setSelectedIndex(new Date().getMonth());
 	}
 
 	private JFXPanel embedWeightHistoryChart() {
 		JFXPanel embeddedPanel = new JFXPanel();
-		chart = new WeightHistoryLineChartFX("Progress Monitoring", "Day of Month");
-		chart.addWeightHistorySeries("Weight Changes History", DatabaseController.getWeightHistoryByMonth(11));
 		embeddedPanel.setScene(chart.createScene());
 		return embeddedPanel;
+	}
+
+	private void changeSeriesToSelectedMonth(Month month) {
+		List<Weighthistory> weightHistory = DatabaseController.getWeightHistoryByMonth(userDisplaying.getId(), month.getMonthNumber());
+
+		new Task<Void>() {
+			protected Void call() throws Exception {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						chart.setWeightHistorySeries("Weight Changes History", weightHistory);
+						chart.recalculateYAxisBounds();
+					}
+				});
+				return null;
+			}
+		}.run();
 	}
 
 	protected void exitButtonPressed() {

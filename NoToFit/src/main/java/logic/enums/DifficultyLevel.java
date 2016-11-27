@@ -13,7 +13,7 @@ public enum DifficultyLevel {
 		return levelNo;
 	}
 
-	public static DifficultyLevel get(int levelNo) {
+	public static DifficultyLevel getByNumber(int levelNo) {
 		switch (levelNo) {
 		case 1:
 			return Easy;

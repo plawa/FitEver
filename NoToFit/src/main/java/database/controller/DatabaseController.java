@@ -21,11 +21,18 @@ import database.entities.Weighthistory;
 
 public class DatabaseController {
 
+	private static final String ERR_NO_ROWS_IN_WEIGHT_HISTORY = "The user hasn't got any entries in WeightHistory table!";
 	private static SessionFactory mySessionFactory;
 
 	public static <T extends Entity> void saveEntityToDatabase(T entity) throws RuntimeException {
-		getNewSessionWithTransaction().persist(entity);
-		finalizeCurrentTransactionAndSession();
+		Session session = getNewSessionWithTransaction();
+		try {
+			session.persist(entity);
+			finalizeCurrentTransactionAndSession();
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+		}
 	}
 
 	public static <T extends Entity> void updateEntityToDatabase(T entity) throws RuntimeException {
@@ -64,14 +71,18 @@ public class DatabaseController {
 	}
 
 	public static float getUserWeightSortByDate(User user, boolean getLatest) {
+		if (getRowCount(Weighthistory.class) == 0) {
+			throw new IllegalArgumentException(ERR_NO_ROWS_IN_WEIGHT_HISTORY);
+		}
+
 		Session session = getNewSessionWithTransaction();
 		DetachedCriteria maxQuery = DetachedCriteria.forClass(Weighthistory.class);
-		maxQuery.add(Restrictions.eq("user.id", user.getId()));
-		maxQuery.setProjection(getLatest ? Projections.max("date") : Projections.min("date"));
+		maxQuery.add(Restrictions.eq("id.user.id", user.getId()));
+		maxQuery.setProjection(getLatest ? Projections.max("id.date") : Projections.min("id.date"));
 
 		Criteria query = session.createCriteria(Weighthistory.class);
-		query.add(Restrictions.eq("user.id", user.getId()));
-		query.add(Property.forName("date").eq(maxQuery));
+		query.add(Restrictions.eq("id.user.id", user.getId()));
+		query.add(Property.forName("id.date").eq(maxQuery));
 		query.setProjection(Projections.property("weight"));
 		query.setMaxResults(1);
 		float actualWeight = (float) query.uniqueResult();
@@ -95,15 +106,15 @@ public class DatabaseController {
 		finalizeCurrentTransactionAndSession();
 		return resultCount;
 	}
-	
-	public static <T extends Entity> List<T> getWeightHistoryByMonth(int month) {
-		String q = String.format("SELECT e FROM Weighthistory e WHERE MONTH(e.date) = '%d'", month);
+
+	public static <T extends Entity> List<T> getWeightHistoryByMonth(int userID, int month) {
+		String q = String.format("SELECT e FROM Weighthistory e WHERE e.id.user = '%d' AND MONTH(e.id.date) = '%d'",
+				userID, month);
 		List<T> resultList = getNewSessionWithTransaction().createQuery(q).getResultList();
 		finalizeCurrentTransactionAndSession();
 		return resultList;
 	}
-	
-	
+
 	public static Session getNewSessionWithTransaction() throws RuntimeException {
 		if (mySessionFactory == null) {
 			tryToInitializeSessionFactory();
@@ -128,4 +139,5 @@ public class DatabaseController {
 			mySessionFactory.close();
 		}
 	}
+
 }

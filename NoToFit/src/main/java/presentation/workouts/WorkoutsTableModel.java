@@ -42,7 +42,7 @@ class WorkoutsTableModel extends AbstractTableModel {
 		case 0:
 			return workout.getName();
 		case 1:
-			return Objective.get(workout.getObjective());			
+			return Objective.getByChar(workout.getObjective());			
 		case 2:
 			return GuiTools.parseDateToString(workout.getValidFrom());
 		case 3:

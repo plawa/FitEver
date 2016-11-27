@@ -105,9 +105,9 @@ public class MaintainMealDialog extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 397, 364);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 49, 59, 0, 0, 0 };
+		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 49, 59, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 25, 0, 0, 0, 0, 73, 33, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
@@ -271,6 +271,7 @@ public class MaintainMealDialog extends JDialog {
 		{
 			cancelButton = new JButton("Cancel");
 			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
+			gbc_cancelButton.anchor = GridBagConstraints.EAST;
 			gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
 			gbc_cancelButton.gridx = 4;
 			gbc_cancelButton.gridy = 9;
@@ -282,18 +283,11 @@ public class MaintainMealDialog extends JDialog {
 			});
 			cancelButton.setActionCommand("Cancel");
 		}
-		
-		Component glue = Box.createGlue();
-		GridBagConstraints gbc_glue = new GridBagConstraints();
-		gbc_glue.insets = new Insets(0, 0, 5, 5);
-		gbc_glue.gridx = 5;
-		gbc_glue.gridy = 9;
-		getContentPane().add(glue, gbc_glue);
 
 		Component horizontalStrutRight = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_horizontalStrutRight = new GridBagConstraints();
 		gbc_horizontalStrutRight.insets = new Insets(0, 0, 5, 0);
-		gbc_horizontalStrutRight.gridx = 6;
+		gbc_horizontalStrutRight.gridx = 5;
 		gbc_horizontalStrutRight.gridy = 9;
 		getContentPane().add(horizontalStrutRight, gbc_horizontalStrutRight);
 

@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Hashtable;
 
+import javax.persistence.PersistenceException;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,19 +25,25 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.hibernate.service.spi.ServiceException;
+
 import database.controller.DatabaseController;
 import database.entities.User;
 import database.entities.Weighthistory;
+import database.entities.WeighthistoryId;
 import presentation.common.DatePicker;
 
 public class UpdateUserWeightDialog extends JDialog {
 	private static final long serialVersionUID = 2665625473604154239L;
+	private static final float SLIDER_VALUE_FACTOR = 0.1f;
+
 	private static final String MSG_SAVE_ERROR = "An error occured! Unable to store data to the database.";
+	private static final Object MSG_DUPLICATE_ENTRY = "Entry for given date and user already exists!";
 
 	private User userToMaintain;
 	private float oldWeight;
 	private float newWeight;
-	private Weighthistory newWeightHistoryEntry = null;
+	private Weighthistory savedWeightEntry = null;
 
 	private final JPanel contentPanel = new JPanel();
 	private JSlider slider;
@@ -168,8 +175,8 @@ public class UpdateUserWeightDialog extends JDialog {
 		{
 			JLabel lblPickDate = new JLabel("Pick date: ");
 			GridBagConstraints gbc_lblPickDate = new GridBagConstraints();
-			gbc_lblPickDate.anchor = GridBagConstraints.WEST;
-			gbc_lblPickDate.insets = new Insets(0, 0, 5, 5);
+			gbc_lblPickDate.anchor = GridBagConstraints.EAST;
+			gbc_lblPickDate.insets = new Insets(0, 0, 0, 5);
 			gbc_lblPickDate.gridx = 3;
 			gbc_lblPickDate.gridy = 5;
 			contentPanel.add(lblPickDate, gbc_lblPickDate);
@@ -179,18 +186,10 @@ public class UpdateUserWeightDialog extends JDialog {
 			GridBagConstraints gbc_datePicker = new GridBagConstraints();
 			gbc_datePicker.gridwidth = 3;
 			gbc_datePicker.fill = GridBagConstraints.HORIZONTAL;
-			gbc_datePicker.insets = new Insets(0, 0, 5, 5);
+			gbc_datePicker.insets = new Insets(0, 0, 0, 5);
 			gbc_datePicker.gridx = 4;
 			gbc_datePicker.gridy = 5;
 			contentPanel.add(datePicker, gbc_datePicker);
-		}
-		{
-			Component bottomStrut = Box.createVerticalStrut(20);
-			GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
-			gbc_bottomStrut.insets = new Insets(0, 0, 0, 5);
-			gbc_bottomStrut.gridx = 1;
-			gbc_bottomStrut.gridy = 6;
-			contentPanel.add(bottomStrut, gbc_bottomStrut);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -226,9 +225,9 @@ public class UpdateUserWeightDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 4.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 	}
 
@@ -241,12 +240,17 @@ public class UpdateUserWeightDialog extends JDialog {
 
 	protected void updateButtonPressed() {
 		Calendar dateInput = (Calendar) datePicker.getJFormattedTextField().getValue();
-		newWeightHistoryEntry = new Weighthistory(userToMaintain, newWeight, dateInput.getTime());
+		Weighthistory newHistoryEntry = new Weighthistory(new WeighthistoryId(userToMaintain, dateInput.getTime()), newWeight);
 		try {
-			DatabaseController.saveEntityToDatabase(newWeightHistoryEntry);
+			DatabaseController.saveEntityToDatabase(newHistoryEntry);
 			tearDown();
-		} catch (RuntimeException e) {
+			savedWeightEntry = newHistoryEntry;
+		} catch (ServiceException e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, MSG_DUPLICATE_ENTRY);
 		}
 	}
 
@@ -256,14 +260,14 @@ public class UpdateUserWeightDialog extends JDialog {
 	}
 
 	private void updateDifferenceLabel() {
-		newWeight = oldWeight + slider.getValue() * 0.1f;
+		newWeight = oldWeight + slider.getValue() * SLIDER_VALUE_FACTOR;
 		lblValueNewWeight.setText(String.format("%.1f kg", newWeight));
 		float differencePercentage = 100f * newWeight / oldWeight - 100f;
 		lblValueDifference.setText(String.format("%.2f %%", differencePercentage));
 	}
 
-	public Weighthistory getNewWeightHistoryEntry() {
-		return newWeightHistoryEntry;
+	public Weighthistory getNewSavedWeightEntry() {
+		return savedWeightEntry;
 	}
 
 }

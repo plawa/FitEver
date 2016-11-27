@@ -5,19 +5,19 @@ public enum Objective {
 	MassGain('m', "Mass Gain"),
 	Reduction('r', "Mass Reduction");
 	
-	private char objectiveChar;
+	private char charID;
 	private String objectiveName;
 	
 	private Objective(char objectiveChar, String objectiveName){
-		this.objectiveChar = objectiveChar;
+		this.charID = objectiveChar;
 		this.objectiveName = objectiveName;
 	}
 	
-	public char getObjectiveChar(){
-		return objectiveChar;
+	public char getCharID(){
+		return charID;
 	}
 	
-	public static Objective get(char objectiveChar){
+	public static Objective getByChar(char objectiveChar){
 		switch(objectiveChar){
 		case 'm': return MassGain;			
 		case 'r': return Reduction;

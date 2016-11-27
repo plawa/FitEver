@@ -32,7 +32,8 @@ import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
 import database.entities.Weighthistory;
-import logic.utils.Encrypter;
+import database.entities.WeighthistoryId;
+import logic.utils.MD5Encrypter;
 import presentation.common.DialogMode;
 import presentation.common.GuiTools;
 import presentation.common.Translator;
@@ -518,8 +519,7 @@ public class MaintainUserDialog extends JDialog {
 		userMaintained.setDateOfBirth(GuiTools.parseStringToDate(formatTxtFldDateOfBirth.getText()));
 		userMaintained.setSex(Translator.parseSexStringToChar((String) comboBoxSex.getSelectedItem()));
 		userMaintained.setHeight(Integer.parseInt(textFieldHeight.getText()));
-		//userMaintained.setStartWeight(startWeight); // TODO!
-		userMaintained.getWeighthistories().add(new Weighthistory(userMaintained, startWeight, new Date()));
+		userMaintained.getWeighthistories().add(new Weighthistory(new WeighthistoryId(userMaintained, new Date()), startWeight));
 		userMaintained.setGoalWeight(goalWeight);
 		userMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
 		userMaintained
@@ -537,7 +537,7 @@ public class MaintainUserDialog extends JDialog {
 
 	private Shadow createUserCredentialsFromEnteredValues() {
 		String login = textFieldLogin.getText();
-		String encryptedPass = Encrypter.encryptWithMD5(passwordField.getText());
+		String encryptedPass = MD5Encrypter.encryptWithMD5(passwordField.getText());
 
 		Shadow userCredentials = new Shadow();
 		userCredentials.setLogin(login);

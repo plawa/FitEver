@@ -39,7 +39,7 @@ public class WorkoutPlanGenerator {
 
 	private static WorkoutDayPreferences buildWorkoutDayPreferences(WorkoutGenerationPreferences workoutPreferences) {
 		WorkoutDayPreferences dayPreferences = new WorkoutDayPreferences();
-		dayPreferences.setObjective(Objective.get(workoutPreferences.getUser().getUserObjective()));
+		dayPreferences.setObjective(Objective.getByChar(workoutPreferences.getUser().getUserObjective()));
 		dayPreferences.setEquipmentRequired(workoutPreferences.hasUserEquipment());
 		dayPreferences.setDifficultyLevel(workoutPreferences.getPrefferedDifficulty());
 		return dayPreferences;

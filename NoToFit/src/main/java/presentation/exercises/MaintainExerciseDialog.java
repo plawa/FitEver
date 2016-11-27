@@ -68,7 +68,7 @@ public class MaintainExerciseDialog extends JDialog {
 	private void retrieveExerciseFromFields() {
 		exerciseMaintained.setName(txtFldName.getText());
 		Objective objective = (Objective) comboBoxObjective.getSelectedItem();
-		exerciseMaintained.setObjective(objective.getObjectiveChar());
+		exerciseMaintained.setObjective(objective.getCharID());
 		DifficultyLevel difficultyLevel = (DifficultyLevel) comboBoxDifficulty.getSelectedItem();
 		exerciseMaintained.setDifficultyLevel(difficultyLevel.getLevelNumber());
 		exerciseMaintained.setRequiresEquipment(chckbxEquipmentRequired.isSelected());
@@ -77,9 +77,9 @@ public class MaintainExerciseDialog extends JDialog {
 
 	private void fillSwingFields() {
 		txtFldName.setText(exerciseMaintained.getName());
-		Objective objective = Objective.get(exerciseMaintained.getObjective());
+		Objective objective = Objective.getByChar(exerciseMaintained.getObjective());
 		comboBoxObjective.setSelectedItem(objective);
-		DifficultyLevel difficulty = DifficultyLevel.get(exerciseMaintained.getDifficultyLevel());
+		DifficultyLevel difficulty = DifficultyLevel.getByNumber(exerciseMaintained.getDifficultyLevel());
 		comboBoxDifficulty.setSelectedItem(difficulty);
 		chckbxEquipmentRequired.setSelected(exerciseMaintained.isRequiresEquipment());
 		textAreaDescription.setText(exerciseMaintained.getDescription());
@@ -91,9 +91,9 @@ public class MaintainExerciseDialog extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 394, 387);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 
@@ -197,19 +197,12 @@ public class MaintainExerciseDialog extends JDialog {
 				saveButtonPressed();
 			}
 		});
-		
-		Component glue = Box.createGlue();
-		GridBagConstraints gbc_glue = new GridBagConstraints();
-		gbc_glue.insets = new Insets(0, 0, 5, 5);
-		gbc_glue.gridx = 5;
-		gbc_glue.gridy = 5;
-		getContentPane().add(glue, gbc_glue);
 
 		Component rightStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_rightStrut = new GridBagConstraints();
 		gbc_rightStrut.anchor = GridBagConstraints.EAST;
 		gbc_rightStrut.insets = new Insets(0, 0, 5, 0);
-		gbc_rightStrut.gridx = 6;
+		gbc_rightStrut.gridx = 5;
 		gbc_rightStrut.gridy = 5;
 		getContentPane().add(rightStrut, gbc_rightStrut);
 		GridBagConstraints gbc_btnSave = new GridBagConstraints();
@@ -225,6 +218,7 @@ public class MaintainExerciseDialog extends JDialog {
 			}
 		});
 		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
+		gbc_btnCancel.anchor = GridBagConstraints.EAST;
 		gbc_btnCancel.insets = new Insets(0, 0, 5, 5);
 		gbc_btnCancel.gridx = 4;
 		gbc_btnCancel.gridy = 5;

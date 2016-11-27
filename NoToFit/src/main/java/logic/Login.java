@@ -3,7 +3,7 @@ package logic;
 import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
-import logic.utils.Encrypter;
+import logic.utils.MD5Encrypter;
 
 public class Login {
 
@@ -14,7 +14,7 @@ public class Login {
 		if (credentialsInDatabase != null) {
 			Shadow credentialsEntered = new Shadow();
 			credentialsEntered.setLogin(login);
-			credentialsEntered.setEncryptedPass(Encrypter.encryptWithMD5(passwordRaw));
+			credentialsEntered.setEncryptedPass(MD5Encrypter.encryptWithMD5(passwordRaw));
 			if (credentialsEntered.equals(credentialsInDatabase))
 				return credentialsInDatabase.getUser();
 		}
