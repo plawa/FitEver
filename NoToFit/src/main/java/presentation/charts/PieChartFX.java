@@ -1,4 +1,4 @@
-package presentation.common;
+package presentation.charts;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Group;

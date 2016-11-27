@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -30,6 +31,7 @@ import javax.swing.event.ChangeListener;
 import database.controller.DatabaseController;
 import database.entities.Shadow;
 import database.entities.User;
+import database.entities.Weighthistory;
 import logic.utils.Encrypter;
 import presentation.common.DialogMode;
 import presentation.common.GuiTools;
@@ -459,7 +461,7 @@ public class MaintainUserDialog extends JDialog {
 		comboBoxSex.setSelectedItem(Translator.parseSexCharToString(userMaintained.getSex()));
 		formatTxtFldDateOfBirth.setText(GuiTools.parseDateToString(userMaintained.getDateOfBirth()));
 		textFieldHeight.setText(Integer.toString(userMaintained.getHeight()));
-		txtFldStartWeight.setText(Float.toString(userMaintained.getStartWeight()));
+		//txtFldStartWeight.setText(Float.toString(userMaintained.getStartWeight()));
 		txtFldGoalWeight.setText(Float.toString(userMaintained.getGoalWeight()));
 		spinnerFatPercentage.setValue(userMaintained.getFatPercentage());
 		comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(userMaintained.getUserObjective()));
@@ -516,9 +518,8 @@ public class MaintainUserDialog extends JDialog {
 		userMaintained.setDateOfBirth(GuiTools.parseStringToDate(formatTxtFldDateOfBirth.getText()));
 		userMaintained.setSex(Translator.parseSexStringToChar((String) comboBoxSex.getSelectedItem()));
 		userMaintained.setHeight(Integer.parseInt(textFieldHeight.getText()));
-		userMaintained.setStartWeight(startWeight);
-		if (userMaintained.getActualWeight() == 0)
-			userMaintained.setActualWeight(startWeight);
+		//userMaintained.setStartWeight(startWeight); // TODO!
+		userMaintained.getWeighthistories().add(new Weighthistory(userMaintained, startWeight, new Date()));
 		userMaintained.setGoalWeight(goalWeight);
 		userMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
 		userMaintained

@@ -71,7 +71,7 @@ public class MaintainExerciseDialog extends JDialog {
 		exerciseMaintained.setObjective(objective.getObjectiveChar());
 		DifficultyLevel difficultyLevel = (DifficultyLevel) comboBoxDifficulty.getSelectedItem();
 		exerciseMaintained.setDifficultyLevel(difficultyLevel.getLevelNumber());
-		exerciseMaintained.setEquipmentRequired(chckbxEquipmentRequired.isSelected());
+		exerciseMaintained.setRequiresEquipment(chckbxEquipmentRequired.isSelected());
 		exerciseMaintained.setDescription(textAreaDescription.getText());
 	}
 
@@ -81,7 +81,7 @@ public class MaintainExerciseDialog extends JDialog {
 		comboBoxObjective.setSelectedItem(objective);
 		DifficultyLevel difficulty = DifficultyLevel.get(exerciseMaintained.getDifficultyLevel());
 		comboBoxDifficulty.setSelectedItem(difficulty);
-		chckbxEquipmentRequired.setSelected(exerciseMaintained.isEquipmentRequired());
+		chckbxEquipmentRequired.setSelected(exerciseMaintained.isRequiresEquipment());
 		textAreaDescription.setText(exerciseMaintained.getDescription());
 	}
 

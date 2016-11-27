@@ -1,29 +1,26 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-10-30 15:10:58 by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
-	<class name="database.entities.Workoutday" table="workoutday"
-		optimistic-lock="version">
-		<id name="id" type="java.lang.Integer">
-			<column name="ID" />
-			<generator class="identity" />
-		</id>
-		<many-to-one name="workout" class="database.entities.Workout"
-			fetch="select">
-			<column name="WorkoutID" not-null="true" />
-		</many-to-one>
-		<set name="exercises" table="workoutday_exercise" inverse="false"
-			lazy="false" fetch="select" cascade="merge">
-			<key>
-				<column name="WorkoutDayID" not-null="true" />
-			</key>
-			<many-to-many entity-name="database.entities.Exercise">
-				<column name="ExerciseID" not-null="true" />
-			</many-to-many>
-		</set>
-		<property name="date" type="date">
-			<column name="Date" length="10" not-null="true" />
-		</property>
-	</class>
+    <class name="database.entities.Workoutday" table="workoutday" catalog="notofit" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="workout" class="database.entities.Workout" fetch="select">
+            <column name="WorkoutID" not-null="true" />
+        </many-to-one>
+        <property name="date" type="date">
+            <column name="Date" length="10" />
+        </property>
+        <set name="exercises" table="workoutday_exercise" inverse="false" lazy="false" fetch="select" cascade="merge">
+            <key>
+                <column name="WorkoutDayID" not-null="true" />
+            </key>
+            <many-to-many entity-name="database.entities.Exercise">
+                <column name="ExerciseID" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
 </hibernate-mapping>

@@ -9,7 +9,7 @@ import database.tools.UserTools;
 public class EnergyRequirementCalculator {
 
 	public static int performCalculation(User user) {
-		float weight = user.getActualWeight();
+		float weight = DatabaseController.getUserActualWeight(user);
 		int height = user.getHeight();
 		int age = UserTools.calculateAge(user);
 		Character sex = user.getSex();

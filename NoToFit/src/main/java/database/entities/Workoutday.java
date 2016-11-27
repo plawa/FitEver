@@ -1,5 +1,5 @@
 package database.entities;
-// Generated 2016-10-30 15:10:58 by Hibernate Tools 5.2.0.Beta1
+// Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -13,21 +13,11 @@ public class Workoutday extends Entity {
 	private Date date;
 	private Set<Exercise> exercises = new HashSet<Exercise>(0);
 
-
 	public Workoutday() {
-	}
-	
-	public Workoutday(Workout workout) {
-		this.workout = workout;
 	}
 
 	public Workoutday(Date date) {
 		this.date = date;
-	}
-
-	public Workoutday(Workout workout, Set<Exercise> exercises) {
-		this.workout = workout;
-		this.exercises = exercises;
 	}
 
 	public Integer getId() {
@@ -47,7 +37,7 @@ public class Workoutday extends Entity {
 	}
 
 	public Date getDate() {
-		return date;
+		return this.date;
 	}
 
 	public void setDate(Date date) {

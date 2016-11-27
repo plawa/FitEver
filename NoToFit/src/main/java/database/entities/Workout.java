@@ -1,5 +1,5 @@
 package database.entities;
-// Generated 2016-10-30 15:10:58 by Hibernate Tools 5.2.0.Beta1
+// Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -17,7 +17,7 @@ public class Workout extends Entity {
 	private Date validFrom;
 	private Date validTo;
 	private Character objective;
-	private Set<Workoutday> workoutdays = new HashSet<>(0);
+	private Set<Workoutday> workoutdays = new HashSet<Workoutday>(0);
 
 	public Workout() {
 	}
@@ -31,7 +31,7 @@ public class Workout extends Entity {
 	}
 
 	public User getUser() {
-		return user;
+		return this.user;
 	}
 
 	public void setUser(User user) {

@@ -4,14 +4,20 @@ import java.util.List;
 
 import javax.persistence.TypedQuery;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.spi.ServiceException;
 
 import database.entities.Entity;
 import database.entities.Shadow;
+import database.entities.User;
+import database.entities.Weighthistory;
 
 public class DatabaseController {
 
@@ -57,9 +63,20 @@ public class DatabaseController {
 		return resultEntity;
 	}
 
-	public static void refreshObject(Object objectToRefresh) {
-		getNewSessionWithTransaction().refresh(objectToRefresh);
+	public static float getUserActualWeight(User user) {
+		Session session = getNewSessionWithTransaction();
+		DetachedCriteria maxQuery = DetachedCriteria.forClass(Weighthistory.class);
+		maxQuery.add(Restrictions.eq("user.id", user.getId()));
+		maxQuery.setProjection(Projections.max("date"));
+
+		Criteria query = session.createCriteria(Weighthistory.class);
+		query.add(Restrictions.eq("user.id", user.getId()));
+		query.add(Property.forName("date").eq(maxQuery));
+
+		Weighthistory weightHistoryEntry = (Weighthistory) query.uniqueResult();
+
 		finalizeCurrentTransactionAndSession();
+		return weightHistoryEntry.getWeight();
 	}
 
 	public static <T extends Entity> List<T> getEntitiesByParameter(Class<T> entityType, String paramName,
@@ -71,12 +88,13 @@ public class DatabaseController {
 		return resultList;
 	}
 
-	public static <T extends Entity> long getRowCount(Class<T> entityType){
-		long resultCount = (long) getNewSessionWithTransaction().createCriteria(entityType).setProjection(Projections.rowCount()).uniqueResult();
+	public static <T extends Entity> long getRowCount(Class<T> entityType) {
+		long resultCount = (long) getNewSessionWithTransaction().createCriteria(entityType)
+				.setProjection(Projections.rowCount()).uniqueResult();
 		finalizeCurrentTransactionAndSession();
 		return resultCount;
 	}
-	
+
 	public static Session getNewSessionWithTransaction() throws RuntimeException {
 		if (mySessionFactory == null) {
 			tryToInitializeSessionFactory();

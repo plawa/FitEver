@@ -1,5 +1,5 @@
 package database.entities;
-// Generated 2016-10-30 15:10:58 by Hibernate Tools 5.2.0.Beta1
+// Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,12 +9,11 @@ import java.util.Set;
  */
 public class Exercise extends Entity {
 
-	private static final long serialVersionUID = 4990654152232158468L;
 	private Integer id;
 	private String name;
 	private String description;
 	private char objective;
-	private boolean equipmentRequired;
+	private boolean requiresEquipment;
 	private Integer difficultyLevel;
 	private Set<Workoutday> workoutdays = new HashSet<Workoutday>(0);
 
@@ -53,12 +52,12 @@ public class Exercise extends Entity {
 		this.objective = objective;
 	}
 
-	public boolean isEquipmentRequired() {
-		return this.equipmentRequired;
+	public boolean isRequiresEquipment() {
+		return this.requiresEquipment;
 	}
 
-	public void setEquipmentRequired(boolean requiresEquipment) {
-		this.equipmentRequired = requiresEquipment;
+	public void setRequiresEquipment(boolean requiresEquipment) {
+		this.requiresEquipment = requiresEquipment;
 	}
 
 	public Integer getDifficultyLevel() {

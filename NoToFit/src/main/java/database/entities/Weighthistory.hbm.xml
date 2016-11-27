@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="database.entities.Weighthistory" table="weighthistory" catalog="notofit" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="database.entities.User" fetch="select">
+            <column name="UserID" not-null="true" />
+        </many-to-one>
+        <property name="weight" type="float">
+            <column name="weight" precision="12" scale="0" not-null="true" />
+        </property>
+        <property name="date" type="date">
+            <column name="date" length="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

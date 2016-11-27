@@ -69,7 +69,7 @@ public class ExerciseChooser {
 
 	private int rateExercise(Exercise exercise) {
 		int points = 0;
-		boolean isAbleToExercise = hasUserEquipment || !exercise.isEquipmentRequired();
+		boolean isAbleToExercise = hasUserEquipment || !exercise.isRequiresEquipment();
 		boolean objectiveMatches = objective.getObjectiveChar() == exercise.getObjective();
 		int difficultyLevelDifference = Math.abs(difficulty.getLevelNumber() - exercise.getDifficultyLevel());
 

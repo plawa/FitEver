@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.Hashtable;
 
 import javax.swing.Box;
@@ -25,6 +26,7 @@ import javax.swing.event.ChangeListener;
 
 import database.controller.DatabaseController;
 import database.entities.User;
+import database.entities.Weighthistory;
 
 public class UpdateUserWeightDialog extends JDialog {
 
@@ -67,7 +69,7 @@ public class UpdateUserWeightDialog extends JDialog {
 		{
 			JLabel lblValueOldWeight = new JLabel("");
 			lblValueOldWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
-			lblValueOldWeight.setText(String.format("%.1f kg", userToMaintain.getActualWeight()));
+			lblValueOldWeight.setText(String.format("%.1f kg", DatabaseController.getUserActualWeight(userToMaintain)));
 			GridBagConstraints gbc_lblValueOldWeight = new GridBagConstraints();
 			gbc_lblValueOldWeight.anchor = GridBagConstraints.WEST;
 			gbc_lblValueOldWeight.insets = new Insets(0, 0, 5, 5);
@@ -214,9 +216,12 @@ public class UpdateUserWeightDialog extends JDialog {
 	}
 
 	protected void updateButtonPressed() {
-		userToMaintain.setActualWeight(newWeight);
+		Weighthistory newWeightHistoryEntry = new Weighthistory();
+		newWeightHistoryEntry.setWeight(newWeight);
+		newWeightHistoryEntry.setDate(new Date()); //TODO
+		newWeightHistoryEntry.setUser(userToMaintain);
 		try {
-			DatabaseController.updateEntityToDatabase(userToMaintain);
+			DatabaseController.saveEntityToDatabase(newWeightHistoryEntry);
 			tearDown();
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR);
@@ -229,9 +234,10 @@ public class UpdateUserWeightDialog extends JDialog {
 	}
 
 	private void updateDifferenceLabel() {
-		newWeight = userToMaintain.getActualWeight() + slider.getValue() * 0.1f;
+		float userActualWeight = DatabaseController.getUserActualWeight(userToMaintain);
+		newWeight = userActualWeight + slider.getValue() * 0.1f;
 		lblValueNewWeight.setText(String.format("%.1f kg", newWeight));
-		float differencePercentage = 100f * newWeight / userToMaintain.getActualWeight() - 100f;
+		float differencePercentage = 100f * newWeight / userActualWeight - 100f;
 		lblValueDifference.setText(String.format("%.2f %%", differencePercentage));
 	}
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2016-10-12 20:49:43 by Hibernate Tools 5.2.0.Beta1 -->
+<!-- Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1 -->
 <hibernate-mapping>
     <class name="database.entities.User" table="user" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -25,12 +25,6 @@
         <property name="height" type="int">
             <column name="height" not-null="true" />
         </property>
-        <property name="startWeight" type="float">
-            <column name="startWeight" precision="12" scale="0" not-null="true" />
-        </property>
-        <property name="actualWeight" type="java.lang.Float">
-            <column name="actualWeight" precision="12" scale="0" />
-        </property>
         <property name="goalWeight" type="float">
             <column name="goalWeight" precision="12" scale="0" not-null="true" />
         </property>
@@ -49,7 +43,7 @@
         </property>
         <property name="somatotype" type="java.lang.Integer">
             <column name="somatotype">
-                <comment>from 1 (ectomorphic) to 3 (mezomorphic)</comment>
+                <comment>from 1 (ectomorphic) to 3 (endomorphic)</comment>
             </column>
         </property>
         <set name="diets" table="diet" inverse="true" lazy="false" fetch="select">
@@ -59,6 +53,12 @@
             <one-to-many class="database.entities.Diet" />
         </set>
         <one-to-one name="shadow" class="database.entities.Shadow"></one-to-one>
+        <set name="weighthistories" table="weighthistory" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="UserID" not-null="true" />
+            </key>
+            <one-to-many class="database.entities.Weighthistory" />
+        </set>
         <set name="workouts" table="workout" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="UserID" not-null="true" />

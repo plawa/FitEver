@@ -1,5 +1,5 @@
 package database.entities;
-// Generated 2016-11-11 15:44:57 by Hibernate Tools 5.2.0.Beta1
+// Generated 2016-11-27 00:30:46 by Hibernate Tools 5.2.0.Beta1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +11,6 @@ import database.tools.MealTools;
  */
 public class Meal extends Entity {
 
-	private static final long serialVersionUID = -5478353296080109577L;
 	private Integer id;
 	private String name;
 	private char objective;
@@ -20,7 +19,7 @@ public class Meal extends Entity {
 	private int carbohydratesPercentage;
 	private int proteinPercentage;
 	private int fatPercentage;
-	private Set<Dietday> dietdays = new HashSet<Dietday>();
+	private Set<Dietday> dietdays = new HashSet<Dietday>(0);
 
 	public Meal() {
 	}

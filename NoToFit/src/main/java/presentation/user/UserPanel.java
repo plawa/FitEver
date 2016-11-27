@@ -20,13 +20,12 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import database.controller.DatabaseController;
 import database.entities.User;
 import database.tools.UserTools;
-import javafx.collections.FXCollections;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.chart.PieChart;
 import presentation.MainFrame;
-import presentation.common.PieChartFX;
+import presentation.charts.LineChartFX;
 import presentation.common.Translator; 
 
 public class UserPanel extends JPanel {
@@ -87,12 +86,12 @@ public class UserPanel extends JPanel {
 		lblValueSex.setText(Translator.parseSexCharToString(userDisplaying.getSex()));
 		lblValueAge.setText(String.format("%d years", UserTools.calculateAge(userDisplaying)));
 		lblValueHeight.setText(String.format("%d cm", userDisplaying.getHeight()));
-		lblValueStartWeight.setText(String.format("%.1f kg", userDisplaying.getStartWeight()));
+		//lblValueStartWeight.setText(String.format("%.1f kg", userDisplaying.getStartWeight())); //TODO!
 		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
 		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
 		lblValueUserObjective.setText(Translator.parseObjectiveCharToString(userDisplaying.getUserObjective()));
 		setBmiLabelsFormatted(UserTools.calculateBMI(userDisplaying));
-		lblValueActualWeight.setText(String.format("%.1f kg", userDisplaying.getActualWeight()));
+		lblValueActualWeight.setText(String.format("%.1f kg", DatabaseController.getUserActualWeight(userDisplaying)));
 	}
 
 	private void setBmiLabelsFormatted(float bmi) {
@@ -412,7 +411,7 @@ public class UserPanel extends JPanel {
 		gbc_lblValueStartWeight.gridy = 12;
 		add(lblValueStartWeight, gbc_lblValueStartWeight);
 
-		final JFXPanel fxPanel = createChartFXPanel();
+		final JFXPanel fxPanel = embedLineChartFX();
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.fill = GridBagConstraints.BOTH;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
@@ -422,15 +421,13 @@ public class UserPanel extends JPanel {
 		add(fxPanel, gbc_lblNewLabel);
 	}
 
-	private JFXPanel createChartFXPanel() {
-		JFXPanel chartPanel = new JFXPanel();
-		PieChartFX chart = new PieChartFX();
-		chart.setPieChartData(FXCollections.observableArrayList(new PieChart.Data("Grapefruit", 13),
-				new PieChart.Data("Oranges", 25), new PieChart.Data("Plums", 10), new PieChart.Data("Pears", 22),
-				new PieChart.Data("Apples", 30)));
-		chartPanel.setScene(chart.getScene());
-		return chartPanel;
+	private JFXPanel embedLineChartFX() {
+		JFXPanel embeddedPanel = new JFXPanel();
+		LineChartFX chart = new LineChartFX("Weight Monitoring", "Day");
+		embeddedPanel.setScene(chart.getScene());
+		return embeddedPanel;
 	}
+
 
 	protected void exitButtonPressed() {
 		((MainFrame) SwingUtilities.getWindowAncestor(this)).tidyUp();
