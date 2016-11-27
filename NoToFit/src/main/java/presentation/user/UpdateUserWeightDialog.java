@@ -10,7 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Hashtable;
 
 import javax.swing.Box;
@@ -27,21 +27,26 @@ import javax.swing.event.ChangeListener;
 import database.controller.DatabaseController;
 import database.entities.User;
 import database.entities.Weighthistory;
+import presentation.common.DatePicker;
 
 public class UpdateUserWeightDialog extends JDialog {
-
 	private static final long serialVersionUID = 2665625473604154239L;
+	private static final String MSG_SAVE_ERROR = "An error occured! Unable to store data to the database.";
 
-	private static final String MSG_SAVE_ERROR = "Unable to store data to the database. An error occured!";
-	private final JPanel contentPanel = new JPanel();
 	private User userToMaintain;
+	private float oldWeight;
+	private float newWeight;
+	private Weighthistory newWeightHistoryEntry = null;
+
+	private final JPanel contentPanel = new JPanel();
 	private JSlider slider;
 	private JLabel lblValueDifference;
 	private JLabel lblValueNewWeight;
-	private float newWeight;
+	private DatePicker datePicker;
 
-	public UpdateUserWeightDialog(User user) {
-		userToMaintain = user;
+	public UpdateUserWeightDialog(User user, float oldWeight) {
+		this.userToMaintain = user;
+		this.oldWeight = oldWeight;
 		initializeFrame();
 		initializeLayout();
 		initializeSwingComponents();
@@ -51,7 +56,7 @@ public class UpdateUserWeightDialog extends JDialog {
 		{
 			Component topStrut = Box.createVerticalStrut(20);
 			GridBagConstraints gbc_topStrut = new GridBagConstraints();
-			gbc_topStrut.insets = new Insets(0, 0, 0, 5);
+			gbc_topStrut.insets = new Insets(0, 0, 5, 5);
 			gbc_topStrut.gridx = 1;
 			gbc_topStrut.gridy = 0;
 			contentPanel.add(topStrut, gbc_topStrut);
@@ -69,7 +74,7 @@ public class UpdateUserWeightDialog extends JDialog {
 		{
 			JLabel lblValueOldWeight = new JLabel("");
 			lblValueOldWeight.setFont(new Font("Tahoma", Font.BOLD, 11));
-			lblValueOldWeight.setText(String.format("%.1f kg", DatabaseController.getUserActualWeight(userToMaintain)));
+			lblValueOldWeight.setText(String.format("%.1f kg", oldWeight));
 			GridBagConstraints gbc_lblValueOldWeight = new GridBagConstraints();
 			gbc_lblValueOldWeight.anchor = GridBagConstraints.WEST;
 			gbc_lblValueOldWeight.insets = new Insets(0, 0, 5, 5);
@@ -161,11 +166,30 @@ public class UpdateUserWeightDialog extends JDialog {
 			contentPanel.add(rightStrut, gbc_rightStrut);
 		}
 		{
+			JLabel lblPickDate = new JLabel("Pick date: ");
+			GridBagConstraints gbc_lblPickDate = new GridBagConstraints();
+			gbc_lblPickDate.anchor = GridBagConstraints.WEST;
+			gbc_lblPickDate.insets = new Insets(0, 0, 5, 5);
+			gbc_lblPickDate.gridx = 3;
+			gbc_lblPickDate.gridy = 5;
+			contentPanel.add(lblPickDate, gbc_lblPickDate);
+		}
+		{
+			datePicker = new DatePicker();
+			GridBagConstraints gbc_datePicker = new GridBagConstraints();
+			gbc_datePicker.gridwidth = 3;
+			gbc_datePicker.fill = GridBagConstraints.HORIZONTAL;
+			gbc_datePicker.insets = new Insets(0, 0, 5, 5);
+			gbc_datePicker.gridx = 4;
+			gbc_datePicker.gridy = 5;
+			contentPanel.add(datePicker, gbc_datePicker);
+		}
+		{
 			Component bottomStrut = Box.createVerticalStrut(20);
 			GridBagConstraints gbc_bottomStrut = new GridBagConstraints();
 			gbc_bottomStrut.insets = new Insets(0, 0, 0, 5);
 			gbc_bottomStrut.gridx = 1;
-			gbc_bottomStrut.gridy = 5;
+			gbc_bottomStrut.gridy = 6;
 			contentPanel.add(bottomStrut, gbc_bottomStrut);
 		}
 		{
@@ -202,9 +226,9 @@ public class UpdateUserWeightDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
 	}
 
@@ -212,14 +236,12 @@ public class UpdateUserWeightDialog extends JDialog {
 		setModal(true);
 		setTitle("Update Actual User Weight");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 224);
+		setBounds(100, 100, 450, 284);
 	}
 
 	protected void updateButtonPressed() {
-		Weighthistory newWeightHistoryEntry = new Weighthistory();
-		newWeightHistoryEntry.setWeight(newWeight);
-		newWeightHistoryEntry.setDate(new Date()); //TODO
-		newWeightHistoryEntry.setUser(userToMaintain);
+		Calendar dateInput = (Calendar) datePicker.getJFormattedTextField().getValue();
+		newWeightHistoryEntry = new Weighthistory(userToMaintain, newWeight, dateInput.getTime());
 		try {
 			DatabaseController.saveEntityToDatabase(newWeightHistoryEntry);
 			tearDown();
@@ -234,11 +256,14 @@ public class UpdateUserWeightDialog extends JDialog {
 	}
 
 	private void updateDifferenceLabel() {
-		float userActualWeight = DatabaseController.getUserActualWeight(userToMaintain);
-		newWeight = userActualWeight + slider.getValue() * 0.1f;
+		newWeight = oldWeight + slider.getValue() * 0.1f;
 		lblValueNewWeight.setText(String.format("%.1f kg", newWeight));
-		float differencePercentage = 100f * newWeight / userActualWeight - 100f;
+		float differencePercentage = 100f * newWeight / oldWeight - 100f;
 		lblValueDifference.setText(String.format("%.2f %%", differencePercentage));
+	}
+
+	public Weighthistory getNewWeightHistoryEntry() {
+		return newWeightHistoryEntry;
 	}
 
 }

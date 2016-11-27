@@ -60,7 +60,7 @@ public class MainFrame extends JFrame {
 	private void createFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(FITEVER_DLG_TITLE);
-		setBounds(100, 100, 863, 550);
+		setBounds(100, 100, 900, 550);
 		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 	}
 

@@ -22,11 +22,12 @@ import javax.swing.UIManager;
 
 import database.controller.DatabaseController;
 import database.entities.User;
+import database.entities.Weighthistory;
 import database.tools.UserTools;
 import javafx.embed.swing.JFXPanel;
 import presentation.MainFrame;
-import presentation.charts.LineChartFX;
-import presentation.common.Translator; 
+import presentation.charts.WeightHistoryLineChartFX;
+import presentation.common.Translator;
 
 public class UserPanel extends JPanel {
 
@@ -47,10 +48,12 @@ public class UserPanel extends JPanel {
 	private ImageIcon updateWeightButtonIcon;
 	private ImageIcon logoutButtonIcon;
 	private ImageIcon exitButtonIcon;
+	private float userActualWeight;
 	private final static Color COLOR_GREEN = new Color(0, 120, 0);
 	private final static String MSG_BMI_OK = "Good";
 	private final static String MSG_BMI_TOO_LOW = "Underweight";
 	private final static String MSG_BMI_TOO_HIGH = "Overweight";
+	private WeightHistoryLineChartFX chart;
 
 	public UserPanel() {
 		this(new User());
@@ -70,28 +73,35 @@ public class UserPanel extends JPanel {
 		refreshUserDetails();
 	}
 
-	protected void updateStats() {
-		UpdateUserWeightDialog updateStatsDlg = new UpdateUserWeightDialog(userDisplaying);
+	protected void updateWeight() {
+		UpdateUserWeightDialog updateStatsDlg = new UpdateUserWeightDialog(userDisplaying, userActualWeight);
 		updateStatsDlg.setLocationRelativeTo(this);
 		updateStatsDlg.setVisible(true);
-		refreshUserDetails();
+		Weighthistory newWeightHistoryEntry = updateStatsDlg.getNewWeightHistoryEntry();
+		if (newWeightHistoryEntry != null) {
+			chart.updateWeightHistorySeriesWithNewEntry(newWeightHistoryEntry);
+			refreshUserDetails();
+		}
 	}
 
 	private void switchUser() {
-		((MainFrame)SwingUtilities.getWindowAncestor(this)).switchUser();
+		((MainFrame) SwingUtilities.getWindowAncestor(this)).switchUser();
 	}
 
 	protected void refreshUserDetails() {
+		userActualWeight = UserTools.retrieveActualWeight(userDisplaying);
+
 		lblValueNameAndSurname.setText(userDisplaying.getName() + " " + userDisplaying.getSurname());
 		lblValueSex.setText(Translator.parseSexCharToString(userDisplaying.getSex()));
 		lblValueAge.setText(String.format("%d years", UserTools.calculateAge(userDisplaying)));
 		lblValueHeight.setText(String.format("%d cm", userDisplaying.getHeight()));
-		//lblValueStartWeight.setText(String.format("%.1f kg", userDisplaying.getStartWeight())); //TODO!
+		// lblValueStartWeight.setText(String.format("%.1f kg",
+		// userDisplaying.getStartWeight())); //TODO!
 		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
 		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
 		lblValueUserObjective.setText(Translator.parseObjectiveCharToString(userDisplaying.getUserObjective()));
 		setBmiLabelsFormatted(UserTools.calculateBMI(userDisplaying));
-		lblValueActualWeight.setText(String.format("%.1f kg", DatabaseController.getUserActualWeight(userDisplaying)));
+		lblValueActualWeight.setText(String.format("%.1f kg", userActualWeight));
 	}
 
 	private void setBmiLabelsFormatted(float bmi) {
@@ -149,7 +159,7 @@ public class UserPanel extends JPanel {
 		JButton btnUpdateWeight = new JButton("Update Weight");
 		btnUpdateWeight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updateStats();
+				updateWeight();
 			}
 		});
 		btnUpdateWeight.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -179,8 +189,7 @@ public class UserPanel extends JPanel {
 		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnExit.setIcon(exitButtonIcon);
 		toolBar.add(btnExit);
-		
-		
+
 		btnEditUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				editUserToolbarButtonPressed();
@@ -411,7 +420,7 @@ public class UserPanel extends JPanel {
 		gbc_lblValueStartWeight.gridy = 12;
 		add(lblValueStartWeight, gbc_lblValueStartWeight);
 
-		final JFXPanel fxPanel = embedLineChartFX();
+		final JFXPanel fxPanel = embedWeightHistoryChart();
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.fill = GridBagConstraints.BOTH;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
@@ -421,13 +430,13 @@ public class UserPanel extends JPanel {
 		add(fxPanel, gbc_lblNewLabel);
 	}
 
-	private JFXPanel embedLineChartFX() {
+	private JFXPanel embedWeightHistoryChart() {
 		JFXPanel embeddedPanel = new JFXPanel();
-		LineChartFX chart = new LineChartFX("Weight Monitoring", "Day");
-		embeddedPanel.setScene(chart.getScene());
+		chart = new WeightHistoryLineChartFX("Progress Monitoring", "Day of Month");
+		chart.addWeightHistorySeries("Weight Changes History", DatabaseController.getWeightHistoryByMonth(11));
+		embeddedPanel.setScene(chart.createScene());
 		return embeddedPanel;
 	}
-
 
 	protected void exitButtonPressed() {
 		((MainFrame) SwingUtilities.getWindowAncestor(this)).tidyUp();

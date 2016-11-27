@@ -63,20 +63,21 @@ public class DatabaseController {
 		return resultEntity;
 	}
 
-	public static float getUserActualWeight(User user) {
+	public static float getUserWeightSortByDate(User user, boolean getLatest) {
 		Session session = getNewSessionWithTransaction();
 		DetachedCriteria maxQuery = DetachedCriteria.forClass(Weighthistory.class);
 		maxQuery.add(Restrictions.eq("user.id", user.getId()));
-		maxQuery.setProjection(Projections.max("date"));
+		maxQuery.setProjection(getLatest ? Projections.max("date") : Projections.min("date"));
 
 		Criteria query = session.createCriteria(Weighthistory.class);
 		query.add(Restrictions.eq("user.id", user.getId()));
 		query.add(Property.forName("date").eq(maxQuery));
-
-		Weighthistory weightHistoryEntry = (Weighthistory) query.uniqueResult();
+		query.setProjection(Projections.property("weight"));
+		query.setMaxResults(1);
+		float actualWeight = (float) query.uniqueResult();
 
 		finalizeCurrentTransactionAndSession();
-		return weightHistoryEntry.getWeight();
+		return actualWeight;
 	}
 
 	public static <T extends Entity> List<T> getEntitiesByParameter(Class<T> entityType, String paramName,
@@ -94,7 +95,15 @@ public class DatabaseController {
 		finalizeCurrentTransactionAndSession();
 		return resultCount;
 	}
-
+	
+	public static <T extends Entity> List<T> getWeightHistoryByMonth(int month) {
+		String q = String.format("SELECT e FROM Weighthistory e WHERE MONTH(e.date) = '%d'", month);
+		List<T> resultList = getNewSessionWithTransaction().createQuery(q).getResultList();
+		finalizeCurrentTransactionAndSession();
+		return resultList;
+	}
+	
+	
 	public static Session getNewSessionWithTransaction() throws RuntimeException {
 		if (mySessionFactory == null) {
 			tryToInitializeSessionFactory();
