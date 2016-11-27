@@ -1,10 +1,8 @@
 package logic.diet;
 
-import database.controller.DatabaseController;
 import database.entities.User;
 import database.tools.UserTools; 
 
-//based on http://www.budujmase.pl/diety/o-dietach/6297-obliczanie-wymaganej-ilosci-kalorii-krok-po-kroku.html
 
 public class EnergyRequirementCalculator {
 
@@ -12,7 +10,7 @@ public class EnergyRequirementCalculator {
 		float weight = UserTools.retrieveActualWeight(user);
 		int height = user.getHeight();
 		int age = UserTools.calculateAge(user);
-		Character sex = user.getSex();
+		char sex = user.getSex();
 		float physicalActivityFactor = 1f + user.getLifeStyle()*0.2f;
 		float somatypeFactor = translateSomatypeToFactor(user.getSomatotype());
 		
@@ -29,7 +27,7 @@ public class EnergyRequirementCalculator {
 		case 'f':
 			return 655f + 9.6f*weight + 1.85f*height - 4.7f*age;
 		default:
-			throw new IllegalArgumentException("Illegal sex identifier.");
+			throw new IllegalArgumentException("Unknown sex identifier.");
 		}
 	}
 	
@@ -46,15 +44,8 @@ public class EnergyRequirementCalculator {
 		case 3:
 			return 0.1f;	//endomorphic
 		default:
-			throw new IllegalArgumentException("Illegal somatype code.");
+			throw new IllegalArgumentException("Unknown somatype code.");
 		}
-	}
-	
-	public static void main(String[] args) {
-		User piotr = DatabaseController.getEntityByID(User.class, 13);
-		
-		piotr.setSomatotype(3);
-		System.out.print(performCalculation(piotr));
 	}
 
 }

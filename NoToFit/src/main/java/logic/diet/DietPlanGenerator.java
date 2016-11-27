@@ -32,7 +32,7 @@ public class DietPlanGenerator {
 
 			newDietDays = Sets.newHashSet();
 			for (DietDayConfiguration dayConfiguration : dietDayConfigurations) {
-				if (!isMealsLibraryBigEnough(dayConfiguration) || caloriesToleranceFactor >= caloriesToleranceLimit) {
+				if (isMealsLibraryTooLess(dayConfiguration) || toleranceExceeded(caloriesToleranceFactor)) {
 					throw new UnsupportedOperationException(MSG_TOO_LESS_MEALS);
 				}
 				Dietday dietDay = mealChooser.generateDietDay(dayConfiguration, newDiet);
@@ -46,8 +46,12 @@ public class DietPlanGenerator {
 		return newDiet;
 	}
 
-	private static boolean isMealsLibraryBigEnough(DietDayConfiguration dayConfig) {
-		return MealChooser.isMealsLibraryBigEnough(dayConfig);
+	private static boolean toleranceExceeded(float caloriesToleranceFactor) {
+		return caloriesToleranceFactor >= caloriesToleranceLimit;
+	}
+
+	private static boolean isMealsLibraryTooLess(DietDayConfiguration dayConfig) {
+		return !MealChooser.isMealsLibraryBigEnough(dayConfig);
 	}
 
 	private static Diet initializeDietPrototype(DietGenerationPreferences dietPreferences) {

@@ -3,12 +3,14 @@ package logic.diet;
 import java.util.Date;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 import database.entities.User;
 
 public class DietGenerationPreferences {
 
 	private static final int ONE_DAY_IN_MILISECONDS = 86400000;
-	
+
 	private User user;
 	private String dietName;
 	private int dietPeriodInDays;
@@ -16,18 +18,16 @@ public class DietGenerationPreferences {
 	private Date firstDietDay;
 	private List<DietDayConfiguration> dayMealsPreferences;
 
-	
 	public DietGenerationPreferences() {
 		setFirstDietDay(new Date());
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
-		if (user == null)
-			throw new IllegalArgumentException("user must not be null!");
+		Preconditions.checkNotNull(user);
 		this.user = user;
 	}
 
@@ -36,8 +36,7 @@ public class DietGenerationPreferences {
 	}
 
 	public void setDietName(String dietName) {
-		if (dietName.length() > 30)
-			throw new IllegalArgumentException("dietName String is too long!");
+		Preconditions.checkArgument(dietName.length() < 30);
 		this.dietName = dietName;
 	}
 
@@ -72,8 +71,8 @@ public class DietGenerationPreferences {
 	private void setFirstDietDay(Date firstDietDay) {
 		this.firstDietDay = firstDietDay;
 	}
-	
-	public Date getLastDietDay(){
+
+	public Date getLastDietDay() {
 		long inMiliseconds = getFirstDietDay().getTime() + dietPeriodInDays * ONE_DAY_IN_MILISECONDS;
 		return new Date(inMiliseconds);
 	}
