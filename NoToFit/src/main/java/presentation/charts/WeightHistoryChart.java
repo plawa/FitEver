@@ -1,5 +1,6 @@
 package presentation.charts;
 
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -20,7 +21,6 @@ import javafx.scene.paint.Color;
 public class WeightHistoryChart {
 	private static final String Y_AXIS_TITLE = "Weight (kg)";
 	private static final String X_AXIS_TITLE = "Day of Month";
-	private static final String CHART_TITLE = "Progress Monitoring";
 	private static final String SERIES_TITLE = "Series";
 
 	private static final float INITIAL_LOWER_BOUND = 50f;
@@ -36,6 +36,7 @@ public class WeightHistoryChart {
 	public void setWeightHistorySeries(String seriesName, Collection<Weighthistory> weightHistoryEntries) {
 		cleanChart();
 		allSeries.add(new Series<>(SERIES_TITLE, convertCollectionToChartDataObservableList(weightHistoryEntries)));
+		refreshYAxisRangle();
 	}
 
 	private ObservableList<Data<Number, Number>> convertCollectionToChartDataObservableList(
@@ -54,7 +55,8 @@ public class WeightHistoryChart {
 
 		allSeries.get(0).getData()
 				.add(new Data<>(newWeightHistoryEntry.getId().getDate().getDate(), newWeightHistoryEntry.getWeight()));
-		recalculateYAxisBounds();
+		refreshYAxisRangle();
+	//	recalculateYAxisBounds();
 	}
 
 	public Scene createScene() {
@@ -94,17 +96,17 @@ public class WeightHistoryChart {
 		return yAxis;
 	}
 
-	public void recalculateYAxisBounds() {
-		float lowestWeight = INITIAL_LOWER_BOUND;
-		float highestWeight = INITIAL_UPPER_BOUND;
-
-		List<Data<Number, Number>> sorted = getDataSortedByWeight();
-		if (sorted != null && !sorted.isEmpty()) {
-			lowestWeight = sorted.get(0).getYValue().floatValue() - 0.2f;
-			highestWeight = sorted.get(sorted.size() - 1).getYValue().floatValue() + 0.2f;
-		}
-		updateYAxis(lowestWeight, highestWeight);
-	}
+//	public void recalculateYAxisBounds() {
+//		float lowestWeight = INITIAL_LOWER_BOUND;
+//		float highestWeight = INITIAL_UPPER_BOUND;
+//
+//		List<Data<Number, Number>> sorted = getDataSortedByWeight();
+//		if (sorted != null && !sorted.isEmpty()) {
+//			lowestWeight = sorted.get(0).getYValue().floatValue() - 0.2f;
+//			highestWeight = sorted.get(sorted.size() - 1).getYValue().floatValue() + 0.2f;
+//		}
+//		refreshYAxisRangle(lowestWeight, highestWeight);
+//	}
 
 	private List<Data<Number, Number>> getDataSortedByWeight() {
 		if (allSeries.isEmpty() || allSeries.get(0).getData().isEmpty()) {
@@ -119,10 +121,9 @@ public class WeightHistoryChart {
 		return sorted;
 	}
 
-	private void updateYAxis(float lowerBound, float upperBound) {
+	private void refreshYAxisRangle() {
 		NumberAxis numberAxis = (NumberAxis) lineChart.getYAxis();
-		numberAxis.setLowerBound(lowerBound);
-		numberAxis.setUpperBound(upperBound);
+		numberAxis.setAutoRanging(true);
 	}
 
 	private void cleanChart() {

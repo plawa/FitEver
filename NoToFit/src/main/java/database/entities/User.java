@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class User extends Entity {
 	private static final long serialVersionUID = 1845285370290031051L;
-	
+
 	private int id;
 	private String name;
 	private String surname;
@@ -18,7 +18,6 @@ public class User extends Entity {
 	private char sex;
 	private int height;
 	private float goalWeight;
-	private Integer fatPercentage;
 	private Character userObjective;
 	private Integer lifeStyle;
 	private Integer somatotype;
@@ -28,34 +27,6 @@ public class User extends Entity {
 	private Set<Workout> workouts = new HashSet<Workout>(0);
 
 	public User() {
-	}
-
-	public User(String name, String surname, Date dateOfBirth, char sex, int height, float goalWeight) {
-		this.name = name;
-		this.surname = surname;
-		this.dateOfBirth = dateOfBirth;
-		this.sex = sex;
-		this.height = height;
-		this.goalWeight = goalWeight;
-	}
-
-	public User(String name, String surname, Date dateOfBirth, char sex, int height, float goalWeight,
-			Integer fatPercentage, Character userObjective, Integer lifeStyle, Integer somatotype, Set<Diet> diets,
-			Shadow shadow, Set<Weighthistory> weighthistories, Set<Workout> workouts) {
-		this.name = name;
-		this.surname = surname;
-		this.dateOfBirth = dateOfBirth;
-		this.sex = sex;
-		this.height = height;
-		this.goalWeight = goalWeight;
-		this.fatPercentage = fatPercentage;
-		this.userObjective = userObjective;
-		this.lifeStyle = lifeStyle;
-		this.somatotype = somatotype;
-		this.diets = diets;
-		this.shadow = shadow;
-		this.weighthistories = weighthistories;
-		this.workouts = workouts;
 	}
 
 	public Integer getId() {
@@ -112,14 +83,6 @@ public class User extends Entity {
 
 	public void setGoalWeight(float goalWeight) {
 		this.goalWeight = goalWeight;
-	}
-
-	public Integer getFatPercentage() {
-		return this.fatPercentage;
-	}
-
-	public void setFatPercentage(Integer fatPercentage) {
-		this.fatPercentage = fatPercentage;
 	}
 
 	public Character getUserObjective() {

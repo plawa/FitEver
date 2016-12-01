@@ -21,6 +21,7 @@ public class WaitDialog extends JDialog {
 	public WaitDialog(String message) {
 		initializeSwingComponents();
 		setMessage(message);
+		//setAlwaysOnTop(true);
 	}
 
 	public void setMessage(String message) {
@@ -35,7 +36,7 @@ public class WaitDialog extends JDialog {
 	private void initializeSwingComponents() {
 		setTitle(DLG_TITLE);
 		setType(Type.POPUP);
-		setBounds(100, 100, 424, 151);
+		setBounds(100, 100, 360, 113);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0 };

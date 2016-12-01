@@ -13,6 +13,7 @@ import java.util.Date;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
@@ -20,10 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -33,6 +32,7 @@ import database.entities.Shadow;
 import database.entities.User;
 import database.entities.Weighthistory;
 import database.entities.WeighthistoryId;
+import database.tools.UserTools;
 import logic.utils.MD5Encrypter;
 import presentation.common.DialogMode;
 import presentation.common.GuiTools;
@@ -55,14 +55,13 @@ public class MaintainUserDialog extends JDialog {
 	private JComboBox<String> comboBoxSex;
 	private JComboBox<String> comboBoxObjective;
 	private JFormattedTextField formatTxtFldDateOfBirth;
-	private JSpinner spinnerFatPercentage;
 	private JTextField textFieldLogin;
 	private JPasswordField passwordField;
 	private JPasswordField passwordFieldConfirm;
-	private JComboBox<String> comboBoxSomatotype;
 	private JSlider sliderLifeStyle;
 	private DialogMode mode;
 	private JTextArea txtrExampleMessageDescribing;
+	private JCheckBox chckbxIEasilyGet;
 
 	public MaintainUserDialog() {
 		getContentPane().setFocusable(false);
@@ -91,16 +90,16 @@ public class MaintainUserDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle(mode + " User");
 		setModal(true);
-		setBounds(100, 100, 471, 553);
+		setBounds(100, 100, 471, 461);
 	}
 
 	private void initializeLayout() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 49, 59, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 0, 49, 59, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0 };
+		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				1.0, 0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 	}
 
@@ -123,7 +122,7 @@ public class MaintainUserDialog extends JDialog {
 
 		textFieldLogin = new JTextField();
 		GridBagConstraints gbc_textFieldLogin = new GridBagConstraints();
-		gbc_textFieldLogin.gridwidth = 3;
+		gbc_textFieldLogin.gridwidth = 4;
 		gbc_textFieldLogin.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldLogin.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldLogin.gridx = 2;
@@ -142,7 +141,7 @@ public class MaintainUserDialog extends JDialog {
 
 		passwordField = new JPasswordField();
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
-		gbc_passwordField.gridwidth = 3;
+		gbc_passwordField.gridwidth = 4;
 		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_passwordField.gridx = 2;
@@ -160,14 +159,14 @@ public class MaintainUserDialog extends JDialog {
 
 		passwordFieldConfirm = new JPasswordField();
 		GridBagConstraints gbc_passwordFieldConfirm = new GridBagConstraints();
-		gbc_passwordFieldConfirm.gridwidth = 3;
+		gbc_passwordFieldConfirm.gridwidth = 4;
 		gbc_passwordFieldConfirm.insets = new Insets(0, 0, 5, 5);
 		gbc_passwordFieldConfirm.fill = GridBagConstraints.HORIZONTAL;
 		gbc_passwordFieldConfirm.gridx = 2;
 		gbc_passwordFieldConfirm.gridy = 3;
 		getContentPane().add(passwordFieldConfirm, gbc_passwordFieldConfirm);
 
-		JLabel lblName = new JLabel("Name:");
+		JLabel lblName = new JLabel("Name/Surname:");
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.WEST;
@@ -179,33 +178,23 @@ public class MaintainUserDialog extends JDialog {
 		textFieldName = new JTextField();
 		textFieldName.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_textFieldName = new GridBagConstraints();
-		gbc_textFieldName.gridwidth = 3;
 		gbc_textFieldName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldName.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldName.gridx = 2;
 		gbc_textFieldName.gridy = 4;
 		getContentPane().add(textFieldName, gbc_textFieldName);
 		textFieldName.setColumns(10);
-
-		JLabel lblSurname = new JLabel("Surname:");
-		lblSurname.setFont(new Font("Tahoma", Font.BOLD, 11));
-		GridBagConstraints gbc_lblSurname = new GridBagConstraints();
-		gbc_lblSurname.anchor = GridBagConstraints.WEST;
-		gbc_lblSurname.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSurname.gridx = 1;
-		gbc_lblSurname.gridy = 5;
-		getContentPane().add(lblSurname, gbc_lblSurname);
-
-		textFieldSurname = new JTextField();
-		textFieldSurname.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_textFieldSurname = new GridBagConstraints();
-		gbc_textFieldSurname.gridwidth = 3;
-		gbc_textFieldSurname.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldSurname.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldSurname.gridx = 2;
-		gbc_textFieldSurname.gridy = 5;
-		getContentPane().add(textFieldSurname, gbc_textFieldSurname);
-		textFieldSurname.setColumns(10);
+		
+				textFieldSurname = new JTextField();
+				textFieldSurname.setHorizontalAlignment(SwingConstants.LEFT);
+				GridBagConstraints gbc_textFieldSurname = new GridBagConstraints();
+				gbc_textFieldSurname.gridwidth = 3;
+				gbc_textFieldSurname.fill = GridBagConstraints.HORIZONTAL;
+				gbc_textFieldSurname.insets = new Insets(0, 0, 5, 5);
+				gbc_textFieldSurname.gridx = 3;
+				gbc_textFieldSurname.gridy = 4;
+				getContentPane().add(textFieldSurname, gbc_textFieldSurname);
+				textFieldSurname.setColumns(10);
 
 		JLabel lblSex = new JLabel("Sex:");
 		lblSex.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -213,17 +202,17 @@ public class MaintainUserDialog extends JDialog {
 		gbc_lblSex.anchor = GridBagConstraints.WEST;
 		gbc_lblSex.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSex.gridx = 1;
-		gbc_lblSex.gridy = 6;
+		gbc_lblSex.gridy = 5;
 		getContentPane().add(lblSex, gbc_lblSex);
 
 		comboBoxSex = new JComboBox<String>();
 		comboBoxSex.setModel(new DefaultComboBoxModel<String>(new String[] { "Male", "Female" }));
 		GridBagConstraints gbc_comboBoxSex = new GridBagConstraints();
-		gbc_comboBoxSex.gridwidth = 3;
+		gbc_comboBoxSex.gridwidth = 4;
 		gbc_comboBoxSex.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxSex.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxSex.gridx = 2;
-		gbc_comboBoxSex.gridy = 6;
+		gbc_comboBoxSex.gridy = 5;
 		getContentPane().add(comboBoxSex, gbc_comboBoxSex);
 
 		JLabel lblDateOfBirth = new JLabel("Date of Birth:");
@@ -232,17 +221,17 @@ public class MaintainUserDialog extends JDialog {
 		gbc_lblDateOfBirth.anchor = GridBagConstraints.WEST;
 		gbc_lblDateOfBirth.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDateOfBirth.gridx = 1;
-		gbc_lblDateOfBirth.gridy = 7;
+		gbc_lblDateOfBirth.gridy = 6;
 		getContentPane().add(lblDateOfBirth, gbc_lblDateOfBirth);
 
 		formatTxtFldDateOfBirth = new JFormattedTextField(GuiTools.getDefaultDateMaskFormatter());
 		formatTxtFldDateOfBirth.setInputVerifier(GuiTools.getDefaultDateInputVerifier());
 		GridBagConstraints gbc_formatTxtFldDate = new GridBagConstraints();
-		gbc_formatTxtFldDate.gridwidth = 3;
+		gbc_formatTxtFldDate.gridwidth = 4;
 		gbc_formatTxtFldDate.insets = new Insets(0, 0, 5, 5);
 		gbc_formatTxtFldDate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_formatTxtFldDate.gridx = 2;
-		gbc_formatTxtFldDate.gridy = 7;
+		gbc_formatTxtFldDate.gridy = 6;
 		getContentPane().add(formatTxtFldDateOfBirth, gbc_formatTxtFldDate);
 
 		JLabel lblHeight = new JLabel("Height:");
@@ -250,117 +239,78 @@ public class MaintainUserDialog extends JDialog {
 		gbc_lblHeight.anchor = GridBagConstraints.WEST;
 		gbc_lblHeight.insets = new Insets(0, 0, 5, 5);
 		gbc_lblHeight.gridx = 1;
-		gbc_lblHeight.gridy = 8;
+		gbc_lblHeight.gridy = 7;
 		getContentPane().add(lblHeight, gbc_lblHeight);
 
 		textFieldHeight = new JTextField();
 		GridBagConstraints gbc_textFieldHeight = new GridBagConstraints();
-		gbc_textFieldHeight.gridwidth = 3;
+		gbc_textFieldHeight.gridwidth = 4;
 		gbc_textFieldHeight.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldHeight.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldHeight.gridx = 2;
-		gbc_textFieldHeight.gridy = 8;
+		gbc_textFieldHeight.gridy = 7;
 		getContentPane().add(textFieldHeight, gbc_textFieldHeight);
 		textFieldHeight.setColumns(10);
 
-		JLabel lblWeight = new JLabel("Weight:");
+		JLabel lblWeight = new JLabel("Weight (actual/goal):");
 		GridBagConstraints gbc_lblWeight = new GridBagConstraints();
 		gbc_lblWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_lblWeight.gridx = 1;
-		gbc_lblWeight.gridy = 9;
+		gbc_lblWeight.gridy = 8;
 		getContentPane().add(lblWeight, gbc_lblWeight);
 
 		txtFldStartWeight = new JTextField();
 		GridBagConstraints gbc_textFieldWeight = new GridBagConstraints();
-		gbc_textFieldWeight.gridwidth = 3;
 		gbc_textFieldWeight.insets = new Insets(0, 0, 5, 5);
 		gbc_textFieldWeight.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldWeight.gridx = 2;
-		gbc_textFieldWeight.gridy = 9;
+		gbc_textFieldWeight.gridy = 8;
 		getContentPane().add(txtFldStartWeight, gbc_textFieldWeight);
 		txtFldStartWeight.setColumns(10);
-
-		JLabel lblGoalWeight = new JLabel("Goal Weight:");
-		GridBagConstraints gbc_lblGoalWeight = new GridBagConstraints();
-		gbc_lblGoalWeight.anchor = GridBagConstraints.WEST;
-		gbc_lblGoalWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_lblGoalWeight.gridx = 1;
-		gbc_lblGoalWeight.gridy = 10;
-		getContentPane().add(lblGoalWeight, gbc_lblGoalWeight);
-
-		txtFldGoalWeight = new JTextField();
-		GridBagConstraints gbc_textFieldGoalWeight = new GridBagConstraints();
-		gbc_textFieldGoalWeight.gridwidth = 3;
-		gbc_textFieldGoalWeight.insets = new Insets(0, 0, 5, 5);
-		gbc_textFieldGoalWeight.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldGoalWeight.gridx = 2;
-		gbc_textFieldGoalWeight.gridy = 10;
-		getContentPane().add(txtFldGoalWeight, gbc_textFieldGoalWeight);
-		txtFldGoalWeight.setColumns(10);
-
-		JLabel lblFatPercentage = new JLabel("Fat Percentage (%):");
-		GridBagConstraints gbc_lblFatPercentage = new GridBagConstraints();
-		gbc_lblFatPercentage.anchor = GridBagConstraints.WEST;
-		gbc_lblFatPercentage.insets = new Insets(0, 0, 5, 5);
-		gbc_lblFatPercentage.gridx = 1;
-		gbc_lblFatPercentage.gridy = 11;
-		getContentPane().add(lblFatPercentage, gbc_lblFatPercentage);
-
-		spinnerFatPercentage = new JSpinner();
-		spinnerFatPercentage.setModel(new SpinnerNumberModel(0, 0, 40, 1));
-		GridBagConstraints gbc_spinnerFatPercentage = new GridBagConstraints();
-		gbc_spinnerFatPercentage.fill = GridBagConstraints.HORIZONTAL;
-		gbc_spinnerFatPercentage.gridwidth = 3;
-		gbc_spinnerFatPercentage.insets = new Insets(0, 0, 5, 5);
-		gbc_spinnerFatPercentage.gridx = 2;
-		gbc_spinnerFatPercentage.gridy = 11;
-		getContentPane().add(spinnerFatPercentage, gbc_spinnerFatPercentage);
+		
+				txtFldGoalWeight = new JTextField();
+				GridBagConstraints gbc_textFieldGoalWeight = new GridBagConstraints();
+				gbc_textFieldGoalWeight.gridwidth = 3;
+				gbc_textFieldGoalWeight.insets = new Insets(0, 0, 5, 5);
+				gbc_textFieldGoalWeight.fill = GridBagConstraints.HORIZONTAL;
+				gbc_textFieldGoalWeight.gridx = 3;
+				gbc_textFieldGoalWeight.gridy = 8;
+				getContentPane().add(txtFldGoalWeight, gbc_textFieldGoalWeight);
+				txtFldGoalWeight.setColumns(10);
 
 		JLabel lblMainGoal = new JLabel("Main Goal:");
 		GridBagConstraints gbc_lblMainGoal = new GridBagConstraints();
 		gbc_lblMainGoal.anchor = GridBagConstraints.WEST;
 		gbc_lblMainGoal.insets = new Insets(0, 0, 5, 5);
 		gbc_lblMainGoal.gridx = 1;
-		gbc_lblMainGoal.gridy = 12;
+		gbc_lblMainGoal.gridy = 9;
 		getContentPane().add(lblMainGoal, gbc_lblMainGoal);
 
 		comboBoxObjective = new JComboBox<String>();
 		comboBoxObjective
 				.setModel(new DefaultComboBoxModel<String>(new String[] { "Mass Gain", "Reduction", "Strength" }));
 		GridBagConstraints gbc_comboBoxUserObjective = new GridBagConstraints();
-		gbc_comboBoxUserObjective.gridwidth = 3;
 		gbc_comboBoxUserObjective.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBoxUserObjective.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxUserObjective.gridx = 2;
-		gbc_comboBoxUserObjective.gridy = 12;
+		gbc_comboBoxUserObjective.gridy = 9;
 		getContentPane().add(comboBoxObjective, gbc_comboBoxUserObjective);
-
-		JLabel lblSomatotype = new JLabel("Somatotype:");
-		GridBagConstraints gbc_lblSomatotype = new GridBagConstraints();
-		gbc_lblSomatotype.anchor = GridBagConstraints.WEST;
-		gbc_lblSomatotype.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSomatotype.gridx = 1;
-		gbc_lblSomatotype.gridy = 13;
-		getContentPane().add(lblSomatotype, gbc_lblSomatotype);
-
-		comboBoxSomatotype = new JComboBox<String>();
-		comboBoxSomatotype.setModel(new DefaultComboBoxModel<String>(
-				new String[] { "Undefined", "Ectomorphic", "Endomorphic", "Mesomorphic" }));
-		GridBagConstraints gbc_comboBoxSomatotype = new GridBagConstraints();
-		gbc_comboBoxSomatotype.gridwidth = 3;
-		gbc_comboBoxSomatotype.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxSomatotype.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBoxSomatotype.gridx = 2;
-		gbc_comboBoxSomatotype.gridy = 13;
-		getContentPane().add(comboBoxSomatotype, gbc_comboBoxSomatotype);
+		
+				chckbxIEasilyGet = new JCheckBox("I easily get fat");
+				GridBagConstraints gbc_chckbxIEasilyGet = new GridBagConstraints();
+				gbc_chckbxIEasilyGet.gridwidth = 3;
+				gbc_chckbxIEasilyGet.insets = new Insets(0, 0, 5, 5);
+				gbc_chckbxIEasilyGet.gridx = 3;
+				gbc_chckbxIEasilyGet.gridy = 9;
+				getContentPane().add(chckbxIEasilyGet, gbc_chckbxIEasilyGet);
 
 		JLabel lblLifeStyle = new JLabel("Life Style:");
 		GridBagConstraints gbc_lblLifeStyle = new GridBagConstraints();
 		gbc_lblLifeStyle.anchor = GridBagConstraints.WEST;
 		gbc_lblLifeStyle.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLifeStyle.gridx = 1;
-		gbc_lblLifeStyle.gridy = 14;
+		gbc_lblLifeStyle.gridy = 10;
 		getContentPane().add(lblLifeStyle, gbc_lblLifeStyle);
 
 		txtrExampleMessageDescribing = new JTextArea();
@@ -373,11 +323,11 @@ public class MaintainUserDialog extends JDialog {
 		txtrExampleMessageDescribing.setEnabled(false);
 		txtrExampleMessageDescribing.setLineWrap(true);
 		GridBagConstraints gbc_txtrExampleMessageDescribing = new GridBagConstraints();
-		gbc_txtrExampleMessageDescribing.gridwidth = 3;
+		gbc_txtrExampleMessageDescribing.gridwidth = 4;
 		gbc_txtrExampleMessageDescribing.insets = new Insets(0, 0, 5, 5);
 		gbc_txtrExampleMessageDescribing.fill = GridBagConstraints.BOTH;
 		gbc_txtrExampleMessageDescribing.gridx = 2;
-		gbc_txtrExampleMessageDescribing.gridy = 15;
+		gbc_txtrExampleMessageDescribing.gridy = 11;
 		getContentPane().add(txtrExampleMessageDescribing, gbc_txtrExampleMessageDescribing);
 
 		sliderLifeStyle = new JSlider();
@@ -396,17 +346,17 @@ public class MaintainUserDialog extends JDialog {
 		sliderLifeStyle.setValue(3);
 		GridBagConstraints gbc_sliderLifeStyle = new GridBagConstraints();
 		gbc_sliderLifeStyle.fill = GridBagConstraints.HORIZONTAL;
-		gbc_sliderLifeStyle.gridwidth = 3;
+		gbc_sliderLifeStyle.gridwidth = 4;
 		gbc_sliderLifeStyle.insets = new Insets(0, 0, 5, 5);
 		gbc_sliderLifeStyle.gridx = 2;
-		gbc_sliderLifeStyle.gridy = 14;
+		gbc_sliderLifeStyle.gridy = 10;
 		getContentPane().add(sliderLifeStyle, gbc_sliderLifeStyle);
 
 		Component horizontalStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
 		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
 		gbc_horizontalStrut.gridx = 0;
-		gbc_horizontalStrut.gridy = 17;
+		gbc_horizontalStrut.gridy = 12;
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 		{
 			JButton okButton = new JButton("Save");
@@ -417,8 +367,8 @@ public class MaintainUserDialog extends JDialog {
 			});
 			GridBagConstraints gbc_okButton = new GridBagConstraints();
 			gbc_okButton.insets = new Insets(0, 0, 5, 5);
-			gbc_okButton.gridx = 3;
-			gbc_okButton.gridy = 17;
+			gbc_okButton.gridx = 4;
+			gbc_okButton.gridy = 12;
 			getContentPane().add(okButton, gbc_okButton);
 			okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(okButton);
@@ -427,8 +377,8 @@ public class MaintainUserDialog extends JDialog {
 			JButton cancelButton = new JButton("Cancel");
 			GridBagConstraints gbc_cancelButton = new GridBagConstraints();
 			gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
-			gbc_cancelButton.gridx = 4;
-			gbc_cancelButton.gridy = 17;
+			gbc_cancelButton.gridx = 5;
+			gbc_cancelButton.gridy = 12;
 			getContentPane().add(cancelButton, gbc_cancelButton);
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -441,15 +391,15 @@ public class MaintainUserDialog extends JDialog {
 		Component horizontalStrut1 = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_horizontalStrut1 = new GridBagConstraints();
 		gbc_horizontalStrut1.insets = new Insets(0, 0, 5, 0);
-		gbc_horizontalStrut1.gridx = 5;
-		gbc_horizontalStrut1.gridy = 17;
+		gbc_horizontalStrut1.gridx = 6;
+		gbc_horizontalStrut1.gridy = 12;
 		getContentPane().add(horizontalStrut1, gbc_horizontalStrut1);
 
 		Component verticalStrut_1 = Box.createVerticalStrut(10);
 		GridBagConstraints gbc_verticalStrut_1 = new GridBagConstraints();
 		gbc_verticalStrut_1.insets = new Insets(0, 0, 0, 5);
 		gbc_verticalStrut_1.gridx = 2;
-		gbc_verticalStrut_1.gridy = 18;
+		gbc_verticalStrut_1.gridy = 13;
 		getContentPane().add(verticalStrut_1, gbc_verticalStrut_1);
 	}
 
@@ -462,12 +412,15 @@ public class MaintainUserDialog extends JDialog {
 		comboBoxSex.setSelectedItem(Translator.parseSexCharToString(userMaintained.getSex()));
 		formatTxtFldDateOfBirth.setText(GuiTools.parseDateToString(userMaintained.getDateOfBirth()));
 		textFieldHeight.setText(Integer.toString(userMaintained.getHeight()));
-		//txtFldStartWeight.setText(Float.toString(userMaintained.getStartWeight()));
+		txtFldStartWeight.setText(Float.toString(UserTools.retrieveInitialWeight(userMaintained)));
 		txtFldGoalWeight.setText(Float.toString(userMaintained.getGoalWeight()));
-		spinnerFatPercentage.setValue(userMaintained.getFatPercentage());
 		comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(userMaintained.getUserObjective()));
-		comboBoxSomatotype.setSelectedItem(Translator.parseSomatotypeIntegerToString(userMaintained.getSomatotype()));
+		chckbxIEasilyGet.setSelected(isUserEasilyGetsFat());
 		sliderLifeStyle.setValue(userMaintained.getLifeStyle());
+	}
+
+	private boolean isUserEasilyGetsFat() {
+		return userMaintained.getSomatotype() == 3;
 	}
 
 	private void lockImmutableFields() {
@@ -519,13 +472,12 @@ public class MaintainUserDialog extends JDialog {
 		userMaintained.setDateOfBirth(GuiTools.parseStringToDate(formatTxtFldDateOfBirth.getText()));
 		userMaintained.setSex(Translator.parseSexStringToChar((String) comboBoxSex.getSelectedItem()));
 		userMaintained.setHeight(Integer.parseInt(textFieldHeight.getText()));
-		userMaintained.getWeighthistories().add(new Weighthistory(new WeighthistoryId(userMaintained, new Date()), startWeight));
+		userMaintained.getWeighthistories()
+				.add(new Weighthistory(new WeighthistoryId(userMaintained, new Date()), startWeight));
 		userMaintained.setGoalWeight(goalWeight);
-		userMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
 		userMaintained
 				.setUserObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
-		userMaintained.setSomatotype(
-				Translator.parseSomatotypeStringToInteger((String) comboBoxSomatotype.getSelectedItem()));
+		userMaintained.setSomatotype(chckbxIEasilyGet.isSelected() ? 3 : 1);
 		userMaintained.setLifeStyle(sliderLifeStyle.getValue());
 	}
 

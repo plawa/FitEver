@@ -1,5 +1,7 @@
 package logic;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -18,7 +20,7 @@ public class ApplicationLauncher {
 
 	private Thread databaseInitThread = initializeDatabaseInitializationThread();
 	private Thread guiThread = initializeApplicationInterfaceThread();
-	private Thread.UncaughtExceptionHandler exceptionHandler = initializeExceptionHandlerThread();
+	private UncaughtExceptionHandler exceptionHandler = initializeExceptionHandlerThread();
 
 	private void launchApplication() {
 		databaseInitThread.setUncaughtExceptionHandler(exceptionHandler);
@@ -34,33 +36,27 @@ public class ApplicationLauncher {
 	}
 
 	private Thread initializeDatabaseInitializationThread() {
-		return new Thread() {
-			@Override
-			public void run() {
-				DatabaseController.tryToInitializeSessionFactory();
-			}
-		};
+		return new Thread(() -> DatabaseController.tryToInitializeSessionFactory());
 	}
 
 	private Thread initializeApplicationInterfaceThread() {
-		return new Thread() {
-			@Override
-			public void run() {
-				User loggedUser = new LoginDialog().getAuthorizedUser();
-				new MainFrame(loggedUser);
-			}
-		};
+		return new Thread(() -> {
+			User loggedUser = new LoginDialog().getAuthorizedUser();
+			new MainFrame(loggedUser);
+		});
 	}
 
-	private Thread.UncaughtExceptionHandler initializeExceptionHandlerThread() {
-		return new Thread.UncaughtExceptionHandler() {
+	private UncaughtExceptionHandler initializeExceptionHandlerThread() {
+		return new UncaughtExceptionHandler() {
 			public void uncaughtException(Thread t, Throwable exception) {
-				exception.printStackTrace();
+				String message;
 				if (exception instanceof ServiceException) {
-					SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, MSG_DATABASE_ERROR, DLG_ERROR_TITLE, 0));
+					message = MSG_DATABASE_ERROR;
 				} else {
-					SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, MSG_FATAL_ERROR, DLG_ERROR_TITLE, 0));
+					message = MSG_FATAL_ERROR;
 				}
+				exception.printStackTrace();
+				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, message, DLG_ERROR_TITLE, 0));
 			}
 		};
 	}

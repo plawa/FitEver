@@ -97,7 +97,7 @@ public class MealChooser {
 
 		Set<Meal> chosenMealSet = Sets.newHashSet();
 		while (chosenMealSet.size() < expectedMealsCount && mealsSourceLib.size() > 0) {
-			Meal meal = popRandomItemFromList(mealsSourceLib);
+			Meal meal = getAndRemoveRandomItemFromList(mealsSourceLib);
 			int mealCalories = MealTools.countMealCalories(meal); 
 			if (mealCalories < mealCaloriesUpperBound && mealCalories > mealCaloriesLowerBound)
 				chosenMealSet.add(meal);
@@ -105,7 +105,7 @@ public class MealChooser {
 		return chosenMealSet;
 	}
 
-	private Meal popRandomItemFromList(List<Meal> mealsLib) {
+	private Meal getAndRemoveRandomItemFromList(List<Meal> mealsLib) {
 		int randomIndex = randomGenerator.nextInt(mealsLib.size());
 		Meal randomMeal = mealsLib.get(randomIndex);
 		mealsLib.remove(randomIndex);

@@ -50,13 +50,10 @@ public class DatabaseController {
 		return resultList;
 	}
 
-	public static Shadow getShadowEntityByLogin(String login) throws RuntimeException {		
-		Shadow result = (Shadow) getNewSessionWithTransaction()
-				.createCriteria(Shadow.class)
-				.add(Restrictions.eq("login", login))
-				.setFetchMode("user", FetchMode.JOIN)
-				.uniqueResult();
-		
+	public static Shadow getShadowEntityByLogin(String login) throws RuntimeException {
+		Shadow result = (Shadow) getNewSessionWithTransaction().createCriteria(Shadow.class)
+				.add(Restrictions.eq("login", login)).setFetchMode("user", FetchMode.JOIN).uniqueResult();
+
 		finalizeCurrentTransactionAndSession();
 		return result;
 	}
@@ -67,7 +64,7 @@ public class DatabaseController {
 		return resultEntity;
 	}
 
-	public static float getUserWeightSortByDate(User user, boolean getLatest) {
+	public static float getUserWeight(User user, boolean getLatest) {
 		if (getRowCount(Weighthistory.class) == 0) {
 			throw new IllegalArgumentException(ERR_NO_ROWS_IN_WEIGHT_HISTORY);
 		}
@@ -96,11 +93,12 @@ public class DatabaseController {
 		finalizeCurrentTransactionAndSession();
 		return resultList;
 	}
-	
+
 	public static <T extends Entity> T getEntityByUniqueParameter(Class<T> entityType, String paramName,
 			String paramValue) {
 		Session session = getNewSessionWithTransaction();
-		T resultEntity = (T) session.createCriteria(entityType).add(Restrictions.eq(paramName, paramValue)).uniqueResult();
+		T resultEntity = (T) session.createCriteria(entityType).add(Restrictions.eq(paramName, paramValue))
+				.uniqueResult();
 		finalizeCurrentTransactionAndSession();
 		return resultEntity;
 	}

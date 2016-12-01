@@ -1,9 +1,8 @@
 package logic.diet;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.google.common.collect.Sets;
 
 import database.entities.Diet;
 import database.entities.Dietday;
@@ -30,7 +29,7 @@ public class DietPlanGenerator {
 			caloriesToleranceFactor += caloriesToleranceStep;
 			MealChooser mealChooser = new MealChooser(caloriesToleranceFactor);
 
-			newDietDays = Sets.newHashSet();
+			newDietDays = new HashSet<>();
 			for (DietDayConfiguration dayConfiguration : dietDayConfigurations) {
 				if (isMealsLibraryTooLess(dayConfiguration) || toleranceExceeded(caloriesToleranceFactor)) {
 					throw new UnsupportedOperationException(MSG_TOO_LESS_MEALS);

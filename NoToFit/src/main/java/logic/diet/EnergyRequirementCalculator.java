@@ -40,11 +40,11 @@ public class EnergyRequirementCalculator {
 		case 1:
 			return 0.2f;	//ectomorphic
 		case 2:
-			return 0.15f;	//mesomorphic
+			return 0.15f;	//mesomorphic (value currently not in use)
 		case 3:
 			return 0.1f;	//endomorphic
 		default:
-			throw new IllegalArgumentException("Unknown somatype code.");
+			throw new IllegalArgumentException("Unknown somatotype code.");
 		}
 	}
 

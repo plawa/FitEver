@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import org.hibernate.service.spi.ServiceException;
@@ -31,6 +32,7 @@ import org.hibernate.service.spi.ServiceException;
 import database.entities.User;
 import logic.Login;
 import net.miginfocom.swing.MigLayout;
+import presentation.common.WaitDialog;
 import presentation.user.MaintainUserDialog;
 
 public class LoginDialog extends JDialog {
@@ -41,6 +43,8 @@ public class LoginDialog extends JDialog {
 	private static final String LBL_MSG_LOGO_NOT_FOUND = "Error! Logo file not found.";
 	private static final String MSG_LOGIN_DENIED = "Username or password incorrect.";
 	private static final String MSG_DATABASE_ERROR = "Error initializing database connection!";
+
+	private final WaitDialog waitDlg = new WaitDialog("Logging in...");
 
 	private User authorizedUser = null;
 	private final JPanel contentPanel = new JPanel();
@@ -148,6 +152,7 @@ public class LoginDialog extends JDialog {
 			{
 				okButton = new JButton("Login");
 				okButton.addActionListener(new ActionListener() {
+
 					public void actionPerformed(ActionEvent arg0) {
 						loginButtonPressed();
 					}
@@ -187,16 +192,32 @@ public class LoginDialog extends JDialog {
 
 	private void loginButtonPressed() {
 		try {
-			authorizedUser = Login.performLogin(txtFldLogin.getText(), passFld.getText());
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					waitDlg.setLocationRelativeTo(LoginDialog.this);
+					waitDlg.setAlwaysOnTop(true);
+					waitDlg.setVisible(true);
+					authorizedUser = Login.performLogin(txtFldLogin.getText(), passFld.getText());
+					return null;
+				}
+				@Override
+				protected void done() {
+					waitDlg.setVisible(false);
+					if (authorizedUser == null) {
+						JOptionPane.showMessageDialog(LoginDialog.this, MSG_LOGIN_DENIED, "Error!", 2);
+					} else {
+						tearDown();
+					}
+				}
+
+			}.execute();
 		} catch (ServiceException err) {
 			err.printStackTrace();
 			JOptionPane.showMessageDialog(LoginDialog.this, MSG_DATABASE_ERROR, "Error!", 0);
 			return;
 		}
-		if (authorizedUser == null)
-			JOptionPane.showMessageDialog(LoginDialog.this, MSG_LOGIN_DENIED, "Error!", 2);
-		else
-			tearDown();
+
 	}
 
 	private JLabel loadHeaderImageLabel() {

@@ -60,7 +60,7 @@ public class UserPanel extends JPanel {
 	private final static String MSG_BMI_OK = "Good";
 	private final static String MSG_BMI_TOO_LOW = "Underweight";
 	private final static String MSG_BMI_TOO_HIGH = "Overweight";
-	private WeightHistoryChart chart;
+	private WeightHistoryChart chart; 
 	private JComboBox<Month> comboBoxMonth;
 
 	public UserPanel() {
@@ -112,7 +112,6 @@ public class UserPanel extends JPanel {
 		lblValueStartWeight.setText(String.format("%.1f kg", UserTools.retrieveInitialWeight(userDisplaying)));
 		lblValueActualWeight.setText(String.format("%.1f kg", userActualWeight));
 		lblValueGoalWeight.setText(String.format("%.1f kg", userDisplaying.getGoalWeight()));
-		lblValueFatPercentage.setText(String.format("%d %%", userDisplaying.getFatPercentage()));
 		lblValueUserObjective.setText(Translator.parseObjectiveCharToString(userDisplaying.getUserObjective()));
 		setBmiLabelsFormatted(UserTools.calculateBMI(userDisplaying));
 	}
@@ -482,13 +481,7 @@ public class UserPanel extends JPanel {
 
 		new Task<Void>() {
 			protected Void call() throws Exception {
-				Platform.runLater(new Runnable() {
-					@Override
-					public void run() {
-						chart.setWeightHistorySeries("Weight Changes History", weightHistory);
-						chart.recalculateYAxisBounds();
-					}
-				});
+				Platform.runLater(() -> chart.setWeightHistorySeries("Weight Changes History", weightHistory));
 				return null;
 			}
 		}.run();

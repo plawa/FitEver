@@ -22,10 +22,10 @@ public class UserTools {
 	}
 	
 	public static float retrieveActualWeight(final User user) throws IllegalArgumentException {
-		return DatabaseController.getUserWeightSortByDate(user, true);
+		return DatabaseController.getUserWeight(user, true);
 	}
 	
 	public static float retrieveInitialWeight(final User user) throws IllegalArgumentException {
-		return DatabaseController.getUserWeightSortByDate(user, false);
+		return DatabaseController.getUserWeight(user, false);
 	}
 }

@@ -36,7 +36,7 @@ import presentation.meals.AllMealsDialog;
 public class DietsPanel extends JPanel {
 	private static final long serialVersionUID = -3015175045558720497L;
 
-	public static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less meals that match your specific needs.";
+	public static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less meals that are able to cover your specific needs.";
 	private static final String POPUP_HEADER_ERROR = "Error!";
 	private static final String MSG_WAIT_FOR_DIET = "Please wait while your diet is being generated.";
 
