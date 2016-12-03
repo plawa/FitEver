@@ -27,7 +27,7 @@ import presentation.common.Translator;
 public class MaintainMealDialog extends JDialog {
 
 	private static final long serialVersionUID = 7513700313890891626L;
-	private static final String MSG_CONNECTION_LOST = "You have probably lost connection to database.";
+	private static final String MSG_SAVE_ERROR = "Error occured while saving data to database.";
 
 	private Meal mealMaintained;
 	protected DialogMode mode;
@@ -59,9 +59,9 @@ public class MaintainMealDialog extends JDialog {
 		try {
 			performSave();
 			tearDown();
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(this, MSG_CONNECTION_LOST, "Error!", 0);
+			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR, "Error!", 0);
 		}
 	}
 

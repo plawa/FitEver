@@ -61,7 +61,7 @@ public class MaintainUserDialog extends JDialog {
 	private DialogMode mode;
 	private JTextArea txtrExampleMessageDescribing;
 	private JCheckBox chckbxIEasilyGet;
-	
+
 	public MaintainUserDialog() {
 		getContentPane().setFocusable(false);
 		mode = DialogMode.CREATE;
@@ -97,8 +97,8 @@ public class MaintainUserDialog extends JDialog {
 		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 0, 49, 59, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+				Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout);
 	}
 
@@ -183,17 +183,17 @@ public class MaintainUserDialog extends JDialog {
 		gbc_textFieldName.gridy = 4;
 		getContentPane().add(textFieldName, gbc_textFieldName);
 		textFieldName.setColumns(10);
-		
-				textFieldSurname = new JTextField();
-				textFieldSurname.setHorizontalAlignment(SwingConstants.LEFT);
-				GridBagConstraints gbc_textFieldSurname = new GridBagConstraints();
-				gbc_textFieldSurname.gridwidth = 3;
-				gbc_textFieldSurname.fill = GridBagConstraints.HORIZONTAL;
-				gbc_textFieldSurname.insets = new Insets(0, 0, 5, 5);
-				gbc_textFieldSurname.gridx = 3;
-				gbc_textFieldSurname.gridy = 4;
-				getContentPane().add(textFieldSurname, gbc_textFieldSurname);
-				textFieldSurname.setColumns(10);
+
+		textFieldSurname = new JTextField();
+		textFieldSurname.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_textFieldSurname = new GridBagConstraints();
+		gbc_textFieldSurname.gridwidth = 3;
+		gbc_textFieldSurname.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldSurname.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldSurname.gridx = 3;
+		gbc_textFieldSurname.gridy = 4;
+		getContentPane().add(textFieldSurname, gbc_textFieldSurname);
+		textFieldSurname.setColumns(10);
 
 		JLabel lblSex = new JLabel("Sex:");
 		lblSex.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -249,14 +249,14 @@ public class MaintainUserDialog extends JDialog {
 		gbc_textFieldHeight.gridy = 7;
 		getContentPane().add(textFieldHeight, gbc_textFieldHeight);
 		textFieldHeight.setColumns(10);
-		
-				chckbxIEasilyGet = new JCheckBox("I easily get fat");
-				GridBagConstraints gbc_chckbxIEasilyGet = new GridBagConstraints();
-				gbc_chckbxIEasilyGet.gridwidth = 3;
-				gbc_chckbxIEasilyGet.insets = new Insets(0, 0, 5, 5);
-				gbc_chckbxIEasilyGet.gridx = 3;
-				gbc_chckbxIEasilyGet.gridy = 7;
-				getContentPane().add(chckbxIEasilyGet, gbc_chckbxIEasilyGet);
+
+		chckbxIEasilyGet = new JCheckBox("I easily get fat");
+		GridBagConstraints gbc_chckbxIEasilyGet = new GridBagConstraints();
+		gbc_chckbxIEasilyGet.gridwidth = 3;
+		gbc_chckbxIEasilyGet.insets = new Insets(0, 0, 5, 5);
+		gbc_chckbxIEasilyGet.gridx = 3;
+		gbc_chckbxIEasilyGet.gridy = 7;
+		getContentPane().add(chckbxIEasilyGet, gbc_chckbxIEasilyGet);
 
 		JLabel lblWeight = new JLabel("Weight (actual/goal):");
 		GridBagConstraints gbc_lblWeight = new GridBagConstraints();
@@ -274,16 +274,16 @@ public class MaintainUserDialog extends JDialog {
 		gbc_textFieldWeight.gridy = 8;
 		getContentPane().add(txtFldStartWeight, gbc_textFieldWeight);
 		txtFldStartWeight.setColumns(10);
-		
-				txtFldGoalWeight = new JTextField();
-				GridBagConstraints gbc_textFieldGoalWeight = new GridBagConstraints();
-				gbc_textFieldGoalWeight.gridwidth = 3;
-				gbc_textFieldGoalWeight.insets = new Insets(0, 0, 5, 5);
-				gbc_textFieldGoalWeight.fill = GridBagConstraints.HORIZONTAL;
-				gbc_textFieldGoalWeight.gridx = 3;
-				gbc_textFieldGoalWeight.gridy = 8;
-				getContentPane().add(txtFldGoalWeight, gbc_textFieldGoalWeight);
-				txtFldGoalWeight.setColumns(10);
+
+		txtFldGoalWeight = new JTextField();
+		GridBagConstraints gbc_textFieldGoalWeight = new GridBagConstraints();
+		gbc_textFieldGoalWeight.gridwidth = 3;
+		gbc_textFieldGoalWeight.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldGoalWeight.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldGoalWeight.gridx = 3;
+		gbc_textFieldGoalWeight.gridy = 8;
+		getContentPane().add(txtFldGoalWeight, gbc_textFieldGoalWeight);
+		txtFldGoalWeight.setColumns(10);
 
 		JLabel lblLifeStyle = new JLabel("Life Style:");
 		GridBagConstraints gbc_lblLifeStyle = new GridBagConstraints();
@@ -414,7 +414,6 @@ public class MaintainUserDialog extends JDialog {
 		retrieveUserPropertiesFromEnteredValues();
 		boolean operationSucceeded = false;
 
-		
 		switch (mode) {
 		case CREATE:
 			if (!loginNotExists()) {

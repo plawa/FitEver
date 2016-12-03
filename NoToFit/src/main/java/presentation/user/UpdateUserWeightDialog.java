@@ -235,7 +235,7 @@ public class UpdateUserWeightDialog extends JDialog {
 		setModal(true);
 		setTitle("Update Actual User Weight");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 284);
+		setBounds(100, 100, 488, 284);
 	}
 
 	protected void updateButtonPressed() {

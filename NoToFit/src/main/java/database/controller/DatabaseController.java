@@ -1,6 +1,7 @@
 package database.controller;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -21,14 +22,10 @@ import database.entities.Weighthistory;
 
 public class DatabaseController {
 
-	private static final String ERR_NO_ROWS_IN_WEIGHT_HISTORY = "The user hasn't got any entries in WeightHistory table!";
+	private static final String EXCEPTION_NO_ROWS_IN_WEIGHT_HISTORY = "The user hasn't got any entries in WeightHistory table!";
+	
 	private static SessionFactory mySessionFactory;
-
-//	public static <T extends Entity> Object saveEntityToDatabase(T entity) throws RuntimeException {
-//		getNewSessionWithTransaction().persist(entity);
-//		commitCurrentTransactionAndCloseSession();
-//		return entity.getId();
-//	}
+	private static Configuration hibernateConfiguration;
 
 	public static <T extends Entity> Object saveEntityToDatabase(T entity) throws RuntimeException {
 		Session session = getNewSessionWithTransaction();
@@ -75,7 +72,7 @@ public class DatabaseController {
 
 	public static float getUserWeight(User user, boolean getLatest) {
 		if (getRowCount(Weighthistory.class) == 0) {
-			throw new IllegalArgumentException(ERR_NO_ROWS_IN_WEIGHT_HISTORY);
+			throw new IllegalArgumentException(EXCEPTION_NO_ROWS_IN_WEIGHT_HISTORY);
 		}
 
 		Session session = getNewSessionWithTransaction();
@@ -127,14 +124,17 @@ public class DatabaseController {
 	}
 
 	public static void tryToInitializeSessionFactory() throws ServiceException {
-		mySessionFactory = new Configuration().configure().buildSessionFactory();
+		if (hibernateConfiguration == null) {
+			hibernateConfiguration = new Configuration().configure();
+		}
+		mySessionFactory = hibernateConfiguration.buildSessionFactory();
 	}
 
 	public static void commitCurrentTransactionAndCloseSession() {
 		mySessionFactory.getCurrentSession().getTransaction().commit();
 		mySessionFactory.getCurrentSession().close();
 	}
-	
+
 	public static void rollbackCurrentTransactionAndCloseSession() {
 		mySessionFactory.getCurrentSession().getTransaction().rollback();
 		mySessionFactory.getCurrentSession().close();
@@ -147,4 +147,16 @@ public class DatabaseController {
 		}
 	}
 
+	public static void setDatabaseConnectionConfiguration(String databaseUrl, String login, String password){
+		mySessionFactory = null;
+		hibernateConfiguration = new Configuration().configure();
+		
+		Properties properties = new Properties();
+		properties.setProperty("hibernate.connection.url", databaseUrl);
+		properties.setProperty("hibernate.connection.username", login);
+		properties.setProperty("hibernate.connection.password", password);
+		
+		hibernateConfiguration.setProperties(properties);
+	}
+	
 }

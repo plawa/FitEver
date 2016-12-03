@@ -47,7 +47,6 @@ public class WeightHistoryChart {
 	public void addSinglePointToCurrentSeries(Weighthistory newWeight) {
 		Preconditions.checkNotNull(newWeight);
 		Preconditions.checkArgument(!allSeries.isEmpty());
-		Preconditions.checkArgument(!allSeries.get(0).getData().isEmpty());
 
 		allSeries.get(0).getData().add(new Data<>(newWeight.getId().getDate().getDate(), newWeight.getWeight()));
 	}

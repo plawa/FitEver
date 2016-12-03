@@ -38,7 +38,8 @@ public class WorkoutsPanel extends JPanel {
 
 	private static final String POPUP_HEADER_ERROR = "Error!";
 	private static final String MSG_TOO_LESS_EXERCISES = "Workout could not have been generated. Exercises library consists of too less entries";
-	protected static final String MSG_WAIT_FOR_WORKOUT = "Please wait until your workout is being generated.";
+	private static final String MSG_WAIT_FOR_WORKOUT = "Please wait until your workout is being generated.";
+	private static final String MSG_SAVE_ERROR = "Error occured while saving data to database.";
 
 	private User currentUser;
 	private JTable table;
@@ -61,30 +62,35 @@ public class WorkoutsPanel extends JPanel {
 	protected void generateWorkoutPlanButtonPressed() {
 		WorkoutGenerationPreferences preferences = askForWorkoutGenerationPreferences();
 		if (preferences != null) {
-			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+			preferences.setUser(currentUser);
+
+			new SwingWorker<Void, Void>() {
 				private WaitDialog waitDlg = new WaitDialog(MSG_WAIT_FOR_WORKOUT);
-				
+
 				@Override
 				protected Void doInBackground() throws Exception {
 					waitDlg.setLocationRelativeTo(WorkoutsPanel.this);
 					waitDlg.setVisible(true);
-					preferences.setUser(currentUser);
 					Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
 					if (generatedWorkout != null) {
 						currentUser.getWorkouts().add(generatedWorkout);
-						DatabaseController.saveEntityToDatabase(generatedWorkout);
-						refreshTable();
+						try {
+							DatabaseController.saveEntityToDatabase(generatedWorkout);
+							refreshTable();
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(WorkoutsPanel.this, MSG_SAVE_ERROR, POPUP_HEADER_ERROR, 0);
+						}
 					} else {
-						JOptionPane.showMessageDialog(WorkoutsPanel.this, MSG_TOO_LESS_EXERCISES, POPUP_HEADER_ERROR, 0);
+						JOptionPane.showMessageDialog(WorkoutsPanel.this, MSG_TOO_LESS_EXERCISES, POPUP_HEADER_ERROR,
+								0);
 					}
 					return null;
 				}
 
 				protected void done() {
-					waitDlg.setVisible(false);					
+					waitDlg.setVisible(false);
 				};
-			};
-			worker.execute();
+			}.execute();
 		}
 	}
 
@@ -234,8 +240,7 @@ public class WorkoutsPanel extends JPanel {
 		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnGenerateDietPlan.setIcon(generateWorkoutButtonIcon);
 		toolBar.add(btnGenerateDietPlan);
-		
-		
+
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -247,7 +252,7 @@ public class WorkoutsPanel extends JPanel {
 		btnExit.setIcon(exitButtonIcon);
 		toolBar.add(btnExit);
 	}
-	
+
 	protected void exitButtonPressed() {
 		((MainFrame) SwingUtilities.getWindowAncestor(this)).tidyUp();
 	}

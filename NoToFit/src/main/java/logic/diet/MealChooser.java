@@ -121,9 +121,9 @@ public class MealChooser {
 	}
 
 	private void updateLibraries() {
-		breakfastsLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", "b"));
-		mainMealsLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", "m"));
-		suppersLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", "s"));
+		breakfastsLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", 'b'));
+		mainMealsLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", 'm'));
+		suppersLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", 's'));
 	}
 
 }
