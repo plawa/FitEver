@@ -6,7 +6,7 @@ import java.util.Set;
 
 import database.entities.Workout;
 import database.entities.Workoutday;
-import logic.enums.Objective;
+import database.tools.UserTools;
 
 public class WorkoutPlanGenerator {
 
@@ -39,7 +39,7 @@ public class WorkoutPlanGenerator {
 
 	private static WorkoutDayPreferences buildWorkoutDayPreferences(WorkoutGenerationPreferences workoutPreferences) {
 		WorkoutDayPreferences dayPreferences = new WorkoutDayPreferences();
-		dayPreferences.setObjective(Objective.getByChar(workoutPreferences.getUser().getUserObjective()));
+		dayPreferences.setObjective(UserTools.getUserObjective(workoutPreferences.getUser()));
 		dayPreferences.setEquipmentRequired(workoutPreferences.hasUserEquipment());
 		dayPreferences.setDifficultyLevel(workoutPreferences.getPrefferedDifficulty());
 		return dayPreferences;
@@ -51,7 +51,7 @@ public class WorkoutPlanGenerator {
 		newWorkout.setValidTo(workoutPreferences.getLastDayDate());
 		newWorkout.setName(workoutPreferences.getName());
 		newWorkout.setUser(workoutPreferences.getUser());
-		newWorkout.setObjective(workoutPreferences.getUser().getUserObjective());
+		newWorkout.setObjective(UserTools.getUserObjective(workoutPreferences.getUser()).getCharID());
 		return newWorkout;
 	}
 

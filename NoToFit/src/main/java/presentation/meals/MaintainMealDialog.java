@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
+import logic.enums.Objective;
 import presentation.common.DialogMode;
 import presentation.common.Translator;
 
@@ -34,7 +35,7 @@ public class MaintainMealDialog extends JDialog {
 
 	protected JTextField textFieldName;
 	protected JTextField textFieldGrammage;
-	protected JComboBox<String> comboBoxObjective;
+	protected JComboBox<Objective> comboBoxObjective;
 	protected JSpinner spinnerFatPercentage;
 	protected JSpinner spinnerProteinPercentage;
 	protected JSpinner spinnerCarbohydratesPercentage;
@@ -85,8 +86,7 @@ public class MaintainMealDialog extends JDialog {
 		mealMaintained.setCarbohydratesPercentage((Integer) spinnerCarbohydratesPercentage.getValue());
 		mealMaintained.setFatPercentage((Integer) spinnerFatPercentage.getValue());
 		mealMaintained.setProteinPercentage((Integer) spinnerProteinPercentage.getValue());
-		mealMaintained
-				.setObjective(Translator.parseObjectiveStringToChar((String) comboBoxObjective.getSelectedItem()));
+		mealMaintained.setObjective(((Objective) comboBoxObjective.getSelectedItem()).getCharID());
 	}
 
 	protected void initializeFields() {
@@ -96,7 +96,7 @@ public class MaintainMealDialog extends JDialog {
 		spinnerCarbohydratesPercentage.setValue(mealMaintained.getCarbohydratesPercentage());
 		spinnerProteinPercentage.setValue(mealMaintained.getProteinPercentage());
 		spinnerFatPercentage.setValue(mealMaintained.getFatPercentage());
-		comboBoxObjective.setSelectedItem(Translator.parseObjectiveCharToString(mealMaintained.getObjective()));
+		comboBoxObjective.setSelectedItem(Objective.getByChar(mealMaintained.getObjective()));
 	}
 
 	private void initializeSwingComponents() {
@@ -236,9 +236,8 @@ public class MaintainMealDialog extends JDialog {
 		gbc_lblObjective.gridy = 7;
 		getContentPane().add(lblObjective, gbc_lblObjective);
 
-		comboBoxObjective = new JComboBox<String>();
-		comboBoxObjective
-				.setModel(new DefaultComboBoxModel<String>(new String[] { "Mass Gain", "Reduction", "Strength" }));
+		comboBoxObjective = new JComboBox<Objective>();
+		comboBoxObjective.setModel(new DefaultComboBoxModel<Objective>(Objective.values()));
 		GridBagConstraints gbc_comboBoxObjective = new GridBagConstraints();
 		gbc_comboBoxObjective.gridwidth = 3;
 		gbc_comboBoxObjective.insets = new Insets(0, 0, 5, 5);

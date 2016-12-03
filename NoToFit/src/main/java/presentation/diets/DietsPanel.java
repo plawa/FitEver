@@ -38,7 +38,7 @@ public class DietsPanel extends JPanel {
 
 	public static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less meals that are able to cover your specific needs.";
 	private static final String POPUP_HEADER_ERROR = "Error!";
-	private static final String MSG_WAIT_FOR_DIET = "Please wait while your diet is being generated.";
+	private static final String MSG_WAIT_FOR_DIET = "Please wait while your diet is generated.";
 
 	private JTable table;
 	private DietsTableModel tableModel;
@@ -91,8 +91,8 @@ public class DietsPanel extends JPanel {
 					}
 					waitDlg.setVisible(false);
 					waitDlg.dispose();
-					if(!successfullyGenerated){
-						JOptionPane.showMessageDialog(DietsPanel.this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);						
+					if (!successfullyGenerated) {
+						JOptionPane.showMessageDialog(DietsPanel.this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);
 					}
 				};
 
@@ -241,6 +241,7 @@ public class DietsPanel extends JPanel {
 			}
 		});
 		table.setFillsViewportHeight(true);
+		table.setAutoCreateRowSorter(true);
 		scrollPane.setViewportView(table);
 
 		Component bottomStrut = Box.createVerticalStrut(20);

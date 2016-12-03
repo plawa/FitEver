@@ -97,15 +97,5 @@ public class WorkoutGenerationPreferences {
 	public void setHasEquipment(boolean hasEquipment) {
 		this.hasEquipment = hasEquipment;
 	}
-	
-	public static void main(String[] args) {
-		WorkoutGenerationPreferences wgp = new WorkoutGenerationPreferences();
-		wgp.setTrainingDaysPerWeek(3);
-		wgp.setWorkoutPeriodInWeeks(4);
-		
-		for (Date d : wgp.retrieveDatesForWorkoutDays()){
-			System.out.println(d);
-		}
-	}
 
 }

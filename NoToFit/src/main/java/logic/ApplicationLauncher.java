@@ -78,14 +78,9 @@ public class ApplicationLauncher {
 
 	private UncaughtExceptionHandler initializeExceptionHandlerThread() {
 		return new UncaughtExceptionHandler() {
-			public void uncaughtException(Thread t, Throwable exception) {
-				String message;
-				if (exception instanceof ServiceException) {
-					message = MSG_DATABASE_ERROR;
-				} else {
-					message = MSG_FATAL_ERROR;
-				}
-				exception.printStackTrace();
+			public void uncaughtException(Thread t, Throwable e) {
+				e.printStackTrace();
+				String message = (e instanceof ServiceException) ? MSG_DATABASE_ERROR : MSG_FATAL_ERROR;
 				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, message, DLG_ERROR_TITLE, 0));
 			}
 		};

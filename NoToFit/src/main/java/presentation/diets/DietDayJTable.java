@@ -20,6 +20,7 @@ public class DietDayJTable extends JTable {
 		setFillsViewportHeight(true);
 		model = new MealsTableModel(dayMeals);
 		setModel(model);
+		setAutoCreateRowSorter(true);
 		getColumnModel().getColumn(0).setPreferredWidth(220);
 		addCustomListener();
 	}

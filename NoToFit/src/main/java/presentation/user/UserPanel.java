@@ -111,7 +111,7 @@ public class UserPanel extends JPanel {
 		lblValueStartWeight.setText(String.format("%.1f kg", UserTools.retrieveInitialWeight(currentUser)));
 		lblValueActualWeight.setText(String.format("%.1f kg", userActualWeight));
 		lblValueGoalWeight.setText(String.format("%.1f kg", currentUser.getGoalWeight()));
-		lblValueUserObjective.setText(Translator.parseObjectiveCharToString(currentUser.getUserObjective()));
+		lblValueUserObjective.setText(UserTools.getUserObjective(currentUser).toString());
 		setBmiLabelsFormatted(UserTools.calculateBMI(currentUser));
 	}
 

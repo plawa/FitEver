@@ -451,8 +451,11 @@ public class MaintainUserDialog extends JDialog {
 		userMaintained.setDateOfBirth(GuiTools.parseStringToDate(formatTxtFldDateOfBirth.getText()));
 		userMaintained.setSex(Translator.parseSexStringToChar((String) comboBoxSex.getSelectedItem()));
 		userMaintained.setHeight(Integer.parseInt(textFieldHeight.getText()));
-		userMaintained.getWeighthistories()
-				.add(new Weighthistory(new WeighthistoryId(userMaintained, new Date()), startWeight));
+		if (userMaintained.getWeighthistories().isEmpty()) {
+			Weighthistory firstEntry = new Weighthistory(new WeighthistoryId(userMaintained, new Date()),
+					startWeight);
+			userMaintained.getWeighthistories().add(firstEntry);
+		}
 		userMaintained.setGoalWeight(goalWeight);
 		userMaintained.setSomatotype(chckbxIEasilyGet.isSelected() ? 3 : 1);
 		userMaintained.setLifeStyle(sliderLifeStyle.getValue());

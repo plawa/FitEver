@@ -32,7 +32,7 @@ public class CoreConfigurationDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setTitle("Configure System Database Connection");
-		setBounds(100, 100, 504, 205);
+		setBounds(100, 100, 504, 218);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -137,7 +137,6 @@ public class CoreConfigurationDialog extends JDialog {
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
-
 			setLocationRelativeTo(null);
 			setVisible(true);
 		}
@@ -149,7 +148,10 @@ public class CoreConfigurationDialog extends JDialog {
 	}
 
 	public List<String> retrieveConfiguration() {
-		String dbConnection = txtDbconnection.getText() + (chckbxCreateDatabaseIf.isSelected() ? "?createDatabaseIfNotExist=true" : "");
+		String dbConnection = txtDbconnection.getText();
+		if (chckbxCreateDatabaseIf.isSelected()) {
+			dbConnection += "?createDatabaseIfNotExist=true";
+		}
 		return Lists.newArrayList(dbConnection, txtUsername.getText(), txtPassword.getText());
 	}
 
