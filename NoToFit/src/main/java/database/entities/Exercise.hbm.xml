@@ -16,7 +16,7 @@
         </property>
         <property name="objective" type="char">
             <column name="objective" length="1" not-null="true">
-                <comment>One char: 'm' stands for mass gain 'r' stands for reduction 'p' stands for power &#160; &#160;</comment>
+                <comment>One char: m stands for mass gain r stands for reduction p stands for power</comment>
             </column>
         </property>
         <property name="requiresEquipment" type="boolean">

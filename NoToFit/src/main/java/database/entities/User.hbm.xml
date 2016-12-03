@@ -19,7 +19,7 @@
         </property>
         <property name="sex" type="char">
             <column name="sex" length="1" not-null="true">
-                <comment>One char: 'm' for male 'f' for female any other char means undefined &#160;</comment>
+                <comment>One char: m for male f for female any other char means undefined</comment>
             </column>
         </property>
         <property name="height" type="int">
@@ -30,7 +30,7 @@
         </property>
         <property name="userObjective" type="java.lang.Character">
             <column name="userObjective" length="1">
-                <comment>One char: 'm' stands for mass gain 'r' stands for reduction &#160;</comment>
+                <comment>One char: m stands for mass gain r stands for reduction</comment>
             </column>
         </property>
         <property name="lifeStyle" type="java.lang.Integer">

@@ -17,7 +17,7 @@ public class Diet extends Entity  {
 	private Date validFrom;
 	private Date validTo;
 	private int dailyReq;
-	private Set<Dietday> dietdays = new HashSet<Dietday>(0);
+	private Set<Dietday> dietdays = new HashSet<>(0);
 
 	public Diet() {
 	}

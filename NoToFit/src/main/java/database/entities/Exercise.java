@@ -9,6 +9,7 @@ import java.util.Set;
  */
 public class Exercise extends Entity {
 
+	private static final long serialVersionUID = 638191007742672136L;
 	private Integer id;
 	private String name;
 	private String description;

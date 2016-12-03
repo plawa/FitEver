@@ -12,6 +12,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.spi.ServiceException;
+import org.hibernate.type.IntegerType;
 
 import database.entities.Entity;
 import database.entities.Shadow;
@@ -23,30 +24,38 @@ public class DatabaseController {
 	private static final String ERR_NO_ROWS_IN_WEIGHT_HISTORY = "The user hasn't got any entries in WeightHistory table!";
 	private static SessionFactory mySessionFactory;
 
-	public static <T extends Entity> void saveEntityToDatabase(T entity) throws RuntimeException {
+//	public static <T extends Entity> Object saveEntityToDatabase(T entity) throws RuntimeException {
+//		getNewSessionWithTransaction().persist(entity);
+//		commitCurrentTransactionAndCloseSession();
+//		return entity.getId();
+//	}
+
+	public static <T extends Entity> Object saveEntityToDatabase(T entity) throws RuntimeException {
 		Session session = getNewSessionWithTransaction();
 		try {
 			session.persist(entity);
-			finalizeCurrentTransactionAndSession();
+			commitCurrentTransactionAndCloseSession();
 		} catch (Exception e) {
 			e.printStackTrace();
-			session.getTransaction().rollback();
+			rollbackCurrentTransactionAndCloseSession();
+			throw e;
 		}
+		return entity.getId();
 	}
 
 	public static <T extends Entity> void updateEntityToDatabase(T entity) throws RuntimeException {
 		getNewSessionWithTransaction().update(entity);
-		finalizeCurrentTransactionAndSession();
+		commitCurrentTransactionAndCloseSession();
 	}
 
 	public static <T extends Entity> void deleteEntityFromDatabase(T entity) throws RuntimeException {
 		getNewSessionWithTransaction().delete(entity);
-		finalizeCurrentTransactionAndSession();
+		commitCurrentTransactionAndCloseSession();
 	}
 
 	public static <T extends Entity> List<T> getAll(Class<T> entityType) throws RuntimeException {
 		List<T> resultList = getNewSessionWithTransaction().createCriteria(entityType).list();
-		finalizeCurrentTransactionAndSession();
+		commitCurrentTransactionAndCloseSession();
 		return resultList;
 	}
 
@@ -54,13 +63,13 @@ public class DatabaseController {
 		Shadow result = (Shadow) getNewSessionWithTransaction().createCriteria(Shadow.class)
 				.add(Restrictions.eq("login", login)).setFetchMode("user", FetchMode.JOIN).uniqueResult();
 
-		finalizeCurrentTransactionAndSession();
+		commitCurrentTransactionAndCloseSession();
 		return result;
 	}
 
 	public static <T extends Entity> T getEntityByID(Class<T> entityType, int ID) throws RuntimeException {
 		T resultEntity = getNewSessionWithTransaction().get(entityType, ID);
-		finalizeCurrentTransactionAndSession();
+		commitCurrentTransactionAndCloseSession();
 		return resultEntity;
 	}
 
@@ -81,40 +90,30 @@ public class DatabaseController {
 		query.setMaxResults(1);
 		float actualWeight = (float) query.uniqueResult();
 
-		finalizeCurrentTransactionAndSession();
+		commitCurrentTransactionAndCloseSession();
 		return actualWeight;
 	}
 
-	public static <T extends Entity> List<T> getEntitiesByParameter(Class<T> entityType, String paramName,
-			String paramValue) {
-		String q = String.format("SELECT e FROM %s e WHERE e.%s = '%s'", entityType.getSimpleName(), paramName,
-				paramValue);
-		List<T> resultList = getNewSessionWithTransaction().createQuery(q).getResultList();
-		finalizeCurrentTransactionAndSession();
-		return resultList;
-	}
-
-	public static <T extends Entity> T getEntityByUniqueParameter(Class<T> entityType, String paramName,
-			String paramValue) {
+	public static <T extends Entity> List<T> getEntitiesByParameter(Class<T> clazz, String paramName,
+			Object paramValue) {
 		Session session = getNewSessionWithTransaction();
-		T resultEntity = (T) session.createCriteria(entityType).add(Restrictions.eq(paramName, paramValue))
-				.uniqueResult();
-		finalizeCurrentTransactionAndSession();
-		return resultEntity;
+		List<T> resultList = session.createCriteria(clazz).add(Restrictions.eq(paramName, paramValue)).list();
+		commitCurrentTransactionAndCloseSession();
+		return resultList;
 	}
 
 	public static <T extends Entity> long getRowCount(Class<T> entityType) {
 		long resultCount = (long) getNewSessionWithTransaction().createCriteria(entityType)
 				.setProjection(Projections.rowCount()).uniqueResult();
-		finalizeCurrentTransactionAndSession();
+		commitCurrentTransactionAndCloseSession();
 		return resultCount;
 	}
 
-	public static <T extends Entity> List<T> getWeightHistoryByMonth(int userID, int month) {
-		String q = String.format("SELECT e FROM Weighthistory e WHERE e.id.user = '%d' AND MONTH(e.id.date) = '%d'",
-				userID, month);
-		List<T> resultList = getNewSessionWithTransaction().createQuery(q).getResultList();
-		finalizeCurrentTransactionAndSession();
+	public static <T extends Entity> List<T> getWeightHistoryOfMonth(int userID, int monthNumber) {
+		Session session = getNewSessionWithTransaction();
+		List<T> resultList = session.createCriteria(Weighthistory.class).add(Restrictions.eq("id.user.id", userID))
+				.add(Restrictions.sqlRestriction("MONTH(date) = ?", monthNumber, new IntegerType())).list();
+		commitCurrentTransactionAndCloseSession();
 		return resultList;
 	}
 
@@ -131,8 +130,13 @@ public class DatabaseController {
 		mySessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
-	public static void finalizeCurrentTransactionAndSession() {
+	public static void commitCurrentTransactionAndCloseSession() {
 		mySessionFactory.getCurrentSession().getTransaction().commit();
+		mySessionFactory.getCurrentSession().close();
+	}
+	
+	public static void rollbackCurrentTransactionAndCloseSession() {
+		mySessionFactory.getCurrentSession().getTransaction().rollback();
 		mySessionFactory.getCurrentSession().close();
 	}
 

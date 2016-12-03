@@ -6,6 +6,7 @@ package database.entities;
  */
 public class Shadow extends Entity {
 
+	private static final long serialVersionUID = 6638505743054276907L;
 	private int userId;
 	private User user;
 	private String login;
