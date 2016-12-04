@@ -4,9 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Random;
 import java.util.Set;
-
-import com.google.common.base.Preconditions;
 
 import database.controller.DatabaseController;
 import database.entities.Exercise;
@@ -21,6 +20,7 @@ public class ExerciseChooser {
 	private static final int MASS_GAIN_EXERCISES_COUNT = 8;
 	private static final int POINTS_FOR_EQUIPMENT_MATCH = 2;
 	private static final int POINTS_FOR_OBJECTIVE_MATCH = 4;
+
 	private int exercisesPerDayCount;
 	private DifficultyLevel difficulty;
 	private Objective objective;
@@ -49,8 +49,7 @@ public class ExerciseChooser {
 	}
 
 	private Set<Exercise> chooseBestMatchedExercises() {
-		Preconditions.checkArgument(isExercisesLibraryBigEnough());
-		PriorityQueue<EntityIntegerPair> exercisesSortedByMatchRank = getRankedExercisesSorted();
+		PriorityQueue<EntityIntegerPair> exercisesSortedByMatchRank = retrieveExercisesRanked();
 		Set<Exercise> resultSet = new HashSet<>();
 		for (int i = 0; i < exercisesPerDayCount; i++) {
 			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().entity);
@@ -58,8 +57,8 @@ public class ExerciseChooser {
 		return resultSet;
 	}
 
-	private PriorityQueue<EntityIntegerPair> getRankedExercisesSorted() {
-		PriorityQueue<EntityIntegerPair> exercisesSortedByMatchRank = new PriorityQueue<EntityIntegerPair>();
+	private PriorityQueue<EntityIntegerPair> retrieveExercisesRanked() {
+		PriorityQueue<EntityIntegerPair> exercisesSortedByMatchRank = new PriorityQueue<>();
 		for (Exercise currentExercise : exercisesLib) {
 			int exerciseRate = rateExercise(currentExercise);
 			exercisesSortedByMatchRank.add(new EntityIntegerPair(currentExercise, exerciseRate));
@@ -68,17 +67,18 @@ public class ExerciseChooser {
 	}
 
 	private int rateExercise(Exercise exercise) {
-		int points = 0;
+		int points = new Random().nextInt(4) - 2; // to provide more diversity of training days
 		boolean isAbleToExercise = hasUserEquipment || !exercise.isRequiresEquipment();
 		boolean objectiveMatches = objective.getCharID() == exercise.getObjective();
-		int difficultyLevelDifference = Math.abs(difficulty.getLevelNumber() - exercise.getDifficultyLevel());
+		int difficultyLevelDifference = Math.abs(difficulty.getNumber() - exercise.getDifficultyLevel());
 
-		if (isAbleToExercise)
+		if (isAbleToExercise) {
 			points += POINTS_FOR_EQUIPMENT_MATCH;
-		if (objectiveMatches)
+		}
+		if (objectiveMatches) {
 			points += POINTS_FOR_OBJECTIVE_MATCH;
+		}
 		points -= difficultyLevelDifference;
-
 		return points;
 	}
 

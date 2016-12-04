@@ -201,6 +201,7 @@ public class LoginDialog extends JDialog {
 					authorizedUser = Login.performLogin(txtFldLogin.getText(), passFld.getText());
 					return null;
 				}
+
 				@Override
 				protected void done() {
 					waitDlg.setVisible(false);

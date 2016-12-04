@@ -24,7 +24,7 @@ public class WorkoutGenerator {
 		int daysToGenerateCount = preferences.getTrainingDaysPerWeek() * preferences.getWorkoutPeriodInWeeks();
 
 		Set<Workoutday> workoutDaysSet = null;
-		ExerciseChooser dayGenerator = new ExerciseChooser(buildWorkoutDayPreferences(preferences));
+		ExerciseChooser dayGenerator = new ExerciseChooser(WorkoutDayPreferences.build(preferences));
 		if (dayGenerator.isExercisesLibraryBigEnough()) {
 			workoutDaysSet = new HashSet<>();
 			Date[] workoutDayDates = preferences.retrieveDatesForWorkoutDays();
@@ -35,14 +35,6 @@ public class WorkoutGenerator {
 			}
 		}
 		return workoutDaysSet;
-	}
-
-	private static WorkoutDayPreferences buildWorkoutDayPreferences(WorkoutGenerationPreferences workoutPreferences) {
-		WorkoutDayPreferences dayPreferences = new WorkoutDayPreferences();
-		dayPreferences.setObjective(UserTools.getUserObjective(workoutPreferences.getUser()));
-		dayPreferences.setEquipmentRequired(workoutPreferences.hasUserEquipment());
-		dayPreferences.setDifficultyLevel(workoutPreferences.getPrefferedDifficulty());
-		return dayPreferences;
 	}
 
 	private static Workout initializeWorkoutPrototype(WorkoutGenerationPreferences workoutPreferences) {

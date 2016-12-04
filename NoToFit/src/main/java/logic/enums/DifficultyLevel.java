@@ -9,7 +9,7 @@ public enum DifficultyLevel {
 		this.levelNo = levelNo;
 	}
 
-	public int getLevelNumber() {
+	public int getNumber() {
 		return levelNo;
 	}
 
