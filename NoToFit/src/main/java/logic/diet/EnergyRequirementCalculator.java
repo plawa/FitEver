@@ -1,7 +1,8 @@
 package logic.diet;
 
 import database.entities.User;
-import database.tools.UserTools; 
+import database.tools.UserTools;
+import logic.enums.Objective; 
 
 
 public class EnergyRequirementCalculator {
@@ -12,12 +13,17 @@ public class EnergyRequirementCalculator {
 		int age = UserTools.calculateAge(user);
 		char sex = user.getSex();
 		float physicalActivityFactor = 1f + user.getLifeStyle()*0.2f;
-		float somatypeFactor = translateSomatypeToFactor(user.getSomatotype());
+		float factor = 0f;
+		if(UserTools.getUserObjective(user) == Objective.MassGain){
+			/* If user wants to gain mass, the additional factor is taken from his somatotype. */
+			factor = retrieveSomatotypeFactor(user.getSomatotype());
+		}
 		
 		float bmr = calculateBasicMetabolismRequirement(weight, height, age, sex);
 		float dailyReq = calculateDailyEnergyRequirement(bmr, physicalActivityFactor);
 		
-		return Math.round(dailyReq + somatypeFactor*dailyReq);
+		int round = Math.round(dailyReq + factor*dailyReq);
+		return round;
 	}
 
 	private static float calculateBasicMetabolismRequirement(float weight, int height, int age, Character sex) {
@@ -35,7 +41,7 @@ public class EnergyRequirementCalculator {
 		return bmr*physicalActivityFactor;		
 	}
 
-	private static float translateSomatypeToFactor(int somatypeIntValue) {
+	private static float retrieveSomatotypeFactor(int somatypeIntValue) {
 		switch(somatypeIntValue){
 		case 1:
 			return 0.2f;	//ectomorphic

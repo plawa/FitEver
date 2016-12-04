@@ -103,7 +103,7 @@ public class MaintainMealDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle(mode + " Meal");
 		setModal(true);
-		setBounds(100, 100, 397, 364);
+		setBounds(100, 100, 436, 364);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 70, 179, 49, 59, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 25, 0, 0, 0, 0, 73, 33, 0, 0 };

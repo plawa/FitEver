@@ -2,6 +2,7 @@ package presentation.meals;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -82,7 +83,7 @@ public class AllMealsDialog extends JDialog {
 
 	private void initializeLayout() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 660, 478);
+		setBounds(100, 100, 845, 478);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -95,6 +96,7 @@ public class AllMealsDialog extends JDialog {
 		{
 			JButton closeButton = new JButton("Close");
 			GridBagConstraints gbc_closeButton = new GridBagConstraints();
+			gbc_closeButton.fill = GridBagConstraints.HORIZONTAL;
 			gbc_closeButton.insets = new Insets(0, 0, 5, 5);
 			gbc_closeButton.gridx = 2;
 			gbc_closeButton.gridy = 3;
@@ -150,7 +152,8 @@ public class AllMealsDialog extends JDialog {
 		gbc_toolBar.gridy = 1;
 		contentPanel.add(toolBar, gbc_toolBar);
 		{
-			JButton btnAdd = new JButton("Add");
+			JButton btnAdd = new JButton("Create");
+			btnAdd.setPreferredSize(new Dimension(70, 23));
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					addButtonPressed();
@@ -158,37 +161,38 @@ public class AllMealsDialog extends JDialog {
 			});
 			btnAdd.setVerticalTextPosition(SwingConstants.BOTTOM);
 			btnAdd.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnAdd.setIcon(new ImageIcon(
-					AllMealsDialog.class.getResource("/com/sun/java/swing/plaf/windows/icons/Question.gif")));
+			btnAdd.setIcon(new ImageIcon(getClass().getResource("/images/add.png")));
 			toolBar.add(btnAdd);
 		}
 		{
-			btnEdit = new JButton("Edit");
+			btnEdit = new JButton("Modify");
+			btnEdit.setPreferredSize(new Dimension(70, 23));
 			btnEdit.setEnabled(false);
 			btnEdit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					editButtonPressed();
 				}
 			});
+			{
+				btnDelete = new JButton("Delete");
+				btnDelete.setPreferredSize(new Dimension(70, 23));
+				btnDelete.setEnabled(false);
+				btnDelete.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						deleteButtonPressed();
+					}
+				});
+				btnDelete.setHorizontalTextPosition(SwingConstants.CENTER);
+				btnDelete.setVerticalTextPosition(SwingConstants.BOTTOM);
+				btnDelete.setIcon(
+						new ImageIcon(getClass().getResource("/images/delete.png")));
+				toolBar.add(btnDelete);
+			}
 			btnEdit.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnEdit.setVerticalTextPosition(SwingConstants.BOTTOM);
 			btnEdit.setIcon(
-					new ImageIcon(AllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
+					new ImageIcon(getClass().getResource("/images/edit.png")));
 			toolBar.add(btnEdit);
-		}
-		{
-			btnDelete = new JButton("Delete");
-			btnDelete.setEnabled(false);
-			btnDelete.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					deleteButtonPressed();
-				}
-			});
-			btnDelete.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnDelete.setVerticalTextPosition(SwingConstants.BOTTOM);
-			btnDelete.setIcon(
-					new ImageIcon(AllMealsDialog.class.getResource("/javax/swing/plaf/metal/icons/ocean/error.png")));
-			toolBar.add(btnDelete);
 		}
 	}
 

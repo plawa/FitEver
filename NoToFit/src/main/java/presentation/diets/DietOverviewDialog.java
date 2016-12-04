@@ -10,7 +10,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -56,19 +55,12 @@ public class DietOverviewDialog extends JDialog {
 
 	private JTabbedPane initializeDietDaysTabbedPane() {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		
+
 		List<Dietday> dietDaysSorted = new ArrayList<>(dietDisplaying.getDietdays());
-		
-		dietDaysSorted.sort(new Comparator<Dietday>() {
-			@Override
-			public int compare(Dietday o1, Dietday o2) {
-				return o1.getDate().compareTo(o2.getDate());
-			}
-		});
-		
-		
-		for (Dietday day : dietDaysSorted) {						
-			tabbedPane.add(GuiTools.parseDateToString(day.getDate()), createDietDayJPanel(day));
+		dietDaysSorted.sort((Dietday o1, Dietday o2) -> o1.getDate().compareTo(o2.getDate()));
+
+		for (Dietday dietDay : dietDaysSorted) {
+			tabbedPane.add(GuiTools.parseDateToString(dietDay.getDate()), createDietDayJPanel(dietDay));
 		}
 		return tabbedPane;
 	}
@@ -86,13 +78,15 @@ public class DietOverviewDialog extends JDialog {
 	}
 
 	private DietDayJTable createDietDayJTable(Set<Meal> dietDayMeals) {
-		return new DietDayJTable(new ArrayList<>(dietDayMeals));
+		ArrayList<Meal> mealsSortedByType = new ArrayList<>(dietDayMeals);
+		mealsSortedByType.sort((Meal o1, Meal o2) -> o1.getType() > o2.getType() ? 1 : -1);
+		return new DietDayJTable(mealsSortedByType);
 	}
 
 	private void initializeSwingComponents() {
 		setModal(true);
 		setTitle("Diet Overview");
-		setBounds(100, 100, 675, 368);
+		setBounds(100, 100, 866, 368);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

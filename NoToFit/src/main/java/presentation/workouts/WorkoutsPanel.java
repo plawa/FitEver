@@ -29,7 +29,7 @@ import database.controller.DatabaseController;
 import database.entities.User;
 import database.entities.Workout;
 import logic.workout.WorkoutGenerationPreferences;
-import logic.workout.WorkoutPlanGenerator;
+import logic.workout.WorkoutGenerator;
 import presentation.MainFrame;
 import presentation.common.WaitDialog;
 import presentation.exercises.AllExercisesDialog;
@@ -71,7 +71,7 @@ public class WorkoutsPanel extends JPanel {
 				protected Boolean doInBackground() throws Exception {
 					waitDlg.setLocationRelativeTo(WorkoutsPanel.this);
 					waitDlg.setVisible(true);
-					Workout generatedWorkout = WorkoutPlanGenerator.generateWorkout(preferences);
+					Workout generatedWorkout = WorkoutGenerator.generateWorkout(preferences);
 					if (generatedWorkout != null) {
 						currentUser.getWorkouts().add(generatedWorkout);
 						try {

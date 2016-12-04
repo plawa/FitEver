@@ -18,7 +18,6 @@ public class User extends Entity {
 	private char sex;
 	private int height;
 	private float goalWeight;
-	private Character userObjective;
 	private Integer lifeStyle;
 	private Integer somatotype;
 	private Set<Diet> diets = new HashSet<Diet>(0);
@@ -83,14 +82,6 @@ public class User extends Entity {
 
 	public void setGoalWeight(float goalWeight) {
 		this.goalWeight = goalWeight;
-	}
-
-	public Character getUserObjective() {
-		return this.userObjective;
-	}
-
-	public void setUserObjective(Character userObjective) {
-		this.userObjective = userObjective;
 	}
 
 	public Integer getLifeStyle() {

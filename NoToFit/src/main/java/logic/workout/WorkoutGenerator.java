@@ -8,7 +8,7 @@ import database.entities.Workout;
 import database.entities.Workoutday;
 import database.tools.UserTools;
 
-public class WorkoutPlanGenerator {
+public class WorkoutGenerator {
 
 	public static Workout generateWorkout(WorkoutGenerationPreferences workoutPreferences) {
 		Workout newWorkout = initializeWorkoutPrototype(workoutPreferences);
