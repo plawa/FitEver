@@ -2,53 +2,55 @@ package logic.diet;
 
 import database.entities.User;
 import database.tools.UserTools;
-import logic.enums.Objective; 
-
+import logic.enums.Objective;
 
 public class EnergyRequirementCalculator {
 
+	private EnergyRequirementCalculator(){}
+	
 	public static int performCalculation(User user) {
 		float weight = UserTools.retrieveActualWeight(user);
 		int height = user.getHeight();
 		int age = UserTools.calculateAge(user);
 		char sex = user.getSex();
-		float physicalActivityFactor = 1f + user.getLifeStyle()*0.2f;
+		float physicalActivityFactor = 1f + user.getLifeStyle() * 0.2f;
 		float factor = 0f;
-		if(UserTools.getUserObjective(user) == Objective.MassGain){
-			/* If user wants to gain mass, the additional factor is taken from his somatotype. */
+		if (UserTools.getUserObjective(user) == Objective.MassGain) {
+			/*
+			 * If user wants to gain mass, the additional factor is taken from
+			 * his somatotype.
+			 */
 			factor = retrieveSomatotypeFactor(user.getSomatotype());
 		}
-		
+
 		float bmr = calculateBasicMetabolismRequirement(weight, height, age, sex);
 		float dailyReq = calculateDailyEnergyRequirement(bmr, physicalActivityFactor);
-		
-		int round = Math.round(dailyReq + factor*dailyReq);
-		return round;
+		return Math.round(dailyReq + factor * dailyReq);
 	}
 
 	private static float calculateBasicMetabolismRequirement(float weight, int height, int age, Character sex) {
-		switch (sex){
+		switch (sex) {
 		case 'm':
-			return 66.5f + 13.7f*weight + 5f*height - 6.8f*age;
+			return 66.5f + 13.7f * weight + 5f * height - 6.8f * age;
 		case 'f':
-			return 655f + 9.6f*weight + 1.85f*height - 4.7f*age;
+			return 655f + 9.6f * weight + 1.85f * height - 4.7f * age;
 		default:
 			throw new IllegalArgumentException("Unknown sex identifier.");
 		}
 	}
-	
+
 	private static float calculateDailyEnergyRequirement(float bmr, float physicalActivityFactor) {
-		return bmr*physicalActivityFactor;		
+		return bmr * physicalActivityFactor;
 	}
 
 	private static float retrieveSomatotypeFactor(int somatypeIntValue) {
-		switch(somatypeIntValue){
+		switch (somatypeIntValue) {
 		case 1:
-			return 0.2f;	//ectomorphic
+			return 0.2f; // ectomorphic
 		case 2:
-			return 0.15f;	//mesomorphic (value currently not in use)
+			return 0.15f; // mesomorphic (value currently not in use)
 		case 3:
-			return 0.1f;	//endomorphic
+			return 0.1f; // endomorphic
 		default:
 			throw new IllegalArgumentException("Unknown somatotype code.");
 		}

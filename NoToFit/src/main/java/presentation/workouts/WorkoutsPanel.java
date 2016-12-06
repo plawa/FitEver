@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -85,6 +83,7 @@ public class WorkoutsPanel extends JPanel {
 					return false;
 				}
 
+				@Override
 				protected void done() {
 					Boolean successfullyGenerated = false;
 					try {
@@ -99,7 +98,7 @@ public class WorkoutsPanel extends JPanel {
 								0);
 					}
 
-				};
+				}
 			}.execute();
 		}
 	}
@@ -108,8 +107,7 @@ public class WorkoutsPanel extends JPanel {
 		GenerateWorkoutDialog generateWorkoutDlg = new GenerateWorkoutDialog();
 		generateWorkoutDlg.setLocationRelativeTo(this);
 		generateWorkoutDlg.setVisible(true);
-		WorkoutGenerationPreferences preferences = generateWorkoutDlg.getWorkoutGenerationPreferences();
-		return preferences;
+		return generateWorkoutDlg.getWorkoutGenerationPreferences();
 	}
 
 	protected void refreshTable() {
@@ -220,44 +218,28 @@ public class WorkoutsPanel extends JPanel {
 		add(toolBar, gbc_toolBar);
 
 		JButton btnOpenSelectedWorkout = new JButton("Open Selected Plan");
-		btnOpenSelectedWorkout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				openSelectedWorkoutPlan();
-			}
-		});
+		btnOpenSelectedWorkout.addActionListener(e->openSelectedWorkoutPlan());
 		btnOpenSelectedWorkout.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnOpenSelectedWorkout.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnOpenSelectedWorkout.setIcon(openButtonIcon);
 		toolBar.add(btnOpenSelectedWorkout);
 
 		JButton btnShowAllExercises = new JButton("Show All Exercises");
-		btnShowAllExercises.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				manageExercisesButtonPressed();
-			}
-		});
+		btnShowAllExercises.addActionListener(e->manageExercisesButtonPressed());
 		btnShowAllExercises.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnShowAllExercises.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnShowAllExercises.setIcon(showExercisesButtonIcon);
 		toolBar.add(btnShowAllExercises);
 
 		JButton btnGenerateDietPlan = new JButton("Generate Workout Plan");
-		btnGenerateDietPlan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				generateWorkoutPlanButtonPressed();
-			}
-		});
+		btnGenerateDietPlan.addActionListener(e->generateWorkoutPlanButtonPressed());
 		btnGenerateDietPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnGenerateDietPlan.setIcon(generateWorkoutButtonIcon);
 		toolBar.add(btnGenerateDietPlan);
 
 		JButton btnExit = new JButton("Exit");
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				exitButtonPressed();
-			}
-		});
+		btnExit.addActionListener(e->exitButtonPressed());
 		btnExit.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnExit.setIcon(exitButtonIcon);

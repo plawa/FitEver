@@ -7,8 +7,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -48,11 +46,8 @@ public class LoginDialog extends JDialog {
 
 	private User authorizedUser = null;
 	private final JPanel contentPanel = new JPanel();
-	private JDialog myAddUserDialog;
 	private JTextField txtFldLogin;
 	private JPasswordField passFld;
-	private JLabel lblImageLabel;
-	private JButton okButton;
 
 	public LoginDialog() {
 		super((Frame) null, true);
@@ -80,13 +75,12 @@ public class LoginDialog extends JDialog {
 
 	private void initializeSwingComponents() {
 		{
-			lblImageLabel = loadHeaderImageLabel();
 			GridBagConstraints gbc_lblImageLabel = new GridBagConstraints();
 			gbc_lblImageLabel.gridwidth = 4;
 			gbc_lblImageLabel.insets = new Insets(0, 0, 5, 5);
 			gbc_lblImageLabel.gridx = 0;
 			gbc_lblImageLabel.gridy = 0;
-			contentPanel.add(lblImageLabel, gbc_lblImageLabel);
+			contentPanel.add(loadHeaderImageLabel(), gbc_lblImageLabel);
 		}
 		{
 			JLabel lblUsername = new JLabel("Username:");
@@ -140,34 +134,19 @@ public class LoginDialog extends JDialog {
 			buttonPane.setLayout(new MigLayout("", "[115px][grow][57px][65px]", "[23px]"));
 			{
 				JButton btnCreateNewUser = new JButton("Create New User");
-				btnCreateNewUser.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						myAddUserDialog = new MaintainUserDialog();
-						myAddUserDialog.setLocationRelativeTo(contentPanel);
-						myAddUserDialog.setVisible(true);
-					}
-				});
+				btnCreateNewUser.addActionListener(e->createNewUserButtonPressed());
 				buttonPane.add(btnCreateNewUser, "cell 0 0,alignx left,aligny center");
 			}
 			{
-				okButton = new JButton("Login");
-				okButton.addActionListener(new ActionListener() {
-
-					public void actionPerformed(ActionEvent arg0) {
-						loginButtonPressed();
-					}
-				});
+				JButton okButton = new JButton("Login");
+				okButton.addActionListener(e->loginButtonPressed());
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton, "cell 2 0,alignx left,aligny center");
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						tearDown();
-					}
-				});
+				cancelButton.addActionListener(e->tearDown());
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton, "cell 3 0,alignx left,aligny center");
 			}
@@ -234,5 +213,11 @@ public class LoginDialog extends JDialog {
 	private void tearDown() {
 		setVisible(false);
 		dispose();
+	}
+
+	private void createNewUserButtonPressed() {
+		MaintainUserDialog myAddUserDialog = new MaintainUserDialog();
+		myAddUserDialog.setLocationRelativeTo(contentPanel);
+		myAddUserDialog.setVisible(true);
 	}
 }

@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
 
 import javax.swing.Box;
@@ -24,8 +22,6 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import database.controller.DatabaseController;
 import database.entities.Shadow;
@@ -40,6 +36,7 @@ import presentation.common.Translator;
 
 public class MaintainUserDialog extends JDialog {
 
+	private static final String POPUP_TITLE_ERROR = "Error!";
 	private static final String MSG_ERROR_PASSWORDS_INCONSISTENT = "Passwords are not the same.";
 	private static final long serialVersionUID = 9182720162758099907L;
 	private static final String MSG_SAVE_ERROR = "Error occured while saving data to database.";
@@ -317,12 +314,7 @@ public class MaintainUserDialog extends JDialog {
 		sliderLifeStyle.setMinimum(1);
 		sliderLifeStyle.setMaximum(5);
 		sliderLifeStyle.setMajorTickSpacing(1);
-		sliderLifeStyle.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				int choice = sliderLifeStyle.getValue();
-				txtrExampleMessageDescribing.setText(Translator.getLifeStyleDescription(choice));
-			}
-		});
+		sliderLifeStyle.addChangeListener(e -> sliderStateChanged());
 		sliderLifeStyle.setValue(3);
 		GridBagConstraints gbc_sliderLifeStyle = new GridBagConstraints();
 		gbc_sliderLifeStyle.fill = GridBagConstraints.HORIZONTAL;
@@ -340,11 +332,7 @@ public class MaintainUserDialog extends JDialog {
 		getContentPane().add(horizontalStrut, gbc_horizontalStrut);
 		{
 			JButton okButton = new JButton("Save");
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					saveButtonPressed();
-				}
-			});
+			okButton.addActionListener(e -> saveButtonPressed());
 			GridBagConstraints gbc_okButton = new GridBagConstraints();
 			gbc_okButton.insets = new Insets(0, 0, 5, 5);
 			gbc_okButton.gridx = 4;
@@ -360,11 +348,7 @@ public class MaintainUserDialog extends JDialog {
 			gbc_cancelButton.gridx = 5;
 			gbc_cancelButton.gridy = 11;
 			getContentPane().add(cancelButton, gbc_cancelButton);
-			cancelButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					tearDown();
-				}
-			});
+			cancelButton.addActionListener(e -> tearDown());
 			cancelButton.setActionCommand("Cancel");
 		}
 
@@ -412,16 +396,11 @@ public class MaintainUserDialog extends JDialog {
 
 	protected void saveButtonPressed() {
 		retrieveUserPropertiesFromEnteredValues();
-		boolean operationSucceeded = false;
+		boolean operationSucceeded;
 
 		switch (mode) {
 		case CREATE:
-			if (!loginNotExists()) {
-				JOptionPane.showMessageDialog(this, MSG_LOGIN_ALREADY_EXISTS, "Error!", 2);
-				return;
-			}
-			if (!areEnteredPasswordsTheSame()) {
-				JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, "Error!", 2);
+			if (!validateInput()){
 				return;
 			}
 			assignNewUserCredentialsToMaintainedUser();
@@ -429,17 +408,33 @@ public class MaintainUserDialog extends JDialog {
 			break;
 		case EDIT:
 			operationSucceeded = updateUserToDatabase();
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported dialog mode");
 		}
 
-		if (operationSucceeded)
+		if (operationSucceeded) {
 			tearDown();
-		else
-			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR, "Error!", 2);
+		} else {
+			JOptionPane.showMessageDialog(this, MSG_SAVE_ERROR, POPUP_TITLE_ERROR, 2);
+		}
 	}
 
+	private boolean validateInput(){
+		if (!loginNotExists()) {
+			JOptionPane.showMessageDialog(this, MSG_LOGIN_ALREADY_EXISTS, POPUP_TITLE_ERROR, 2);
+			return false;
+		}
+		if (!areEnteredPasswordsTheSame()) {
+			JOptionPane.showMessageDialog(this, MSG_ERROR_PASSWORDS_INCONSISTENT, POPUP_TITLE_ERROR, 2);
+			return false;
+		}
+		return true;
+	}
+	
 	private boolean loginNotExists() {
 		String login = textFieldLogin.getText();
-		return DatabaseController.getEntitiesByParameter(Shadow.class, "login", login).size() == 0;
+		return DatabaseController.getEntitiesByParameter(Shadow.class, "login", login).isEmpty();
 	}
 
 	private void retrieveUserPropertiesFromEnteredValues() {
@@ -452,8 +447,7 @@ public class MaintainUserDialog extends JDialog {
 		userMaintained.setSex(Translator.parseSexStringToChar((String) comboBoxSex.getSelectedItem()));
 		userMaintained.setHeight(Integer.parseInt(textFieldHeight.getText()));
 		if (userMaintained.getWeighthistories().isEmpty()) {
-			Weighthistory firstEntry = new Weighthistory(new WeighthistoryId(userMaintained, new Date()),
-					startWeight);
+			Weighthistory firstEntry = new Weighthistory(new WeighthistoryId(userMaintained, new Date()), startWeight);
 			userMaintained.getWeighthistories().add(firstEntry);
 		}
 		userMaintained.setGoalWeight(goalWeight);
@@ -504,5 +498,10 @@ public class MaintainUserDialog extends JDialog {
 	protected void tearDown() {
 		setVisible(false);
 		dispose();
+	}
+
+	private void sliderStateChanged() {
+		int choice = sliderLifeStyle.getValue();
+		txtrExampleMessageDescribing.setText(Translator.getLifeStyleDescription(choice));
 	}
 }

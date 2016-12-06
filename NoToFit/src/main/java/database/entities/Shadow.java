@@ -46,14 +46,14 @@ public class Shadow extends Entity {
 	public void setEncryptedPass(String pass) {
 		this.encryptedPass = pass;
 	}
-	
-/* MANUAL CODE REGION */
+
+	/* MANUAL CODE REGION */
 
 	public boolean equals(Shadow other) {
-		if (this.encryptedPass.equals(other.encryptedPass))
+		if (other != null && encryptedPass.equals(other.getEncryptedPass())) {
 			return true;
-		else
-			return false;
+		}
+		return false;
 	}
 
 }

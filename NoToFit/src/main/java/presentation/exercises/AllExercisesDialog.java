@@ -9,9 +9,9 @@ import presentation.meals.AllMealsDialog;
 public class AllExercisesDialog extends AllMealsDialog {
 
 	private static final String TABLE_TOOLTIP = "Open to see more details";
-	protected static final String DLG_TITLE = "Exercises Library";
+	protected static final String DLG_ALL_EXERCISES_TITLE = "Exercises Library";
 	private static final long serialVersionUID = -6051480256970284306L;
-	private ExercisesTableModel tableModel;
+	private ExercisesTableModel allExercisesTableModel;
 
 	public AllExercisesDialog() {
 		super();
@@ -21,8 +21,8 @@ public class AllExercisesDialog extends AllMealsDialog {
 
 	@Override
 	protected void refreshTable() {
-		tableModel = new ExercisesTableModel(DatabaseController.getAll(Exercise.class));
-		table.setModel(tableModel);
+		allExercisesTableModel = new ExercisesTableModel(DatabaseController.getAll(Exercise.class));
+		table.setModel(allExercisesTableModel);
 		table.getColumnModel().getColumn(0).setPreferredWidth(130);
 	}
 
@@ -56,11 +56,11 @@ public class AllExercisesDialog extends AllMealsDialog {
 	}
 
 	private Exercise retrieveSelectedExercise() {
-		return tableModel.getExerciseAt(table.getSelectedRow());
+		return allExercisesTableModel.getExerciseAt(table.getSelectedRow());
 	}
 
 	private void setSwingProperties() {
-		setTitle(DLG_TITLE);
+		setTitle(DLG_ALL_EXERCISES_TITLE);
 		table.setToolTipText(TABLE_TOOLTIP);
 	}
 

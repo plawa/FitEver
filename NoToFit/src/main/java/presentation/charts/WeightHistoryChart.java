@@ -16,6 +16,8 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.scene.paint.Color;
 
 public class WeightHistoryChart {
+
+	private static final long serialVersionUID = -1581878849641943340L;
 	private static final String Y_AXIS_TITLE = "Weight (kg)";
 	private static final String X_AXIS_TITLE = "Day of Month";
 	private static final String SERIES_TITLE = "Series";
@@ -29,7 +31,7 @@ public class WeightHistoryChart {
 		allSeries = FXCollections.observableArrayList();
 	}
 
-	public void setWeightHistorySeries(String seriesName, Collection<Weighthistory> weightHistories) {
+	public void setWeightHistorySeries(Collection<Weighthistory> weightHistories) {
 		removeAllSeries();
 		allSeries.add(
 				new Series<>(SERIES_TITLE, convertWeightHistoryCollectionToChartDataObservableList(weightHistories)));
@@ -87,7 +89,7 @@ public class WeightHistoryChart {
 	}
 
 	private void removeAllSeries() {
-		while (allSeries.size() > 0) {
+		while (!allSeries.isEmpty()) {
 			allSeries.remove(0);
 		}
 	}

@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -63,7 +61,7 @@ public class DietsPanel extends JPanel {
 		DietGenerationPreferences dietPreferences = extractDietPreferencesFromInputDialog();
 		if (dietPreferences != null) {
 			dietPreferences.setUser(currentUser);
-			SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+			new SwingWorker<Boolean, Void>() {
 				private WaitDialog waitDlg = new WaitDialog(MSG_WAIT_FOR_DIET);
 
 				@Override
@@ -82,6 +80,7 @@ public class DietsPanel extends JPanel {
 					return false;
 				}
 
+				@Override
 				protected void done() {
 					Boolean successfullyGenerated = false;
 					try {
@@ -94,10 +93,9 @@ public class DietsPanel extends JPanel {
 					if (!successfullyGenerated) {
 						JOptionPane.showMessageDialog(DietsPanel.this, MSG_TOO_LESS_MEALS, POPUP_HEADER_ERROR, 0);
 					}
-				};
+				}
 
-			};
-			worker.execute();
+			}.execute();
 		}
 	}
 
@@ -127,7 +125,7 @@ public class DietsPanel extends JPanel {
 	}
 
 	protected void refreshTable() {
-		List<Diet> dietsList = new ArrayList<Diet>(currentUser.getDiets());
+		List<Diet> dietsList = new ArrayList<>(currentUser.getDiets());
 		tableModel = new DietsTableModel(dietsList);
 		table.setModel(tableModel);
 		table.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -159,44 +157,28 @@ public class DietsPanel extends JPanel {
 		add(toolBar, gbc_toolBar);
 
 		JButton btnOpenSelectedDiet = new JButton("Open Selected Plan");
-		btnOpenSelectedDiet.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				openSelectedDietPlan();
-			}
-		});
+		btnOpenSelectedDiet.addActionListener(e->openSelectedDietPlan());
 		btnOpenSelectedDiet.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnOpenSelectedDiet.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnOpenSelectedDiet.setIcon(openButtonIcon);
 		toolBar.add(btnOpenSelectedDiet);
 
 		JButton btnShowAllMeals = new JButton("Manage Meals");
-		btnShowAllMeals.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				manageMealsButtonPressed();
-			}
-		});
+		btnShowAllMeals.addActionListener(e->manageMealsButtonPressed());
 		btnShowAllMeals.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnShowAllMeals.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnShowAllMeals.setIcon(showMealsButtonIcon);
 		toolBar.add(btnShowAllMeals);
 
 		JButton btnGenerateDietPlan = new JButton("Generate Diet Plan");
-		btnGenerateDietPlan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				generateDietPlanButtonPressed();
-			}
-		});
+		btnGenerateDietPlan.addActionListener(e->generateDietPlanButtonPressed());
 		btnGenerateDietPlan.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnGenerateDietPlan.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnGenerateDietPlan.setIcon(generateDietButtonIcon);
 		toolBar.add(btnGenerateDietPlan);
 
 		JButton btnExit = new JButton("Exit");
-		btnExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				exitButtonPressed();
-			}
-		});
+		btnExit.addActionListener(e -> exitButtonPressed());
 		btnExit.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnExit.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnExit.setIcon(exitButtonIcon);

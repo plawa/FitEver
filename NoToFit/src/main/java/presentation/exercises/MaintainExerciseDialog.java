@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -137,7 +135,7 @@ public class MaintainExerciseDialog extends JDialog {
 		gbc_lblObjective.gridy = 2;
 		getContentPane().add(lblObjective, gbc_lblObjective);
 
-		comboBoxObjective = new JComboBox<Objective>();
+		comboBoxObjective = new JComboBox<>();
 		comboBoxObjective.setModel(new DefaultComboBoxModel<Objective>(Objective.values()));
 		GridBagConstraints gbc_comboBoxObjective = new GridBagConstraints();
 		gbc_comboBoxObjective.gridwidth = 3;
@@ -155,7 +153,7 @@ public class MaintainExerciseDialog extends JDialog {
 		gbc_lblDifficulty.gridy = 3;
 		getContentPane().add(lblDifficulty, gbc_lblDifficulty);
 
-		comboBoxDifficulty = new JComboBox<DifficultyLevel>();
+		comboBoxDifficulty = new JComboBox<>();
 		comboBoxDifficulty.setModel(new DefaultComboBoxModel<DifficultyLevel>(DifficultyLevel.values()));
 		GridBagConstraints gbc_comboBoxDifficulty = new GridBagConstraints();
 		gbc_comboBoxDifficulty.insets = new Insets(0, 0, 5, 5);
@@ -192,11 +190,7 @@ public class MaintainExerciseDialog extends JDialog {
 		getContentPane().add(textAreaDescription, gbc_textAreaDescription);
 
 		btnSave = new JButton("Save");
-		btnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				saveButtonPressed();
-			}
-		});
+		btnSave.addActionListener(e->saveButtonPressed());
 
 		Component rightStrut = Box.createHorizontalStrut(10);
 		GridBagConstraints gbc_rightStrut = new GridBagConstraints();
@@ -212,11 +206,7 @@ public class MaintainExerciseDialog extends JDialog {
 		getContentPane().add(btnSave, gbc_btnSave);
 
 		btnCancel = new JButton("Cancel");
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				tearDown();
-			}
-		});
+		btnCancel.addActionListener(e->tearDown());
 		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
 		gbc_btnCancel.anchor = GridBagConstraints.EAST;
 		gbc_btnCancel.insets = new Insets(0, 0, 5, 5);

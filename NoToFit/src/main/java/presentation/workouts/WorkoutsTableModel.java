@@ -12,7 +12,7 @@ class WorkoutsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 8510801416973305236L;
 	private List<Workout> workouts;
-	final private String[] columnNames = { "Workout Name", "Objective", "Valid From", "Valid To" };
+	private static final  String[] columnNames = { "Workout Name", "Objective", "Valid From", "Valid To" };
 
 	
 	public WorkoutsTableModel(List<Workout> workoutsList) {

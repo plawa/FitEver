@@ -16,11 +16,12 @@ public class Exercise extends Entity {
 	private char objective;
 	private boolean requiresEquipment;
 	private Integer difficultyLevel;
-	private Set<Workoutday> workoutdays = new HashSet<Workoutday>(0);
+	private Set<Workoutday> workoutdays = new HashSet<>(0);
 
 	public Exercise() {
 	}
-
+	
+	@Override
 	public Integer getId() {
 		return this.id;
 	}

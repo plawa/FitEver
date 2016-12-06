@@ -8,6 +8,8 @@ public class MealTools {
 	private static final float CALORIES_IN_ONE_GRAM_OF_PROTEINS = 4.5f;
 	private static final float CALORIES_IN_ONE_GRAM_OF_FAT = 9f;
 	
+	private MealTools(){}
+	
 	public static int countMealCalories(Meal meal){
 		int grammage = meal.getGrammage();
 		int carboCalories = Math.round(grammage * CALORIES_IN_ONE_GRAM_OF_CARBOHYDRATES *

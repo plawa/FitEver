@@ -36,10 +36,11 @@ public class WeighthistoryId implements java.io.Serializable {
 		this.date = date;
 	}
 
+	@Override
 	public boolean equals(Object other) {
-		if ((this == other))
+		if (this == other)
 			return true;
-		if ((other == null))
+		if (other == null)
 			return false;
 		if (!(other instanceof WeighthistoryId))
 			return false;
@@ -51,6 +52,7 @@ public class WeighthistoryId implements java.io.Serializable {
 						&& this.getDate().equals(castOther.getDate())));
 	}
 
+	@Override
 	public int hashCode() {
 		int result = 17;
 

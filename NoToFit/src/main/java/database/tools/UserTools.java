@@ -9,6 +9,8 @@ import logic.enums.Objective;
 
 public class UserTools {
 
+	private UserTools(){}
+	
 	public static float calculateBMI(final User user) {
 		float userActualWeight = retrieveActualWeight(user);
 		float heightMeters = user.getHeight() / 100f;
@@ -22,11 +24,11 @@ public class UserTools {
 		return age.getYears();
 	}
 
-	public static float retrieveActualWeight(final User user) throws IllegalArgumentException {
+	public static float retrieveActualWeight(final User user) {
 		return DatabaseController.getUserWeight(user, true);
 	}
 
-	public static float retrieveInitialWeight(final User user) throws IllegalArgumentException {
+	public static float retrieveInitialWeight(final User user) {
 		return DatabaseController.getUserWeight(user, false);
 	}
 

@@ -30,6 +30,7 @@ public class Diet extends Entity  {
 		this.user = user;
 	}
 
+	@Override
 	public Integer getId() {
 		return this.id;
 	}

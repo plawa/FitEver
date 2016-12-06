@@ -89,14 +89,14 @@ public class MealChooser {
 	}
 
 	private Set<Meal> chooseMealSubset(List<Meal> mealsSourceLib, int expectedMealsCount, int calories) {
-		int avgCaloriesPerMeal = Math.round(calories / expectedMealsCount);
+		int avgCaloriesPerMeal = Math.round((float)calories / expectedMealsCount);
 		int mealCaloriesTolerance = Math.round(caloriesDifferenceToleranceFactor * avgCaloriesPerMeal);
 
 		final int mealCaloriesLowerBound = avgCaloriesPerMeal - mealCaloriesTolerance;
 		final int mealCaloriesUpperBound = avgCaloriesPerMeal + mealCaloriesTolerance;
 
 		Set<Meal> chosenMealSet = Sets.newHashSet();
-		while (chosenMealSet.size() < expectedMealsCount && mealsSourceLib.size() > 0) {
+		while (chosenMealSet.size() < expectedMealsCount && !mealsSourceLib.isEmpty()) {
 			Meal meal = getAndRemoveRandomItemFromList(mealsSourceLib);
 			int mealCalories = MealTools.countMealCalories(meal); 
 			if (mealCalories < mealCaloriesUpperBound && mealCalories > mealCaloriesLowerBound)
@@ -120,7 +120,7 @@ public class MealChooser {
 		return breakfastsLibrary.size() + mainMealsLibrary.size() + suppersLibrary.size() == mealsInDBCount;
 	}
 
-	private void updateLibraries() {
+	private static void updateLibraries() {
 		breakfastsLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", 'b'));
 		mainMealsLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", 'm'));
 		suppersLibrary = new ArrayList<>(DatabaseController.getEntitiesByParameter(Meal.class, "type", 's'));

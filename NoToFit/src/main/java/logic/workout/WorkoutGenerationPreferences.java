@@ -9,9 +9,9 @@ import logic.enums.DifficultyLevel;
 
 public class WorkoutGenerationPreferences {
 
-	private final static long ONE_DAY_IN_MILISECONDS = 86400000;
+	private static final long ONE_DAY_IN_MILISECONDS = 86400000;
 	private static final int DAYS_IN_WEEK_COUNT = 7;
-	
+
 	private User user;
 	private String name;
 	private int workoutDaysPerWeek;
@@ -21,35 +21,35 @@ public class WorkoutGenerationPreferences {
 	private Date firstDayDate;
 
 	public WorkoutGenerationPreferences() {
-		firstDayDate = new Date(); //start from now
+		firstDayDate = new Date(); // start from now
 	}
-	
+
 	public Date[] retrieveDatesForWorkoutDays() {
 		Preconditions.checkArgument(workoutDaysPerWeek != 0 && workoutPeriodInWeeks != 0);
-		
-		int workoutDaysCount = workoutDaysPerWeek * workoutPeriodInWeeks;
+
+		int daysCount = workoutDaysPerWeek * workoutPeriodInWeeks;
 
 		long firstDayInMiliseconds = getFirstDayDate().getTime();
-		long lastDayInMiliseconds = getLastDayDate().getTime(); 
-		long workoutDaysInterval = (lastDayInMiliseconds - firstDayInMiliseconds) / workoutDaysCount;
+		long lastDayInMiliseconds = getLastDayDate().getTime();
+		long workoutDaysInterval = daysCount != 0 ? ((lastDayInMiliseconds - firstDayInMiliseconds) / daysCount) : 0;
 
 		Date[] daysDates = new Date[workoutDaysPerWeek * workoutPeriodInWeeks];
-		for (int i = 0; i < workoutDaysCount; i++) {
+		for (int i = 0; i < daysCount; i++) {
 			daysDates[i] = new Date(firstDayInMiliseconds + i * workoutDaysInterval);
 		}
 		return daysDates;
 	}
-	
-	public Date getFirstDayDate(){
+
+	public Date getFirstDayDate() {
 		return firstDayDate;
 	}
-	
-	public Date getLastDayDate(){
-		long workoutPeriodInDays = DAYS_IN_WEEK_COUNT * workoutPeriodInWeeks;
+
+	public Date getLastDayDate() {
+		long workoutPeriodInDays = (long) DAYS_IN_WEEK_COUNT * workoutPeriodInWeeks;
 		long inMiliseconds = getFirstDayDate().getTime() + workoutPeriodInDays * ONE_DAY_IN_MILISECONDS;
 		return new Date(inMiliseconds);
 	}
-	
+
 	public String getName() {
 		return name;
 	}

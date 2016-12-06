@@ -5,10 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -55,12 +52,7 @@ public class WorkoutOverviewDialog extends JDialog {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		
 		List<Workoutday> workoutDaysSorted = new ArrayList<>(workoutDisplaying.getWorkoutdays());
-		workoutDaysSorted.sort(new Comparator<Workoutday>() {
-			@Override
-			public int compare(Workoutday o1, Workoutday o2) {
-				return o1.getDate().compareTo(o2.getDate());
-			}
-		});
+		workoutDaysSorted.sort((Workoutday o1, Workoutday o2) -> o1.getDate().compareTo(o2.getDate()));
 		
 		for(Workoutday workoutDay : workoutDaysSorted){
 			String dateHeader = GuiTools.parseDateToString(workoutDay.getDate());
@@ -165,11 +157,7 @@ public class WorkoutOverviewDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton cancelButton = new JButton("Close");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						tearDown();
-					}
-				});
+				cancelButton.addActionListener(e->tearDown());
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}

@@ -52,7 +52,7 @@ public class ExerciseChooser {
 		PriorityQueue<EntityIntegerPair> exercisesSortedByMatchRank = retrieveExercisesRanked();
 		Set<Exercise> resultSet = new HashSet<>();
 		for (int i = 0; i < exercisesPerDayCount; i++) {
-			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().entity);
+			resultSet.add((Exercise) exercisesSortedByMatchRank.poll().getEntity());
 		}
 		return resultSet;
 	}
@@ -93,7 +93,7 @@ public class ExerciseChooser {
 		}
 	}
 
-	private void updateLibrary() {
+	private static void updateLibrary() {
 		exercisesLib = DatabaseController.getAll(Exercise.class);
 	}
 

@@ -33,7 +33,7 @@ public class DietDayConfiguration {
 	}
 
 	public void setCaloriesWeightsByDefault() {
-		float allMealsCount = breakfastMealsCount + mainDishMealsCount + supperMealsCount; //should be float due to floating point calculations below
+		float allMealsCount = (float)breakfastMealsCount + mainDishMealsCount + supperMealsCount; //should be float due to floating point calculations below
 
 		breakfastCaloriesWeight = breakfastMealsCount / allMealsCount;
 		mainDishCaloriesWeight = mainDishMealsCount / allMealsCount;

@@ -19,11 +19,12 @@ public class Meal extends Entity {
 	private int carbohydratesPercentage;
 	private int proteinPercentage;
 	private int fatPercentage;
-	private Set<Dietday> dietdays = new HashSet<Dietday>(0);
+	private Set<Dietday> dietdays = new HashSet<>(0);
 
 	public Meal() {
 	}
 
+	@Override
 	public Integer getId() {
 		return this.id;
 	}
@@ -96,11 +97,11 @@ public class Meal extends Entity {
 		this.dietdays = dietdays;
 	}
 
-	/* MANUAL CODE REGION */ 
-	
+	/* MANUAL CODE REGION */
+
 	@Override
 	public String toString() {
 		return getName() + ", kCal: " + MealTools.countMealCalories(this);
 	}
-	
+
 }

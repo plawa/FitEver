@@ -17,6 +17,7 @@ public class Weighthistory extends Entity {
 		this.weight = weight;
 	}
 
+	@Override
 	public WeighthistoryId getId() {
 		return this.id;
 	}

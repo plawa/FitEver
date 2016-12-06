@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +37,7 @@ public class GenerateDietDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JSlider sliderDietPeriod;
 	private JTextField txtMyNewExample;
-	private DietGenerationPreferences newDietPreferences;
+	private transient DietGenerationPreferences newDietPreferences;
 	private JSpinner spinnerSupperMealsCount;
 	private JSpinner spinnerMainDishesCount;
 	private JSpinner spinnerBreakfastMealsCount;
@@ -219,22 +217,14 @@ public class GenerateDietDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						okButtonPressed();
-					}
-				});
+				okButton.addActionListener(e -> okButtonPressed());
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						tearDownDialog();
-					}
-				});
+				cancelButton.addActionListener(e->tearDownDialog());
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}

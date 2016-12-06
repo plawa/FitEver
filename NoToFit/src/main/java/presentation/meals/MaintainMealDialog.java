@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -66,7 +64,7 @@ public class MaintainMealDialog extends JDialog {
 		}
 	}
 
-	private void performSave() throws RuntimeException {
+	private void performSave() {
 		switch (mode) {
 		case CREATE:
 			DatabaseController.saveEntityToDatabase(mealMaintained);
@@ -146,7 +144,7 @@ public class MaintainMealDialog extends JDialog {
 		gbc_lblMealType.gridy = 2;
 		getContentPane().add(lblMealType, gbc_lblMealType);
 
-		comboBoxMealType = new JComboBox<String>();
+		comboBoxMealType = new JComboBox<>();
 		comboBoxMealType
 				.setModel(new DefaultComboBoxModel<String>(new String[] { "Breakfast", "Main Dish", "Supper" }));
 		GridBagConstraints gbc_comboBoxmealType = new GridBagConstraints();
@@ -236,7 +234,7 @@ public class MaintainMealDialog extends JDialog {
 		gbc_lblObjective.gridy = 7;
 		getContentPane().add(lblObjective, gbc_lblObjective);
 
-		comboBoxObjective = new JComboBox<Objective>();
+		comboBoxObjective = new JComboBox<>();
 		comboBoxObjective.setModel(new DefaultComboBoxModel<Objective>(Objective.values()));
 		GridBagConstraints gbc_comboBoxObjective = new GridBagConstraints();
 		gbc_comboBoxObjective.gridwidth = 3;
@@ -254,11 +252,7 @@ public class MaintainMealDialog extends JDialog {
 		getContentPane().add(horizontalStrutLeft, gbc_horizontalStrutLeft);
 		{
 			okButton = new JButton("Save");
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					proceedButtonPressed();
-				}
-			});
+			okButton.addActionListener(e->proceedButtonPressed());
 			GridBagConstraints gbc_okButton = new GridBagConstraints();
 			gbc_okButton.insets = new Insets(0, 0, 5, 5);
 			gbc_okButton.gridx = 3;
@@ -275,11 +269,7 @@ public class MaintainMealDialog extends JDialog {
 			gbc_cancelButton.gridx = 4;
 			gbc_cancelButton.gridy = 9;
 			getContentPane().add(cancelButton, gbc_cancelButton);
-			cancelButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					tearDown();
-				}
-			});
+			cancelButton.addActionListener(e->tearDown());
 			cancelButton.setActionCommand("Cancel");
 		}
 

@@ -14,11 +14,12 @@ public class Dietday extends Entity {
 	private Integer id;
 	private Diet diet;
 	private Date date;
-	private Set<Meal> meals = new HashSet<Meal>(0);
+	private Set<Meal> meals = new HashSet<>(0);
 
 	public Dietday() {
 	}
 
+	@Override
 	public Integer getId() {
 		return this.id;
 	}

@@ -7,6 +7,8 @@ import logic.utils.MD5Encrypter;
 
 public class Login {
 
+	private Login(){}
+	
 	public static User performLogin(String login, String passwordRaw) {
 		
 		Shadow credentialsInDatabase = DatabaseController.getShadowEntityByLogin(login);

@@ -17,11 +17,12 @@ public class Workout extends Entity {
 	private Date validFrom;
 	private Date validTo;
 	private Character objective;
-	private Set<Workoutday> workoutdays = new HashSet<Workoutday>(0);
+	private Set<Workoutday> workoutdays = new HashSet<>(0);
 
 	public Workout() {
 	}
 
+	@Override
 	public Integer getId() {
 		return this.id;
 	}

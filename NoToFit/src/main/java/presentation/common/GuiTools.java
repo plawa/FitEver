@@ -10,18 +10,21 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.text.MaskFormatter;
 
+
 public class GuiTools {
 	
-	private final static String DATE_MASK_PATTERN = "##-##-####";
-	private final static String DATE_FORMAT = "dd-MM-yyyy";
-	private final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);	
+	private static final String DATE_MASK_PATTERN = "##-##-####";
+	private static final String DATE_FORMAT = "dd-MM-yyyy";
+	private static final DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);	
+	
+	private GuiTools(){}
 	
 	public static String parseDateToString(Date date){	
 		return dateFormatter.format(date);
 	}
 	
 	public static Date parseStringToDate(String dateString){
-		Date date = new Date(0); //1970 year set to return if parsing fails
+		Date date = new Date(0); /*1970 year set to return if parsing fails*/
 		try {
 			 date = dateFormatter.parse(dateString);
 		} catch (ParseException e) {

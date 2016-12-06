@@ -21,7 +21,6 @@ public class WaitDialog extends JDialog {
 	public WaitDialog(String message) {
 		initializeSwingComponents();
 		setMessage(message);
-		//setAlwaysOnTop(true);
 	}
 
 	public void setMessage(String message) {

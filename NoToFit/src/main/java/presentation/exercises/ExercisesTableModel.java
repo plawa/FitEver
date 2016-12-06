@@ -12,7 +12,7 @@ public class ExercisesTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1156719073152150069L;
 	private List<Exercise> exercises;
-	final String[] columnNames = { "Name", "Objective", "Difficulty", "Equipment Required", "Description" };
+	private static final String[] columnNames = { "Name", "Objective", "Difficulty", "Equipment Required", "Description" };
 
 	public ExercisesTableModel(List<Exercise> exercises) {
 		this.exercises = exercises;

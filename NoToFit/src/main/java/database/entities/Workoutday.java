@@ -11,7 +11,7 @@ public class Workoutday extends Entity {
 	private Integer id;
 	private Workout workout;
 	private Date date;
-	private Set<Exercise> exercises = new HashSet<Exercise>(0);
+	private Set<Exercise> exercises = new HashSet<>(0);
 
 	public Workoutday() {
 	}
@@ -20,6 +20,7 @@ public class Workoutday extends Entity {
 		this.date = date;
 	}
 
+	@Override
 	public Integer getId() {
 		return this.id;
 	}

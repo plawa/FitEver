@@ -9,7 +9,10 @@ public class WorkoutDayPreferences {
 	private Objective objective;
 	private DifficultyLevel difficultyLevel;
 	private boolean isEquipmentRequired;
-	
+
+	private WorkoutDayPreferences() {
+	}
+
 	public static WorkoutDayPreferences build(WorkoutGenerationPreferences workoutPreferences) {
 		WorkoutDayPreferences dayPreferences = new WorkoutDayPreferences();
 		dayPreferences.setObjective(UserTools.getUserObjective(workoutPreferences.getUser()));
@@ -17,11 +20,7 @@ public class WorkoutDayPreferences {
 		dayPreferences.setDifficultyLevel(workoutPreferences.getPrefferedDifficulty());
 		return dayPreferences;
 	}
-	
-	private WorkoutDayPreferences(){
-		
-	}
-	
+
 	public Objective getObjective() {
 		return objective;
 	}

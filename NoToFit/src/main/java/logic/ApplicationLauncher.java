@@ -42,19 +42,20 @@ public class ApplicationLauncher {
 			guiThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			Thread.currentThread().interrupt();
 		}
 	}
 
 	private void configureDatabase() {
 		try {
 			Path configFile = Paths.get(CONFIG_FILE_PATH);
-			if (Files.notExists(configFile)) {
+			if (!configFile.toFile().exists()) {
 				createConfigFile(configFile);
 			}
 			List<String> configLines = Files.readAllLines(configFile);
 			DatabaseController.setDatabaseConnectionConfiguration(configLines.get(0), configLines.get(1),
 					configLines.get(2));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, MSG_FATAL_ERROR, DLG_ERROR_TITLE, 0));
 		}
@@ -78,6 +79,7 @@ public class ApplicationLauncher {
 
 	private UncaughtExceptionHandler initializeExceptionHandlerThread() {
 		return new UncaughtExceptionHandler() {
+			@Override
 			public void uncaughtException(Thread t, Throwable e) {
 				e.printStackTrace();
 				String message = (e instanceof ServiceException) ? MSG_DATABASE_ERROR : MSG_FATAL_ERROR;

@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -29,7 +27,7 @@ public class GenerateWorkoutDialog extends JDialog {
 	private static final long serialVersionUID = 2372123556581471698L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFieldName;
-	private WorkoutGenerationPreferences preferences;
+	private transient WorkoutGenerationPreferences preferences;
 	private JSlider sliderDaysPerWeek;
 	private JSlider sliderWorkoutPeriodInDays;
 	private JCheckBox chckbxIHaveEquipment;
@@ -179,7 +177,7 @@ public class GenerateWorkoutDialog extends JDialog {
 			contentPanel.add(lblPreferredDifficulty, gbc_lblPreferredDifficulty);
 		}
 		{
-			comboBox = new JComboBox<DifficultyLevel>();
+			comboBox = new JComboBox<>();
 			comboBox.setModel(new DefaultComboBoxModel<>(DifficultyLevel.values()));
 			GridBagConstraints gbc_comboBox = new GridBagConstraints();
 			gbc_comboBox.insets = new Insets(0, 0, 5, 5);
@@ -202,22 +200,14 @@ public class GenerateWorkoutDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						okButtonPressed();
-					}
-				});
+				okButton.addActionListener(e->okButtonPressed());
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						tearDown();
-					}
-				});
+				cancelButton.addActionListener(e->tearDown());
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}

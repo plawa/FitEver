@@ -13,10 +13,12 @@ public class DietPlanGenerator {
 
 	private static final String MSG_TOO_LESS_MEALS = "Diet could not have been generated. Meals library consists of too less meals that match your specific needs.";
 	
-	private final static float caloriesToleranceStep = 0.05f;
-	private final static float caloriesToleranceLimit = 1f;
+	private static final  float CALORIES_TOLERANCE_STEP = 0.05f;
+	private static final  float CALORIES_TOLERANCE_LIMIT = 1f;
 
-	public static Diet generateDiet(DietGenerationPreferences dietConfiguration) throws UnsupportedOperationException {
+	private DietPlanGenerator(){}
+	
+	public static Diet generateDiet(DietGenerationPreferences dietConfiguration) {
 		final List<DietDayConfiguration> dietDayConfigurations = dietConfiguration.getDayMealsPreferences();
 		Diet newDiet = initializeDietPrototype(dietConfiguration);
 
@@ -26,7 +28,7 @@ public class DietPlanGenerator {
 		boolean isMealsInGeneratedDietCountOK;
 		do {
 			isMealsInGeneratedDietCountOK = true;
-			caloriesToleranceFactor += caloriesToleranceStep;
+			caloriesToleranceFactor += CALORIES_TOLERANCE_STEP;
 			MealChooser mealChooser = new MealChooser(caloriesToleranceFactor);
 
 			newDietDays = new HashSet<>();
@@ -46,7 +48,7 @@ public class DietPlanGenerator {
 	}
 
 	private static boolean toleranceExceeded(float caloriesToleranceFactor) {
-		return caloriesToleranceFactor >= caloriesToleranceLimit;
+		return caloriesToleranceFactor >= CALORIES_TOLERANCE_LIMIT;
 	}
 
 	private static boolean isMealsLibraryTooLess(DietDayConfiguration dayConfig) {

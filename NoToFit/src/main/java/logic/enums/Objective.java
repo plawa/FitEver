@@ -16,13 +16,10 @@ public enum Objective {
 	}
 
 	public static Objective getByChar(Character objectiveChar) {
-		if (objectiveChar != null) {
-			switch (objectiveChar) {
-			case 'm':
-				return MassGain;
-			case 'r':
-				return Reduction;
-			}
+		if (objectiveChar == 'm') {
+			return MassGain;
+		} else if (objectiveChar == 'r') {
+			return Reduction;
 		}
 		return Undefined;
 	}

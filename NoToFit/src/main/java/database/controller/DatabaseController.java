@@ -12,7 +12,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.service.spi.ServiceException;
 import org.hibernate.type.IntegerType;
 
 import database.entities.Entity;
@@ -23,11 +22,14 @@ import database.entities.Weighthistory;
 public class DatabaseController {
 
 	private static final String EXCEPTION_NO_ROWS_IN_WEIGHT_HISTORY = "The user hasn't got any entries in WeightHistory table!";
-	
+
 	private static SessionFactory mySessionFactory;
 	private static Configuration hibernateConfiguration;
 
-	public static <T extends Entity> Object saveEntityToDatabase(T entity) throws RuntimeException {
+	private DatabaseController() {
+	}
+
+	public static <T extends Entity> Object saveEntityToDatabase(T entity) {
 		Session session = getNewSessionWithTransaction();
 		try {
 			session.persist(entity);
@@ -40,23 +42,23 @@ public class DatabaseController {
 		return entity.getId();
 	}
 
-	public static <T extends Entity> void updateEntityToDatabase(T entity) throws RuntimeException {
+	public static <T extends Entity> void updateEntityToDatabase(T entity) {
 		getNewSessionWithTransaction().update(entity);
 		commitCurrentTransactionAndCloseSession();
 	}
 
-	public static <T extends Entity> void deleteEntityFromDatabase(T entity) throws RuntimeException {
+	public static <T extends Entity> void deleteEntityFromDatabase(T entity) {
 		getNewSessionWithTransaction().delete(entity);
 		commitCurrentTransactionAndCloseSession();
 	}
 
-	public static <T extends Entity> List<T> getAll(Class<T> entityType) throws RuntimeException {
+	public static <T extends Entity> List<T> getAll(Class<T> entityType) {
 		List<T> resultList = getNewSessionWithTransaction().createCriteria(entityType).list();
 		commitCurrentTransactionAndCloseSession();
 		return resultList;
 	}
 
-	public static Shadow getShadowEntityByLogin(String login) throws RuntimeException {
+	public static Shadow getShadowEntityByLogin(String login) {
 		Shadow result = (Shadow) getNewSessionWithTransaction().createCriteria(Shadow.class)
 				.add(Restrictions.eq("login", login)).setFetchMode("user", FetchMode.JOIN).uniqueResult();
 
@@ -64,8 +66,8 @@ public class DatabaseController {
 		return result;
 	}
 
-	public static <T extends Entity> T getEntityByID(Class<T> entityType, int ID) throws RuntimeException {
-		T resultEntity = getNewSessionWithTransaction().get(entityType, ID);
+	public static <T extends Entity> T getEntityByID(Class<T> entityType, int id) {
+		T resultEntity = getNewSessionWithTransaction().get(entityType, id);
 		commitCurrentTransactionAndCloseSession();
 		return resultEntity;
 	}
@@ -114,7 +116,7 @@ public class DatabaseController {
 		return resultList;
 	}
 
-	public static Session getNewSessionWithTransaction() throws RuntimeException {
+	public static Session getNewSessionWithTransaction() {
 		if (mySessionFactory == null) {
 			tryToInitializeSessionFactory();
 		}
@@ -123,7 +125,7 @@ public class DatabaseController {
 		return mySession;
 	}
 
-	public static void tryToInitializeSessionFactory() throws ServiceException {
+	public static void tryToInitializeSessionFactory() {
 		if (hibernateConfiguration == null) {
 			hibernateConfiguration = new Configuration().configure();
 		}
@@ -147,16 +149,16 @@ public class DatabaseController {
 		}
 	}
 
-	public static void setDatabaseConnectionConfiguration(String databaseUrl, String login, String password){
+	public static void setDatabaseConnectionConfiguration(String databaseUrl, String login, String password) {
 		mySessionFactory = null;
 		hibernateConfiguration = new Configuration().configure();
-		
+
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.connection.url", databaseUrl);
 		properties.setProperty("hibernate.connection.username", login);
 		properties.setProperty("hibernate.connection.password", password);
-		
+
 		hibernateConfiguration.setProperties(properties);
 	}
-	
+
 }

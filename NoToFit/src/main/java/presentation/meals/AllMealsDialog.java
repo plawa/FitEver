@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,8 +19,6 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import database.controller.DatabaseController;
 import database.entities.Meal;
@@ -101,11 +97,7 @@ public class AllMealsDialog extends JDialog {
 			gbc_closeButton.gridx = 2;
 			gbc_closeButton.gridy = 3;
 			contentPanel.add(closeButton, gbc_closeButton);
-			closeButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					tearDown();
-				}
-			});
+			closeButton.addActionListener(e->tearDown());
 		}
 	}
 
@@ -126,14 +118,7 @@ public class AllMealsDialog extends JDialog {
 						editButtonPressed();
 				}
 			});
-			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					boolean areEnabled = table.getSelectedRow() != -1;
-					setMutationButtonsEnabled(areEnabled);
-				}
-			});
+			table.getSelectionModel().addListSelectionListener(e->tableRowSelectionChanged());
 			refreshTable();
 			scrollPane.setViewportView(table);
 		}
@@ -154,11 +139,7 @@ public class AllMealsDialog extends JDialog {
 		{
 			JButton btnAdd = new JButton("Create");
 			btnAdd.setPreferredSize(new Dimension(70, 23));
-			btnAdd.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addButtonPressed();
-				}
-			});
+			btnAdd.addActionListener(e->addButtonPressed());
 			btnAdd.setVerticalTextPosition(SwingConstants.BOTTOM);
 			btnAdd.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnAdd.setIcon(new ImageIcon(getClass().getResource("/images/add.png")));
@@ -168,20 +149,12 @@ public class AllMealsDialog extends JDialog {
 			btnEdit = new JButton("Modify");
 			btnEdit.setPreferredSize(new Dimension(70, 23));
 			btnEdit.setEnabled(false);
-			btnEdit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					editButtonPressed();
-				}
-			});
+			btnEdit.addActionListener(e->editButtonPressed());
 			{
 				btnDelete = new JButton("Delete");
 				btnDelete.setPreferredSize(new Dimension(70, 23));
 				btnDelete.setEnabled(false);
-				btnDelete.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						deleteButtonPressed();
-					}
-				});
+				btnDelete.addActionListener(e->deleteButtonPressed());
 				btnDelete.setHorizontalTextPosition(SwingConstants.CENTER);
 				btnDelete.setVerticalTextPosition(SwingConstants.BOTTOM);
 				btnDelete.setIcon(
@@ -204,5 +177,10 @@ public class AllMealsDialog extends JDialog {
 	private void setMutationButtonsEnabled(boolean isEnabled) {
 		btnEdit.setEnabled(isEnabled);
 		btnDelete.setEnabled(isEnabled);
+	}
+
+	private void tableRowSelectionChanged() {
+		boolean areEnabled = table.getSelectedRow() != -1;
+		setMutationButtonsEnabled(areEnabled);
 	}
 }

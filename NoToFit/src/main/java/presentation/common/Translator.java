@@ -7,6 +7,7 @@ import com.google.common.collect.HashBiMap;
 
 public class Translator {
 
+	private static final String MSG_ERROR = "Error!";
 	private static final BiMap<Character, String> sexTranslations;
 	private static final BiMap<Character, String> objectiveTranslations;
 	private static final HashMap<Integer, String> lifeStyleDescriptions;
@@ -30,7 +31,7 @@ public class Translator {
 		objectiveTranslations.put('r', "Reduction");
 		objectiveTranslations.put('s', "Strength");
 
-		lifeStyleDescriptions = new HashMap<Integer, String>();
+		lifeStyleDescriptions = new HashMap<>();
 		lifeStyleDescriptions.put(1, DESC_LIFESTYLE_1);
 		lifeStyleDescriptions.put(2, DESC_LIFESTYLE_2);
 		lifeStyleDescriptions.put(3, DESC_LIFESTYLE_3);
@@ -43,8 +44,10 @@ public class Translator {
 		mealTypeTranslations.put('s', "Supper");
 	}
 
+	private Translator(){}
+	
 	public static String parseSexCharToString(Character sexChar) {
-		return sexTranslations.getOrDefault(sexChar, "Error!");
+		return sexTranslations.getOrDefault(sexChar, MSG_ERROR);
 	}
 
 	public static Character parseSexStringToChar(String sexString) {
@@ -52,7 +55,7 @@ public class Translator {
 	}
 
 	public static String parseObjectiveCharToString(Character objectiveChar) {
-		return objectiveTranslations.getOrDefault(objectiveChar, "Error!");
+		return objectiveTranslations.getOrDefault(objectiveChar, MSG_ERROR);
 	}
 
 	public static Character parseObjectiveStringToChar(String objectiveString) {
@@ -60,11 +63,11 @@ public class Translator {
 	}
 
 	public static String getLifeStyleDescription(Integer lifeStyleInt) {
-		return lifeStyleDescriptions.getOrDefault(lifeStyleInt, "Error!");
+		return lifeStyleDescriptions.getOrDefault(lifeStyleInt, MSG_ERROR);
 	}
 
 	public static String parseMealTypeCharToString(Character mealType) {
-		return mealTypeTranslations.getOrDefault(mealType, "Error!");
+		return mealTypeTranslations.getOrDefault(mealType, MSG_ERROR);
 	}
 
 	public static Character parseMealTypeStringToChar(String mealType) {

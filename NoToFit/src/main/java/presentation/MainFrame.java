@@ -18,7 +18,6 @@ import presentation.workouts.WorkoutsPanel;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -3253794944742197441L;
-	
 	private static final String FITEVER_DLG_TITLE = "FitEver v1.0";
 
 	private User userLogged;
@@ -84,10 +83,6 @@ public class MainFrame extends JFrame {
 
 	public void tidyUp() {
 		DatabaseController.tidyUp();
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				MainFrame.this.dispatchEvent(new WindowEvent(MainFrame.this, WindowEvent.WINDOW_CLOSING));
-			}
-		});
+		EventQueue.invokeLater(() -> MainFrame.this.dispatchEvent(new WindowEvent(MainFrame.this, WindowEvent.WINDOW_CLOSING)));
 	}
 }

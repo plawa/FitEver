@@ -8,8 +8,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Hashtable;
 
@@ -22,8 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.hibernate.service.spi.ServiceException;
 
@@ -138,11 +134,7 @@ public class UpdateUserWeightDialog extends JDialog {
 		{
 
 			slider = new JSlider();
-			slider.addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent arg0) {
-					updateDifferenceLabel();
-				}
-			});
+			slider.addChangeListener(e -> updateDifferenceLabel());
 			slider.setPaintTicks(true);
 
 			slider.setMinimum(-20);
@@ -155,11 +147,11 @@ public class UpdateUserWeightDialog extends JDialog {
 			gbc_slider.gridx = 1;
 			gbc_slider.gridy = 4;
 
-			Hashtable<Integer, JLabel> sliderLabels = new Hashtable<Integer, JLabel>();
+			Hashtable<Integer, JLabel> sliderLabels = new Hashtable<>();
 			sliderLabels.put(0, new JLabel("0"));
 			sliderLabels.put(20, new JLabel("+"));
 			sliderLabels.put(-20, new JLabel("-"));
-			slider.setLabelTable(sliderLabels);
+			slider.setLabelTable(sliderLabels); 
 			slider.setPaintLabels(true);
 
 			contentPanel.add(slider, gbc_slider);
@@ -197,22 +189,14 @@ public class UpdateUserWeightDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("Update");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						updateButtonPressed();
-					}
-				});
+				okButton.addActionListener(e -> updateButtonPressed());
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						tearDown();
-					}
-				});
+				cancelButton.addActionListener(e -> tearDown());
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -240,7 +224,8 @@ public class UpdateUserWeightDialog extends JDialog {
 
 	protected void updateButtonPressed() {
 		Calendar dateInput = (Calendar) datePicker.getJFormattedTextField().getValue();
-		Weighthistory newHistoryEntry = new Weighthistory(new WeighthistoryId(userToMaintain, dateInput.getTime()), newWeight);
+		Weighthistory newHistoryEntry = new Weighthistory(new WeighthistoryId(userToMaintain, dateInput.getTime()),
+				newWeight);
 		try {
 			DatabaseController.saveEntityToDatabase(newHistoryEntry);
 			tearDown();

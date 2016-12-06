@@ -10,6 +10,9 @@ import database.tools.UserTools;
 
 public class WorkoutGenerator {
 
+	private WorkoutGenerator() {
+	}
+
 	public static Workout generateWorkout(WorkoutGenerationPreferences workoutPreferences) {
 		Workout newWorkout = initializeWorkoutPrototype(workoutPreferences);
 		Set<Workoutday> generatedWorkoutDaysSet = generateWorkoutDaysSet(newWorkout, workoutPreferences);
